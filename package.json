@@ -53,7 +53,7 @@
     "ngx-quilljs": "0.0.10",
     "ngx-toastr": "13.1.0",
     "rxjs": "6.6.3",
-    "tslib": "2.0.3",
+    "tslib": "2.2.0",
     "zone.js": "0.11.4"
   },
   "devDependencies": {
