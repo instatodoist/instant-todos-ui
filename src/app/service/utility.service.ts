@@ -1,7 +1,8 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
+import {Observable} from '@apollo/client/core';
 import { Injectable, ViewContainerRef, ComponentRef, Injector, ComponentFactoryResolver, TemplateRef, ViewRef } from '@angular/core';
 import { ToastrService } from 'ngx-toastr';
-import { Observable } from 'apollo-link';
+
 import { TranslateService } from '@ngx-translate/core';
 import { IDialogRef, TDialogTempRef, TDialogCompRef, ILanguage } from '../models';
 

@@ -1,6 +1,7 @@
+import {Apollo} from 'apollo-angular';
 import { Injectable } from '@angular/core';
 import { environment } from 'src/environments/environment';
-import { Apollo } from 'apollo-angular';
+
 import { Observable } from 'rxjs';
 import { map } from 'rxjs/operators';
 import {

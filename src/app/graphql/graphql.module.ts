@@ -1,16 +1,15 @@
+import { APOLLO_OPTIONS, Apollo} from 'apollo-angular';
+import {HttpClientModule} from '@angular/common/http';
+import {InMemoryCache, ApolloLink } from '@apollo/client/core';
+import { HttpLink} from 'apollo-angular/http';
+import {setContext} from '@apollo/client/link/context';
+import {onError} from '@apollo/client/link/error';
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { ApolloModule, APOLLO_OPTIONS, Apollo } from 'apollo-angular';
-import { InMemoryCache } from 'apollo-cache-inmemory';
-import { HttpLinkModule, HttpLink } from 'apollo-angular-link-http';
-import { ApolloLink } from 'apollo-link';
-import { setContext } from 'apollo-link-context';
-import { onError } from 'apollo-link-error';
 import { environment } from '../../environments/environment';
 import { UtilityService } from '../service/utility.service';
 import { LsService } from '../service/ls.service';
 import { AuthService } from '../service/auth/auth.service';
-import { ApolloClient } from 'apollo-client';
 import { catchError } from 'rxjs/operators';
 import { throwError } from 'rxjs';
 import { Router } from '@angular/router';
@@ -18,9 +17,7 @@ import { Router } from '@angular/router';
 @NgModule({
   declarations: [],
   imports: [
-    CommonModule,
-    ApolloModule,
-    HttpLinkModule
+    HttpClientModule
   ]
 })
 export class GraphqlModule {

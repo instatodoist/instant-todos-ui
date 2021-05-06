@@ -1,4 +1,5 @@
-import gql from 'graphql-tag';
+import {gql} from 'apollo-angular';
+
 
 export const ADD_GOAL_MUTATION = gql`
   mutation addThought( $input: ThoughtInputType!) {

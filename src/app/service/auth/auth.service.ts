@@ -1,7 +1,8 @@
+import {Apollo} from 'apollo-angular';
 import { Injectable } from '@angular/core';
 import { LsService } from './../../service/ls.service';
 import { environment } from '../../../environments/environment';
-import { Apollo } from 'apollo-angular';
+
 import { map } from 'rxjs/operators';
 import { Observable } from 'rxjs';
 import { UserModel, IUserProfile, IUserPassword, ISuccessType, ILoginResponse } from '../../models';

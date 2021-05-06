@@ -1,3 +1,4 @@
+import {Apollo, Query} from 'apollo-angular';
 import { Injectable } from '@angular/core';
 import { environment } from 'src/environments/environment';
 import { Router, ActivatedRoute } from '@angular/router';
@@ -18,7 +19,7 @@ import {
   TODO_PROJECT_DELETE_MUTATION,
   TODO_PROJECT_QUERY
 } from '../../graphql/gql/todo.gql';
-import { Apollo, Query } from 'apollo-angular';
+
 import { Observable, forkJoin } from 'rxjs';
 import { map } from 'rxjs/operators';
 import {
