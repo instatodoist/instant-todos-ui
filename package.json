@@ -3,7 +3,8 @@
   "version": "1.0.2",
   "scripts": {
     "ng": "ng",
-    "start": "ng serve",
+    "start": "ng serve --open",
+    "start:prod": "ng serve -c=production --open",
     "build": "ng build --aot --prod",
     "test": "ng test",
     "lint": "eslint --ext .ts src/",
