@@ -11,10 +11,10 @@
               <!-- For Todos Other than Completed, Today, Pending-->
               <ng-container *ngIf="todoCurrentType !== TODOTYPES.completed && tabs[todoCurrentType].length < 2">
                 <span class="badge badge-primary badge-pill" *ngIf="queryStr">
-                  {{ todos?.totalCount || '' }}
+                  {{ todos?.totalCount || 0 }}
                 </span>
                 <span class="badge badge-primary badge-pill" *ngIf="!queryStr">
-                  {{(this.count) && this.count[item.name] || todos?.totalCount || ''}}
+                  {{(this.count) && this.count[item.name] || todos?.totalCount || 0}}
                 </span>
               </ng-container>
 
