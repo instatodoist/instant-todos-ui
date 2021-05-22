@@ -37,7 +37,8 @@
             "scripts": [
               "src/assets/facelift/js/jquery.min.js",
               "src/assets/facelift/js/popper.min.js",
-              "src/assets/facelift/js/bootstrap.min.js"
+              "src/assets/facelift/js/bootstrap.min.js",
+              "src/assets/facelift/js/owl.carousel.min.js"
             ],
             "vendorChunk": true,
             "extractLicenses": false,

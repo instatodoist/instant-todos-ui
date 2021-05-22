@@ -1,4 +1,4 @@
-import { Component, OnInit, AfterContentInit, AfterViewInit } from '@angular/core';
+import { Component, OnInit, AfterViewInit } from '@angular/core';
 import { AppService } from '../../service';
 declare let $: any;
 
