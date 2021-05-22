@@ -22,12 +22,8 @@
                 <input type="text" class="form-control" id="description" placeholder="Description"
                   formControlName="description" autocomplete="off">
               </div>
-              <div class="form-group input-group cursor" (click)="refreshColor()">
-                <div class="input-group-prepend">
-                  <span class="input-group-text" id="inputGroupPrepend"><i class="fas fa-sync-alt"></i></span>
-                </div>
-                <!-- <label for="colFormLabelLg" class="pb-0">Large</label> -->
-                <input type="text" class="form-control form-control-lg" id="color" placeholder="Color"
+              <div class="form-group input-group cursor">
+                <input type="color" class="form-control form-control-lg" id="color" placeholder="Color"
                   formControlName="color" [style]="{'color': formObj.value.color}">
               </div>
               <div class="form-group">
