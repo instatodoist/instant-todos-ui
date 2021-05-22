@@ -1,5 +1,6 @@
 import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
 import { TodoLabelType } from 'src/app/models';
 import { TodoService } from 'src/app/service';
 
@@ -11,13 +12,13 @@ import { TodoService } from 'src/app/service';
 export class TodoLabelDialogComponent implements OnInit {
 
   @Input() label: TodoLabelType;
-  @Input() modelId = 'tagLabelDialog';
-  @Output() done: EventEmitter<boolean> = new EventEmitter(false);
+  @Output() callback: EventEmitter<boolean> = new EventEmitter(false);
   formObj: FormGroup;
 
   constructor(
     private fb: FormBuilder,
-    private todoService: TodoService
+    private todoService: TodoService,
+    public activeModal: NgbActiveModal
   ) { }
 
   ngOnInit(): void {
@@ -35,6 +36,7 @@ export class TodoLabelDialogComponent implements OnInit {
   populateForm(label: TodoLabelType) {
     if (label) {
       this.formObj.patchValue({
+        // eslint-disable-next-line no-underscore-dangle
         _id: label._id,
         name: label.name || '',
         description: label.description || '',
@@ -64,7 +66,8 @@ export class TodoLabelDialogComponent implements OnInit {
     this.todoService
       .todoLabelOperation(postBody)
       .subscribe(() => {
-        this.done.next(true);
+        this.activeModal.dismiss();
+        this.callback.next(true);
       });
   }
 
