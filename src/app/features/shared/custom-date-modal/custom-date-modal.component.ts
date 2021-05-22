@@ -9,7 +9,7 @@ type Operation = 'ADD' | 'UPDATE';
 export class CustomDateModalComponent implements OnInit, AfterViewInit {
   @Input() operationType: Operation;
   @Input() scheduledAt = '';
-  @Output() data: EventEmitter<string> = new EventEmitter<string>();
+  @Output() callback: EventEmitter<string> = new EventEmitter<string>();
   model: NgbDateStruct;
   date: {year: number; month: number; day: number};
 
@@ -26,7 +26,8 @@ export class CustomDateModalComponent implements OnInit, AfterViewInit {
     date.year < current.year;
 
   onEvent(model: NgbDateStruct) {
-    this.data.next(`${model.month}-${model.day}-${model.year}`);
+    this.callback.next(`${model.month}-${model.day}-${model.year}`);
+    this.activeModal.dismiss();
   }
 
 }

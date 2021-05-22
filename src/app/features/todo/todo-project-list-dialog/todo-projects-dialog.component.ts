@@ -11,7 +11,7 @@ import { TodoProjectType } from '../../../models';
 export class TodoProjectListDialogComponent implements OnInit {
   @Input() projectId = '';
   @Input() projects: TodoProjectType[] = [];
-  @Output() data: EventEmitter<string> = new EventEmitter<string>();
+  @Output() callback: EventEmitter<string> = new EventEmitter<string>();
   formObj: FormGroup;
   constructor(
     public activeModal: NgbActiveModal,
@@ -20,8 +20,10 @@ export class TodoProjectListDialogComponent implements OnInit {
   ngOnInit(): void {}
 
   checkProject(project: TodoProjectType) {
+    // eslint-disable-next-line no-underscore-dangle
     this.projectId = project._id;
-    this.data.next(this.projectId);
+    this.callback.next(this.projectId);
+    this.activeModal.dismiss();
   }
 
 }

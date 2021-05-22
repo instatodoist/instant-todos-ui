@@ -2,7 +2,7 @@
 /* eslint-disable @typescript-eslint/naming-convention */
 import { CommonModule } from '@angular/common';
 import { ReactiveFormsModule, FormsModule } from '@angular/forms';
-import { Component, OnInit, Input, OnDestroy, ViewChild, ElementRef, ViewContainerRef, TemplateRef, NgModule } from '@angular/core';
+import { Component, OnInit, Input, OnDestroy, NgModule } from '@angular/core';
 import { Router } from '@angular/router';
 import { FormGroup, FormBuilder, FormArray } from '@angular/forms';
 import { combineLatest, Subscription } from 'rxjs';
@@ -13,7 +13,6 @@ import { TodoType, TodoLabelType, TodoConditions, IOperationEnumType, TodoProjec
 import {  SharedModule } from '../../shared/shared.module';
 import { DialogTodoTagsComponent } from '../todo-tag-dialog/dialog-todo-tags.component';
 import { TodoProjectListDialogComponent } from '../todo-project-list-dialog/todo-projects-dialog.component';
-// import { CustomDateModalComponent } from '../../shared/custom-date-modal/custom-date-modal.component';
 import { NgbActiveModal, NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { CustomDateModalComponent } from '../../shared/custom-date-modal/custom-date-modal.component';
 
@@ -57,14 +56,6 @@ export class TodoDialogComponent implements OnInit, OnDestroy {
   @Input() modelId = 'todo-dialog';
   @Input() todo: TodoType = null; // todo object if update
   @Input() conditions: TodoConditions = null; // conditions object
-  @ViewChild('vctodo', { read: ViewContainerRef }) private vctodoRef: ViewContainerRef;
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  @ViewChild('tags', { read: TemplateRef }) private tagsRef: TemplateRef<any>;
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  @ViewChild('projectRef', { read: TemplateRef }) private projectsRef: TemplateRef<any>;
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  @ViewChild('date', { read: TemplateRef }) private dateRef: TemplateRef<any>;
-  @ViewChild('titleInput') private elementRef: ElementRef;
   nestedModalId = '';
   title = 'Add Task'; // default title if use same component for ADD/EDIT
   operationType: IOperationEnumType = 'ADD'; // default operationType if use same component for ADD/EDIT
@@ -277,7 +268,7 @@ export class TodoDialogComponent implements OnInit, OnDestroy {
         title: this.todo && this.todo.title || '',
         projectId: this.todo && this.todo.projectId || '',
         scheduledDate: this.todo && this.todo.scheduledDate ? this.todo.scheduledDate : '',
-        scheduledType: this.scheduleTypeOnUpdate(this.todo.scheduledDate),
+        scheduledType: this.initialiseDate(this.todo.scheduledDate),
         labelIds: this.labelIdVal,
         operationType: this.todo._id ? 'UPDATE' : 'ADD',
         isCompleted: this.todo && this.todo.isCompleted ? true : false,
@@ -325,24 +316,12 @@ export class TodoDialogComponent implements OnInit, OnDestroy {
   }
 
   /**
-   * get labels from child component vai Output
-   *
-   * @param data - labels/Tags Arrray
-   */
-  // eslint-disable-next-line @typescript-eslint/member-ordering
-  callbackLabel(data: string[]): void {
-    this.formObj.patchValue({
-      labelIds: data
-    });
-  }
-
-  /**
    * Check scheduledDate
    *
    * @param scheduledDate - Date
    */
   // eslint-disable-next-line @typescript-eslint/member-ordering
-  scheduleTypeOnUpdate(scheduledDate: Date): string {
+  initialiseDate(scheduledDate: Date): string {
     if (scheduledDate) {
       if (moment(scheduledDate).isSame(moment(), 'day')) {
         return 'TODAY';
@@ -353,34 +332,45 @@ export class TodoDialogComponent implements OnInit, OnDestroy {
   }
 
   /**
-   * Set the scheduled Date
-   *
-   * @param scheduledType - scheduledType
-   */
-  // eslint-disable-next-line @typescript-eslint/member-ordering
-  askDatePickerToOpen(templateContent: any, scheduledType: TScheduledString): void {
-    if (scheduledType === 'CUSTOM') {
-      this.modalService.open(templateContent, { centered: true });
-      this.formObj.patchValue({
-        scheduledType
-      });
-    } else {
-      this.formObj.patchValue({
-        scheduledType,
-        scheduledDate: this.scheduledObj[scheduledType].value
-      });
-    }
-  }
-
-  /**
    * open nested popups for project, tag & date
    *
    * @param nestedModalId - modelId
    * @param type - model type - PROJECT, TAG, DATE
    */
   // eslint-disable-next-line @typescript-eslint/member-ordering
-  openListPopup(templateContent: any): void {
-    this.modalService.open(templateContent, {size: 'lg'});
+  openListPopup(popupType: string, scheduledType?: TScheduledString): void {
+    if(popupType === 'PROJECT'){
+      const modalRef = this.modalService.open(TodoProjectListDialogComponent, {size: 'lg'});
+      modalRef.componentInstance.projects = this.projects;
+      modalRef.componentInstance.projectId = this.formObj.value.projectId;
+      modalRef.componentInstance.callback.subscribe((projectId: string) => {
+        this.callbackProject(projectId);
+      });
+    } else if(popupType === 'TAG'){
+      const modalRef = this.modalService.open(DialogTodoTagsComponent, {size: 'lg'});
+      modalRef.componentInstance.labels = this.labels;
+      modalRef.componentInstance.labelIds = this.formObj.value.labelIds;
+      modalRef.componentInstance.callback.subscribe((tagIds: string[]) => {
+        this.callbackLabel(tagIds);
+      });
+    } else if(popupType === 'DATE'){
+      if (scheduledType === 'CUSTOM') {
+        this.formObj.patchValue({
+          scheduledType
+        });
+        const modalRef = this.modalService.open(CustomDateModalComponent, {centered: true});
+        modalRef.componentInstance.operationType = this.formObj.value.operationType;
+        modalRef.componentInstance.scheduledAt = this.formObj.value.scheduledDate;
+        modalRef.componentInstance.callback.subscribe((date: any) => {
+          this.callbackDate(date);
+        });
+      } else {
+        this.formObj.patchValue({
+          scheduledType,
+          scheduledDate: this.scheduledObj[scheduledType].value
+        });
+      }
+    }
   }
 
   /**
@@ -394,6 +384,18 @@ export class TodoDialogComponent implements OnInit, OnDestroy {
     this.currentProject = projectName;
     this.formObj.patchValue({
       projectId: data
+    });
+  }
+
+  /**
+   * get labels from child component vai Output
+   *
+   * @param data - labels/Tags Arrray
+   */
+  // eslint-disable-next-line @typescript-eslint/member-ordering
+  callbackLabel(data: string[]): void {
+    this.formObj.patchValue({
+      labelIds: data
     });
   }
 

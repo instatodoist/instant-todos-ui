@@ -1,5 +1,5 @@
 <div class="modal-header" style="border-bottom: none; padding: 0; margin-right: 10px;">
-  <button type="button" class="close" aria-label="Close" (click)="activeModal.dismiss('Cross click')">
+  <button type="button" class="close" aria-label="Close" (click)="activeModal.close('Cross click')">
     <span aria-hidden="true">×</span>
   </button>
 </div>
@@ -42,7 +42,7 @@
                       (click)="checkLabels(label)" class="fa fa-times" aria-hidden="true"></i></span>
                 </ng-container>
                 <span class="badge border border-secondary text-secondary mt-2 mr-2 cursor"
-                  (click)="openListPopup(tags)"><i class="fa fa-hashtag" aria-hidden="true"></i>Add
+                  (click)="openListPopup('TAG')"><i class="fa fa-hashtag" aria-hidden="true"></i>Add
                   Tag</span>
               </div>
             </div>
@@ -99,7 +99,7 @@
               <div class="iq-card-header d-flex justify-content-between">
                 <div class="iq-header-title">
                   <h4 class="card-title"> List: </h4>
-                  <div class="btn-group mb-2" role="group" (click)="openListPopup(projectRef)">
+                  <div class="btn-group mb-2" role="group" (click)="openListPopup('PROJECT')">
 
                     <div *ngIf="currentProject else chooseList" class="badge badge-pill badge-primary mr-2 cursor">
                       {{currentProject | titlecase}}</div>
@@ -120,7 +120,7 @@
                     <button type="button" class="btn rounded-pill mb-3" [ngClass]="{
                             'btn-outline-primary': formObj.value.scheduledType !== scheduledObj[key].slug,
                             'btn-primary': formObj.value.scheduledType === scheduledObj[key].slug
-                          }" (click)="askDatePickerToOpen(date, scheduledObj[key].slug)">
+                          }" (click)="openListPopup('DATE', scheduledObj[key].slug)">
                       <span *ngIf="scheduledObj[key].slug === 'CUSTOM'">
                         {{ formObj.value.scheduledDate? (formObj.value.scheduledDate | date: 'YYYY-MM-dd'):
                         scheduledObj[key].name}}
@@ -143,20 +143,3 @@
     </button>
   </form>
 </div>
-
-<ng-template #tags>
-  <app-dialog-todo-tags [labels]="labels" [labelIds]="formObj.value.labelIds" (data)="callbackLabel($event)">
-  </app-dialog-todo-tags>
-</ng-template>
-
-<ng-template #projectRef let-modal>
-  <app-dialog-todo-projects [projects]="projects" [projectId]="formObj.value.projectId"
-    (data)="callbackProject($event)">
-  </app-dialog-todo-projects>
-</ng-template>
-
-<ng-template #date>
-  <app-custom-date-modal [scheduledAt]="formObj.value.scheduledDate" [operationType]="formObj.value.operationType"
-    (data)="callbackDate($event)">
-  </app-custom-date-modal>
-</ng-template>
