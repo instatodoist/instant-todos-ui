@@ -347,7 +347,7 @@ export class TodoDialogComponent implements OnInit, OnDestroy {
         this.callbackProject(projectId);
       });
     } else if(popupType === 'TAG'){
-      const modalRef = this.modalService.open(DialogTodoTagsComponent, {size: 'lg'});
+      const modalRef = this.modalService.open(DialogTodoTagsComponent, {size: 'lg', scrollable: true});
       modalRef.componentInstance.labels = this.labels;
       modalRef.componentInstance.labelIds = this.formObj.value.labelIds;
       modalRef.componentInstance.callback.subscribe((tagIds: string[]) => {

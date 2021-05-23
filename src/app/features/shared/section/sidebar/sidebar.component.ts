@@ -192,7 +192,7 @@ export class SidebarComponent implements OnInit, AfterViewInit {
 
   // eslint-disable-next-line @typescript-eslint/member-ordering
   lazyLoadComponent(): void{
-    this.modalService.open(TodoProjectDialogComponent, {size: 'lg'});
+    this.modalService.open(TodoProjectDialogComponent, {size: 'lg', scrollable: true});
   }
 
 }
