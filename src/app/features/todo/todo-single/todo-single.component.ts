@@ -39,10 +39,14 @@ export class TodoSingleComponent implements OnInit {
     this.deleteTodoCb.next(todo);
   }
 
-  deleteRequest(todo: TodoType): void {
-    todo.deleteRequest = true;
+  deleteRequest(): void {
+    this.todo = {
+      ...this.todo, deleteRequest: true
+    };
     setTimeout(() => {
-      todo.deleteRequest = false;
+      this.todo = {
+        ...this.todo, deleteRequest: false
+      };
     }, 3000);
   }
 

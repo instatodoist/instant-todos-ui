@@ -46,7 +46,7 @@ padding-bottom: 10px;" [ngClass]="{'i-am-subtask': isSubTask }" (click)="openPop
       </ng-container>
       <span class="text-primary">
         <ng-container>
-          <div class=" ml-auto ml-4" (click)="$event.stopPropagation(); deleteRequest(todo)">
+          <div class=" ml-auto ml-4" (click)="$event.stopPropagation(); deleteRequest()">
             <button type="button" class="close ml-4" data-dismiss="alert" aria-label="Close">
               <span class="text-primary todo-actions" *ngIf="todo?.deleteRequest"
                 (click)="$event.stopPropagation(); deleteTodo(todo)">
