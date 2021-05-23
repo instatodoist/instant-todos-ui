@@ -60,7 +60,7 @@
             <ng-container *ngIf="todos?.data.length">
               <ng-container *ngFor="let todo of todos?.data; let i = index">
                 <app-todo-single [todo]="todo" [index]="i" [todoCurrentType]="todoCurrentType" [TODOTYPES]="TODOTYPES"
-                  (openPopUpCb)="openPopUp($event)" (updateTodoCb)="updateTodo($event)"
+                  (openPopUpCb)="openPopUp($event)" (updateTodoCb)="markComplete($event)"
                   (deleteTodoCb)="deleteTodo($event)"></app-todo-single>
               </ng-container>
             </ng-container>

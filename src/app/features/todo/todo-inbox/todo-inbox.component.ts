@@ -218,8 +218,11 @@ export class TodoInboxComponent implements OnInit, AfterViewInit, OnDestroy {
   /**
    * @param todo - todo object
    */
-  updateTodo(todo: TodoType): void {
-    todo.subTasks = todo.subTasks || [];
+   markComplete(todo: TodoType): void {
+    this.todo = { ...todo };
+    this.todo = {
+      ...this.todo, subTasks: todo.subTasks || []
+    };
     const postBody: TodoType = {
       // eslint-disable-next-line no-underscore-dangle
       _id: todo._id,
@@ -239,6 +242,7 @@ export class TodoInboxComponent implements OnInit, AfterViewInit, OnDestroy {
     this.toddService
       .todoOperation(postBody, this.conditions)
       .subscribe(() => {
+        this.todo = null;
         // navigate to today route if no pending task
         if (this.todoCurrentType === this.TODOTYPES.pending && !this.count.pending) {
           this.router.navigate(['/tasks/today']);
