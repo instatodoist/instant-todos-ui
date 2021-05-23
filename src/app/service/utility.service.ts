@@ -17,13 +17,14 @@ export class UtilityService {
   vcRefRoot: ViewContainerRef;
 
   constructor(
-    private injector: Injector,
-    private componentFactoryResolver: ComponentFactoryResolver,
+    // private injector: Injector,
+    // private componentFactoryResolver: ComponentFactoryResolver,
     private iziToast: ToastrService,
     private translateService: TranslateService
   ) { }
 
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  // eslint-disable-next-line @typescript-eslint/naming-convention
   get JQuery(): any {
     return $;
   }
@@ -75,82 +76,82 @@ export class UtilityService {
    *
    * @param ref - ComponentRef
    */
-  createComponentOutlet(ref: TDialogCompRef): any {
-    const factory = this.componentFactoryResolver.resolveComponentFactory(ref.value);
-    const componentRef: ComponentRef<any> = factory.create(this.injector);
-    if (ref?.data) {
-      (Object.keys(ref?.data)).forEach(element => {
-        if (element in ref?.data) {
-          componentRef.instance[element] = ref?.data[element];
-        }
-      });
-    }
-    const view = componentRef.hostView;
-    this.insertInAppViewContainer(view);
-    return componentRef.instance;
-  }
+  // createComponentOutlet(ref: TDialogCompRef): any {
+  //   const factory = this.componentFactoryResolver.resolveComponentFactory(ref.value);
+  //   const componentRef: ComponentRef<any> = factory.create(this.injector);
+  //   if (ref?.data) {
+  //     (Object.keys(ref?.data)).forEach(element => {
+  //       if (element in ref?.data) {
+  //         componentRef.instance[element] = ref?.data[element];
+  //       }
+  //     });
+  //   }
+  //   const view = componentRef.hostView;
+  //   this.insertInAppViewContainer(view);
+  //   return componentRef.instance;
+  // }
 
   /**
    * Create a template reference from param [TemplateRef]
    *
    * @param ref - TemplateRef
    */
-  createTemplateRef(ref: TDialogTempRef): void {
-    const temRef: TemplateRef<any> = ref.value;
-    const view = temRef.createEmbeddedView(null);
-    this.insertInAppViewContainer(view);
-  }
+  // createTemplateRef(ref: TDialogTempRef): void {
+  //   const temRef: TemplateRef<any> = ref.value;
+  //   const view = temRef.createEmbeddedView(null);
+  //   this.insertInAppViewContainer(view);
+  // }
 
   /**
    * Insert ComponentRef & TemplateRef in the APP ViewContanerRef
    *
    * @param view - TemplateRef | ComponentRef
    */
-  insertInAppViewContainer(view: ViewRef): void {
-    this.vcRefRoot.insert(view);
-  }
+  // insertInAppViewContainer(view: ViewRef): void {
+  //   this.vcRefRoot.insert(view);
+  // }
 
   /**
    * Passing ComponentRef | TemplateRef to open as a dialog
    *
    * @param ref - TemplateRef | ComponentRef
    */
-  openMdcDialog(ref: IDialogRef): Observable<{dialog: any; instance: any}> {
-    let instance: any;
-    if (ref.type === 'template') {
-      instance = this.createTemplateRef(ref);
-    } else {
-      instance = this.createComponentOutlet(ref);
-    }
-    return this.triggerMdcDialog(instance, ref.data.modelId);
-  }
+  // openMdcDialog(ref: IDialogRef): Observable<{dialog: any; instance: any}> {
+  //   let instance: any;
+  //   if (ref.type === 'template') {
+  //     instance = this.createTemplateRef(ref);
+  //   } else {
+  //     instance = this.createComponentOutlet(ref);
+  //   }
+  //   return this.triggerMdcDialog(instance, ref.data.modelId);
+  // }
 
   /**
    * Open ComponentRef | TemplateRef as a dialog
    */
-  triggerMdcDialog(instance: any, modelId: string): Observable<{dialog: any; instance: any}> {
-    return new Observable((observer) => {
-      setTimeout(()=>{
-        const dialog = $(`#${modelId}`);
-        dialog.modal('toggle'); // Open & close Popup
-        // instance.dialog = dialog;
-        dialog.on('hidden.bs.modal', () => { // listen modal close event
-          this.vcRefRoot.clear();
-        });
-        observer.next({ dialog, instance });
-      },0);
-    });
-  }
+  // triggerMdcDialog(instance: any, modelId: string): Observable<{dialog: any; instance: any}> {
+  //   return new Observable((observer) => {
+  //     setTimeout(()=>{
+  //       const dialog = $(`#${modelId}`);
+  //       dialog.modal('toggle'); // Open & close Popup
+  //       // instance.dialog = dialog;
+  //       dialog.on('hidden.bs.modal', () => { // listen modal close event
+  //         this.vcRefRoot.clear();
+  //       });
+  //       observer.next({ dialog, instance });
+  //     },0);
+  //   });
+  // }
 
   /**
    * Close MDC Dialog
    *
    * @param dialog - MDCDialog
    */
-  closeMdcDialog(dialog: any): void {
-    dialog.close();
-    this.vcRefRoot.clear();
-  }
+  // closeMdcDialog(dialog: any): void {
+  //   dialog.close();
+  //   this.vcRefRoot.clear();
+  // }
 
   getCurrentLanguage(): string {
     const currentStoredLang = localStorage.getItem('lang');

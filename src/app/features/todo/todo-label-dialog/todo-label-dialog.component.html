@@ -1,5 +1,4 @@
 <div class="modal-header">
-  <!-- <h5 class="modal-title" id="exampleModalLongTitle">Move to</h5> -->
   <button type="button" class="close" aria-label="Close" (click)="activeModal.dismiss('Cross click')">
     <span aria-hidden="true">×</span>
   </button>
@@ -7,12 +6,10 @@
 <div class="modal-body" style="min-height: 300px;">
   <form role="form" class="form-horizontal" name="form" id="form" [formGroup]="formObj" (ngSubmit)="submit()" novalidate>
     <div class="form-group">
-      <!-- <label for="colFormLabelSm">Small</label> -->
       <input type="text" class="form-control" id="name" placeholder="Label Name"
         formControlName="name" [style]="{'color': formObj.value.color}">
     </div>
     <div class="form-group">
-      <!-- <label for="colFormLabel">Default</label> -->
       <input type="text" class="form-control" id="description" placeholder="Description"
         formControlName="description" autocomplete="off">
     </div>
@@ -23,7 +20,6 @@
     <div class="form-group">
       <button type="submit" class="btn btn-primary" [disabled]="!formObj.valid">
         Save changes
-        <!-- <i class="fa fa-spinner fa-spin"></i> -->
       </button>
     </div>
   </form>

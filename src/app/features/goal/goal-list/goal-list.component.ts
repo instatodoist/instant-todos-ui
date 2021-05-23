@@ -73,10 +73,10 @@ export class GoalListComponent implements OnInit, OnDestroy {
 
   openUpdatePopUp(goal: IGoalType = null, type: ITemplateOperation = 'IS_UPDATE'): void {
     if (type === 'IS_UPDATE') {
-      const modelRef = this.modalService.open(GoalDialogComponent);
+      const modelRef = this.modalService.open(GoalDialogComponent, {size: 'lg'});
       modelRef.componentInstance.goal = goal;
     } else {
-      this.modalService.open(GoalDialogComponent);
+      this.modalService.open(GoalDialogComponent, {size: 'lg'});
     }
   }
 

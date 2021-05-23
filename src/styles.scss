@@ -1,12 +1,12 @@
 /* Importing Bootstrap SCSS file. */
-@import '~bootstrap/scss/bootstrap';
+// @import '~bootstrap/scss/bootstrap';
 
 
 /* You can add global styles to this file, and also import other style files */
 
 /* Importing Bootstrap SCSS file. */
 
-// @import './assets/facelift/css/bootstrap.min.css';
+@import './assets/facelift/css/bootstrap.min.css';
 @import './assets/facelift/css/typography.css';
 @import './assets/facelift/css/style.css';
 @import './assets/facelift/css/responsive.css';
@@ -16,32 +16,6 @@
 .cursor {
   cursor: pointer;
 }
-// .display-block {
-//   display: block !important;
-// }
-// button:disabled, button[disabled] {
-//   background-color: var(--iq-primary) !important;
-//   border-color: var(--iq-primary) !important;
-// }
-// .mt-15 {
-//   margin-top: 150px;
-// }
-// .mh-40{
-//   min-height: 400px !important
-// }
-// a:hover {
-//   color: var(--iq-primary) !important;
-// }
-// .flota-l {
-//   float: left;
-// }
-// @media screen and (-webkit-min-device-pixel-ratio:0) {
-//   select,
-//   textarea,
-//   input {
-//     font-size: 16px;
-//   }
-// }
 
 .modal-content {
     border-radius: 15px;
@@ -49,10 +23,6 @@
 .card {
     border-radius: 15px;
 }
-// body.modal-dialog {
-//   height: 100vh;
-//   overflow-y: hidden;
-// }
-// .light-blue-backdrop {
-//     background-color: #5cb3fd;
-// }
+.btn-primary:not(:disabled):not(.disabled).active:focus, .btn-primary:not(:disabled):not(.disabled):active:focus, .show>.btn-primary.dropdown-toggle:focus {
+  box-shadow: none !important;
+}

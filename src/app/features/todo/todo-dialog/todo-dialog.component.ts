@@ -340,7 +340,7 @@ export class TodoDialogComponent implements OnInit, OnDestroy {
   // eslint-disable-next-line @typescript-eslint/member-ordering
   openListPopup(popupType: string, scheduledType?: TScheduledString): void {
     if(popupType === 'PROJECT'){
-      const modalRef = this.modalService.open(TodoProjectListDialogComponent, {size: 'lg'});
+      const modalRef = this.modalService.open(TodoProjectListDialogComponent, {size: 'lg', scrollable: true});
       modalRef.componentInstance.projects = this.projects;
       modalRef.componentInstance.projectId = this.formObj.value.projectId;
       modalRef.componentInstance.callback.subscribe((projectId: string) => {
