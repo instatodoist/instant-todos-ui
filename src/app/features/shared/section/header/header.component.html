@@ -50,7 +50,7 @@
       </div>
       <ul class="navbar-list">
         <li class="line-height">
-          <a href="javascript:void(0)" class="search-toggle iq-waves-effect d-flex align-items-center">
+          <a href="javascript:void(0)" (click)="headerJs($event)" class="search-toggle iq-waves-effect d-flex align-items-center">
             <img src="{{session?.profilePic?.url || defaultProfileImage}}" class="img-fluid rounded mr-3" alt="user">
             <div class="caption">
               <h6 class="mb-0 line-height">{{session?.email.charAt(0) | titlecase}}

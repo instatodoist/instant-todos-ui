@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { AfterViewInit, Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { FormGroup, FormBuilder } from '@angular/forms';
 import { debounceTime, distinctUntilChanged } from 'rxjs/operators';
@@ -23,6 +23,7 @@ export class HeaderComponent implements OnInit {
   languages: ILanguage[] = [];
   defaultLang: ILanguage = null;
   defaultProfileImage = this.appService.defautProfileImage;
+  jQuery = this.utilityService.JQuery;
 
   constructor(
     private router: Router,
@@ -50,6 +51,40 @@ export class HeaderComponent implements OnInit {
   ngOnInit(): void {
     this.getProfile();
     this.onSearch();
+  }
+
+  headerJs(e: Event): void {
+    const jQuery = this.jQuery;
+    const myTargetElement = e.target;
+    let selector;
+    let mainElement;
+    if (
+      jQuery(myTargetElement).hasClass('search-toggle') ||
+      jQuery(myTargetElement).parent().hasClass('search-toggle') ||
+      jQuery(myTargetElement).parent().parent().hasClass('search-toggle')
+    ) {
+      if (jQuery(myTargetElement).hasClass('search-toggle')) {
+        selector = jQuery(myTargetElement).parent();
+        mainElement = jQuery(myTargetElement);
+      } else if (jQuery(myTargetElement).parent().hasClass('search-toggle')) {
+        selector = jQuery(myTargetElement).parent().parent();
+        mainElement = jQuery(myTargetElement).parent();
+      } else if (jQuery(myTargetElement).parent().parent().hasClass('search-toggle')) {
+        selector = jQuery(myTargetElement).parent().parent().parent();
+        mainElement = jQuery(myTargetElement).parent().parent();
+      }
+      if (!mainElement.hasClass('active') && jQuery('.navbar-list li').find('.active')) {
+        jQuery('.navbar-list li').removeClass('iq-show');
+        jQuery('.navbar-list li .search-toggle').removeClass('active');
+      }
+      selector.toggleClass('iq-show');
+      mainElement.toggleClass('active');
+      e.preventDefault();
+    // eslint-disable-next-line no-empty
+    } else if (jQuery(myTargetElement).is('.search-input')) {} else {
+      jQuery('.navbar-list li').removeClass('iq-show');
+      jQuery('.navbar-list li .search-toggle').removeClass('active');
+    }
   }
 
   // do singout
