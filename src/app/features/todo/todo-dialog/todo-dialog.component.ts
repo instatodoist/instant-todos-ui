@@ -460,7 +460,9 @@ export class TodoDialogComponent implements OnInit, OnDestroy {
    */
   // eslint-disable-next-line @typescript-eslint/member-ordering
   ngOnDestroy(): void {
-    this.routeSubscription.unsubscribe();
+    if(this.routeSubscription){
+      this.routeSubscription.unsubscribe();
+    }
   }
 
 }

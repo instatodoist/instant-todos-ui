@@ -178,14 +178,14 @@ export class TodoService {
   /**
    * @param conditions - filter params while fetching todos
    */
-  listTodos(conditions: TodoConditions): Observable<TodoListType> {
+  listTodos(conditions: TodoConditions): Observable<any> {
     return this.apollo
       .watchQuery({
         query: TODO_LIST_QUERY,
         variables: conditions,
         fetchPolicy: 'cache-and-network'
       })
-      .valueChanges.pipe(map((data: any) => data.data));
+      .valueChanges;
   }
 
   /**
@@ -210,14 +210,14 @@ export class TodoService {
   /**
    * @param conditions - filter params while fetching todos
    */
-  listCompletedTodos(conditions: TodoConditions): Observable<TodoCompletedListType> {
+  listCompletedTodos(conditions: TodoConditions): Observable<any> {
     return this.apollo
       .watchQuery({
         query: TODO_COMPLETED_QUERY,
         variables: conditions,
         fetchPolicy: 'cache-and-network'
       })
-      .valueChanges.pipe(map((data: any) => data.data));
+      .valueChanges;
   }
 
   /**
@@ -270,6 +270,7 @@ export class TodoService {
     if(body.notes){
       postTodo.notes = body.notes;
     }
+    // eslint-disable-next-line no-underscore-dangle
     if(body._id){
       postTodo.noteId = body.noteId;
     }
@@ -303,11 +304,13 @@ export class TodoService {
         ...postTodo,
         isCompleted: !!body.isCompleted
       };
+      // eslint-disable-next-line no-underscore-dangle
       variables.id = body._id;
       break;
     case 'DELETE':
       gqlOperation = TODO_DELETE_MUTATION;
       defaultDataKey = 'deleteTodo';
+      // eslint-disable-next-line no-underscore-dangle
       variables.id = body._id;
       break;
     default:
@@ -372,6 +375,7 @@ export class TodoService {
     case 'DELETE':
       gqlOperation = TODO_LABEL_DELETE_MUTATION;
       defaultDataKey = 'deleteTodoLabel';
+      // eslint-disable-next-line no-underscore-dangle
       variables.id = body._id;
       break;
     default:
@@ -434,12 +438,14 @@ export class TodoService {
         input: {
           name: body.name
         },
+        // eslint-disable-next-line no-underscore-dangle
         id: body._id
       };
       break;
     case 'DELETE':
       gqlOperation = TODO_PROJECT_DELETE_MUTATION;
       defaultDataKey = 'deleteTodoProject';
+      // eslint-disable-next-line no-underscore-dangle
       variables.id = body._id;
       break;
     default:
