@@ -70,6 +70,7 @@ export class TodoInboxComponent implements OnInit, AfterViewInit, OnDestroy {
       }
     ]
   };
+  private deleteReqSubscription: Subscription;
 
   private fetchCompletedTodosSubscription: Subscription;
   private fetchTodosSubscription: Subscription;
@@ -85,8 +86,13 @@ export class TodoInboxComponent implements OnInit, AfterViewInit, OnDestroy {
   }
 
   ngOnDestroy(): void {
+    // unsubscript complete
     if(this.fetchCompletedTodosSubscription){
       this.fetchCompletedTodosSubscription.unsubscribe();
+    }
+    // unsubscribe delete
+    if(this.deleteReqSubscription){
+      this.deleteReqSubscription.unsubscribe();
     }
     this.fetchTodosSubscription.unsubscribe();
   }
@@ -227,7 +233,6 @@ export class TodoInboxComponent implements OnInit, AfterViewInit, OnDestroy {
       // eslint-disable-next-line no-underscore-dangle
       _id: todo._id,
       isCompleted: !todo.isCompleted,
-      operationType: 'UPDATE'
     };
     const subTasks = todo?.subTasks.map((item: TodoType) => {
       const { isCompleted, title } = item;
@@ -240,7 +245,7 @@ export class TodoInboxComponent implements OnInit, AfterViewInit, OnDestroy {
       postBody.subTasks = subTasks;
     }
     this.toddService
-      .todoOperation(postBody, this.conditions)
+      .updateTodo(postBody, this.conditions)
       .subscribe(() => {
         this.todo = null;
         // navigate to today route if no pending task
@@ -261,8 +266,8 @@ export class TodoInboxComponent implements OnInit, AfterViewInit, OnDestroy {
         _id: todo._id,
         operationType: 'DELETE'
       };
-      this.toddService
-        .todoOperation(postBody, this.conditions)
+      this.deleteReqSubscription = this.toddService
+        .deleteTodo(postBody, this.conditions)
         .subscribe(() => {
           this.isDeleting = false;
           this.toastr.toastrSuccess('Task Deleted');
@@ -283,20 +288,6 @@ export class TodoInboxComponent implements OnInit, AfterViewInit, OnDestroy {
       this.getCompletedTodos(this.conditions);
     }
   }
-
-  // getTotalCount(): void {
-  //   const query: TodoConditions = {
-  //     filter: {
-  //       isCompleted: true,
-  //       // eslint-disable-next-line @typescript-eslint/naming-convention
-  //       title_contains: this.queryStr
-  //     }
-  //   };
-  //   this.countSubscription = this.toddService.listTodosCount(query).subscribe((response: any) => {
-  //     const { completed } = response;
-  //     this.count = { ...this.count, completed: completed.totalCount };
-  //   });
-  // }
 
   get trackIds(): string[] {
     // eslint-disable-next-line no-underscore-dangle

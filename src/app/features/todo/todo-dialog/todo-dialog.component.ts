@@ -71,6 +71,7 @@ export class TodoDialogComponent implements OnInit, OnDestroy {
   scheduledObjKeys = Object.keys(this.scheduledObj);
   subTasksFormArray: FormArray;
   private routeSubscription: Subscription;
+  private todoSubscription: Subscription;
 
   constructor(
     private router: Router,
@@ -417,6 +418,7 @@ export class TodoDialogComponent implements OnInit, OnDestroy {
   // eslint-disable-next-line @typescript-eslint/member-ordering
   submit(): void {
     if (this.formObj.valid) {
+      let $todo = null;
       const postBody = this.formValue;
       const { subTasks } = postBody;
       let filteredSubTasks = subTasks.filter((item: TodoType) => item.title);
@@ -427,18 +429,21 @@ export class TodoDialogComponent implements OnInit, OnDestroy {
           title
         };
       });
-      if (postBody._id) {
-        postBody.subTasks = filteredSubTasks;
-      } else {
-        delete postBody.subTasks;
-      }
       if(!postBody.noteId){
         delete postBody.noteId;
       }
+      if (postBody._id) {
+        postBody.subTasks = filteredSubTasks;
+        $todo =  this.todoService
+          .updateTodo(postBody, this.conditions);
+      } else {
+        delete postBody.subTasks;
+        $todo =  this.todoService
+          .createTodo(postBody, this.conditions);
+      }
       this.isSubmit = true;
-      this.todoService
-        .todoOperation(postBody, this.conditions)
-        .subscribe(() => {
+      $todo.subscribe(
+        () => {
           this.isSubmit = false;
           // this.isOpen.emit(false);
           this.activeModal.dismiss();
@@ -450,8 +455,7 @@ export class TodoDialogComponent implements OnInit, OnDestroy {
         },
         () => {
           this.isSubmit = false;
-        }
-        );
+        });
     }
   }
 

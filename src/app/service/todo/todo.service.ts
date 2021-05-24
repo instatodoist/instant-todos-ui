@@ -251,96 +251,96 @@ export class TodoService {
    * @param body - postbody for add/update/delete task
    * @param conditions - refetch conditions for todos-task wrt apolo
    */
-  todoOperation(body: TodoType, conditions: any = null, extraRefetch: TodoConditions = null): Observable<ISuccessType> {
-    let gqlOperation = TODO_ADD_MUTATION;
-    let defaultDataKey = 'addTodo';
-    const operationType = body.operationType;
-    // refetch query after add or update
-    const refetchQuery: any = {
-      query: TODO_LIST_QUERY
-    };
-    // if passing conditions
-    if (conditions) {
-      refetchQuery.variables = { ...conditions };
-    }
-    const refetch = [refetchQuery];
-    // initialising input body
-    const postTodo: TodoType = {};
-    // check notes
-    if(body.notes){
-      postTodo.notes = body.notes;
-    }
-    // eslint-disable-next-line no-underscore-dangle
-    if(body._id){
-      postTodo.noteId = body.noteId;
-    }
-    // checking title
-    if (body.title) {
-      postTodo.title = body.title;
-    }
-    if (body.projectId) {
-      postTodo.projectId = body.projectId;
-    }
-    // checking labels
-    if (body.labelIds && body.labelIds.length) {
-      postTodo.labelIds = body.labelIds;
-    } else {
-      postTodo.labelIds = [];
-    }
-    // checking scheduling
-    if (body.scheduledDate) {
-      postTodo.scheduledDate = body.scheduledDate;
-    } else {
-      postTodo.scheduledDate = null;
-    }
-    postTodo.subTasks = body.subTasks;
-    // initialising gql variables
-    const variables: IGQLVariable<string,  TodoType> = {};
-    switch (operationType) { // checking which operation - 'ADD' | 'UPDATE' | 'DELETE'
-    case 'UPDATE':
-      gqlOperation = TODO_UPDATE_MUTATION;
-      defaultDataKey = 'updateTodo';
-      variables.input = {
-        ...postTodo,
-        isCompleted: !!body.isCompleted
-      };
-      // eslint-disable-next-line no-underscore-dangle
-      variables.id = body._id;
-      break;
-    case 'DELETE':
-      gqlOperation = TODO_DELETE_MUTATION;
-      defaultDataKey = 'deleteTodo';
-      // eslint-disable-next-line no-underscore-dangle
-      variables.id = body._id;
-      break;
-    default:
-      variables.input = postTodo;
-      break;
-    }
-    // const refetch = [refetchQuery];
-    return this.apollo.mutate({
-      mutation: gqlOperation,
-      variables,
-      refetchQueries: [
-        ...refetch,
-        {
-          query: TODO_LIST_COUNT_QUERY,
-          variables: {
-            filter: {
-              isCompleted: true
-            }
-          }
-        },
-        {
-          query: TODO_PROJECT_QUERY,
-          variables: {
-            sort: { updatedAt: 'ASC' }
-          }
-        }
-      ]
-    })
-      .pipe(map(({ data }: any) => data[defaultDataKey]));
-  }
+  // todoOperation(body: TodoType, conditions: any = null, extraRefetch: TodoConditions = null): Observable<ISuccessType> {
+  //   let gqlOperation = TODO_ADD_MUTATION;
+  //   let defaultDataKey = 'addTodo';
+  //   const operationType = body.operationType;
+  //   // refetch query after add or update
+  //   const refetchQuery: any = {
+  //     query: TODO_LIST_QUERY
+  //   };
+  //   // if passing conditions
+  //   if (conditions) {
+  //     refetchQuery.variables = { ...conditions };
+  //   }
+  //   const refetch = [refetchQuery];
+  //   // initialising input body
+  //   const postTodo: TodoType = {};
+  //   // check notes
+  //   if(body.notes){
+  //     postTodo.notes = body.notes;
+  //   }
+  //   // eslint-disable-next-line no-underscore-dangle
+  //   if(body._id){
+  //     postTodo.noteId = body.noteId;
+  //   }
+  //   // checking title
+  //   if (body.title) {
+  //     postTodo.title = body.title;
+  //   }
+  //   if (body.projectId) {
+  //     postTodo.projectId = body.projectId;
+  //   }
+  //   // checking labels
+  //   if (body.labelIds && body.labelIds.length) {
+  //     postTodo.labelIds = body.labelIds;
+  //   } else {
+  //     postTodo.labelIds = [];
+  //   }
+  //   // checking scheduling
+  //   if (body.scheduledDate) {
+  //     postTodo.scheduledDate = body.scheduledDate;
+  //   } else {
+  //     postTodo.scheduledDate = null;
+  //   }
+  //   postTodo.subTasks = body.subTasks;
+  //   // initialising gql variables
+  //   const variables: IGQLVariable<string,  TodoType> = {};
+  //   switch (operationType) { // checking which operation - 'ADD' | 'UPDATE' | 'DELETE'
+  //   case 'UPDATE':
+  //     gqlOperation = TODO_UPDATE_MUTATION;
+  //     defaultDataKey = 'updateTodo';
+  //     variables.input = {
+  //       ...postTodo,
+  //       isCompleted: !!body.isCompleted
+  //     };
+  //     // eslint-disable-next-line no-underscore-dangle
+  //     variables.id = body._id;
+  //     break;
+  //   case 'DELETE':
+  //     gqlOperation = TODO_DELETE_MUTATION;
+  //     defaultDataKey = 'deleteTodo';
+  //     // eslint-disable-next-line no-underscore-dangle
+  //     variables.id = body._id;
+  //     break;
+  //   default:
+  //     variables.input = postTodo;
+  //     break;
+  //   }
+  //   // const refetch = [refetchQuery];
+  //   return this.apollo.mutate({
+  //     mutation: gqlOperation,
+  //     variables,
+  //     refetchQueries: [
+  //       ...refetch,
+  //       {
+  //         query: TODO_LIST_COUNT_QUERY,
+  //         variables: {
+  //           filter: {
+  //             isCompleted: true
+  //           }
+  //         }
+  //       },
+  //       {
+  //         query: TODO_PROJECT_QUERY,
+  //         variables: {
+  //           sort: { updatedAt: 'ASC' }
+  //         }
+  //       }
+  //     ]
+  //   })
+  //     .pipe(map(({ data }: any) => data[defaultDataKey]));
+  // }
 
   /**
    * @param body - postbody for add/update/delete label
@@ -498,5 +498,125 @@ export class TodoService {
       todoCurrentType = this.TODOTYPES.pending;
     }
     return todoCurrentType;
+  }
+
+    /** --- refactor services ---*/
+  // create
+  createTodo(body: TodoType, conditions: any = null): Observable<ISuccessType>{
+    const refetchQuery = this.createRefetchQuery(conditions);
+    const defaultDataKey = 'addTodo';
+    const postTodo = this.createTodoPayload(body);
+    // initialising gql variables
+    const variables: IGQLVariable<string,  TodoType> = {};
+    variables.input = postTodo;
+    return this.apollo.mutate({
+      mutation: TODO_ADD_MUTATION,
+      variables,
+      refetchQueries: [
+        ...refetchQuery
+      ]
+    })
+      .pipe(map(({ data }: any) => data[defaultDataKey]));
+  }
+
+  // update
+  updateTodo(body: TodoType, conditions: any = null): Observable<ISuccessType>{
+    const refetchQuery = this.createRefetchQuery(conditions);
+    const defaultDataKey = 'updateTodo';
+    const postTodo = this.createTodoPayload(body);
+    // initialising gql variables
+    const variables: IGQLVariable<string,  TodoType> = {};
+    variables.input = {
+      ...postTodo,
+      isCompleted: !!body.isCompleted
+    };
+    // eslint-disable-next-line no-underscore-dangle
+    variables.id = body._id;
+    return this.apollo.mutate({
+      mutation: TODO_UPDATE_MUTATION,
+      variables,
+      refetchQueries: [
+        ...refetchQuery
+      ]
+    })
+      .pipe(map(({ data }: any) => data[defaultDataKey]));
+  }
+
+  // delete
+  deleteTodo(body: TodoType, conditions: any = null): Observable<ISuccessType>{
+    const refetchQuery = this.createRefetchQuery(conditions);
+    const defaultDataKey = 'deleteTodo';
+    const variables: IGQLVariable<string,  TodoType> = {};
+    // eslint-disable-next-line no-underscore-dangle
+    variables.id = body._id;
+    return this.apollo.mutate({
+      mutation: TODO_DELETE_MUTATION,
+      variables,
+      refetchQueries: [
+        ...refetchQuery
+      ]
+    })
+      .pipe(map(({ data }: any) => data[defaultDataKey]));
+  }
+
+  private createRefetchQuery(conditions: any = null, type?: string): any{
+    // refetch query
+    const refetchQuery: any = {
+      query: TODO_LIST_QUERY
+    };
+    // if passing conditions
+    if (conditions) {
+      refetchQuery.variables = { ...conditions };
+    }
+    return [
+        ...[refetchQuery],
+        {
+          query: TODO_LIST_COUNT_QUERY,
+          variables: {
+            filter: {
+              isCompleted: true
+            }
+          }
+        },
+        {
+          query: TODO_PROJECT_QUERY,
+          variables: {
+            sort: { updatedAt: 'ASC' }
+          }
+        }
+      ];
+  }
+
+  private createTodoPayload(body: TodoType): TodoType {
+    const postTodo: TodoType = {};
+    // check notes
+    if(body.notes){
+      postTodo.notes = body.notes;
+    }
+    // eslint-disable-next-line no-underscore-dangle
+    if(body._id){
+      postTodo.noteId = body.noteId;
+    }
+    // checking title
+    if (body.title) {
+      postTodo.title = body.title;
+    }
+    if (body.projectId) {
+      postTodo.projectId = body.projectId;
+    }
+    // checking labels
+    if (body.labelIds && body.labelIds.length) {
+      postTodo.labelIds = body.labelIds;
+    } else {
+      postTodo.labelIds = [];
+    }
+    // checking scheduling
+    if (body.scheduledDate) {
+      postTodo.scheduledDate = body.scheduledDate;
+    } else {
+      postTodo.scheduledDate = null;
+    }
+    postTodo.subTasks = body.subTasks;
+    return postTodo;
   }
 }
