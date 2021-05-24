@@ -73,7 +73,7 @@ export class SaDailyComponent implements OnInit {
   // }
 
   private getTasksCount() {
-    this.todoService.listTodosCount({
+    this.todoService.countByTodoType({
       filter: {
         isCompleted: true
       }

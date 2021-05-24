@@ -80,6 +80,22 @@ export class TodoService {
     };
   }
 
+  getCurentRoute(): string {
+    let todoCurrentType = '';
+    if (this.router.url.match('/tasks/today')) { // checking route if today
+      todoCurrentType = this.TODOTYPES.today;
+    } else if (this.router.url.match('/tasks/upcoming')) { // checking route if today
+      todoCurrentType = this.TODOTYPES.upcoming;
+    } else if (this.router.url.match('/tasks/completed')) { // checking route if completed
+      todoCurrentType = this.TODOTYPES.completed;
+    } else if (this.router.url.match('/tasks/inbox')) { // checking route if inbox
+      todoCurrentType = this.TODOTYPES.inbox;
+    } else if (this.router.url.match('/tasks/pending')) { // checking route if inbox
+      todoCurrentType = this.TODOTYPES.pending;
+    }
+    return todoCurrentType;
+  }
+
   /**
    * @param type - current route type
    * @description - used to get the refetch condition for current route for aplolo
@@ -166,7 +182,7 @@ export class TodoService {
   /**
    * @param conditions - filter params while fetching todos
    */
-  listTodos(conditions: TodoConditions): Observable<any> {
+  fetchAll(conditions: TodoConditions): Observable<any> {
     return this.apollo
       .watchQuery({
         query: TODO_LIST_QUERY,
@@ -179,7 +195,20 @@ export class TodoService {
   /**
    * @param conditions - filter params while fetching todos
    */
-  listTodosCount(conditions: TodoConditions): Observable<ITodoTypeCount> {
+  fetchCompleted(conditions: TodoConditions): Observable<any> {
+    return this.apollo
+      .watchQuery({
+        query: TODO_COMPLETED_QUERY,
+        variables: conditions,
+        fetchPolicy: 'cache-and-network'
+      })
+      .valueChanges;
+  }
+
+  /**
+   * @param conditions - filter params while fetching todos
+   */
+  countByTodoType(conditions: TodoConditions): Observable<ITodoTypeCount> {
     return this.apollo
       .watchQuery({
         query: TODO_LIST_COUNT_QUERY,
@@ -195,66 +224,6 @@ export class TodoService {
         })));
   }
 
-  /**
-   * @param conditions - filter params while fetching todos
-   */
-  listCompletedTodos(conditions: TodoConditions): Observable<any> {
-    return this.apollo
-      .watchQuery({
-        query: TODO_COMPLETED_QUERY,
-        variables: conditions,
-        fetchPolicy: 'cache-and-network'
-      })
-      .valueChanges;
-  }
-
-  /**
-   * @param conditions - filter params while fetching todos
-   */
-  listCompletedTodosCount(conditions: TodoConditions): Observable<TodoCompletedListType> {
-    return this.apollo
-      .watchQuery({
-        query: TODO_COMPLETED_COUNT_QUERY,
-        variables: conditions,
-        fetchPolicy: 'network-only'
-      })
-      .valueChanges.pipe(map(({ data }: any) => data.todoCompleted));
-  }
-
-  /**
-   * @description - getting count for tasks
-   */
-  callTodoCountService() {
-    const todoTypes = this.todoTypes();
-    const obs1 = this.listTodosCount(this.getConditions(todoTypes.inbox));
-    const obs2 = this.listTodosCount(this.getConditions(todoTypes.today));
-    const obs3 = this.listTodosCount(this.getConditions(todoTypes.pending));
-    const obs4 = this.listCompletedTodosCount(this.getConditions(todoTypes.completed));
-    return forkJoin([
-      obs1,
-      obs2,
-      obs3,
-      obs4
-    ]);
-  }
-
-  getCurentRoute(): string {
-    let todoCurrentType = '';
-    if (this.router.url.match('/tasks/today')) { // checking route if today
-      todoCurrentType = this.TODOTYPES.today;
-    } else if (this.router.url.match('/tasks/upcoming')) { // checking route if today
-      todoCurrentType = this.TODOTYPES.upcoming;
-    } else if (this.router.url.match('/tasks/completed')) { // checking route if completed
-      todoCurrentType = this.TODOTYPES.completed;
-    } else if (this.router.url.match('/tasks/inbox')) { // checking route if inbox
-      todoCurrentType = this.TODOTYPES.inbox;
-    } else if (this.router.url.match('/tasks/pending')) { // checking route if inbox
-      todoCurrentType = this.TODOTYPES.pending;
-    }
-    return todoCurrentType;
-  }
-
-    /** --- refactor services ---*/
   // create
   createTodo(body: TodoType, conditions: any = null): Observable<ISuccessType>{
     const refetchQuery = this.createRefetchQuery(conditions);
@@ -313,34 +282,6 @@ export class TodoService {
       .pipe(map(({ data }: any) => data[defaultDataKey]));
   }
 
-  private createRefetchQuery(conditions: any = null, type?: string): any{
-    // refetch query
-    const refetchQuery: any = {
-      query: TODO_LIST_QUERY
-    };
-    // if passing conditions
-    if (conditions) {
-      refetchQuery.variables = { ...conditions };
-    }
-    return [
-        ...[refetchQuery],
-        {
-          query: TODO_LIST_COUNT_QUERY,
-          variables: {
-            filter: {
-              isCompleted: true
-            }
-          }
-        },
-        {
-          query: TODO_PROJECT_QUERY,
-          variables: {
-            sort: { updatedAt: 'ASC' }
-          }
-        }
-      ];
-  }
-
   private createTodoPayload(body: TodoType): TodoType {
     const postTodo: TodoType = {};
     // check notes
@@ -372,5 +313,33 @@ export class TodoService {
     }
     postTodo.subTasks = body.subTasks;
     return postTodo;
+  }
+
+  private createRefetchQuery(conditions: any = null, type?: string): any{
+    // refetch query
+    const refetchQuery: any = {
+      query: TODO_LIST_QUERY
+    };
+    // if passing conditions
+    if (conditions) {
+      refetchQuery.variables = { ...conditions };
+    }
+    return [
+        ...[refetchQuery],
+        {
+          query: TODO_LIST_COUNT_QUERY,
+          variables: {
+            filter: {
+              isCompleted: true
+            }
+          }
+        },
+        {
+          query: TODO_PROJECT_QUERY,
+          variables: {
+            sort: { updatedAt: 'ASC' }
+          }
+        }
+      ];
   }
 }

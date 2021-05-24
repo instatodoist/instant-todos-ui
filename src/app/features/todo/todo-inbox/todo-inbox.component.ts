@@ -25,7 +25,7 @@ export class TodoInboxComponent implements OnInit, AfterViewInit, OnDestroy {
   popupType: string; // popup type - update/delete
   todo: TodoType = null; // single todo object
   conditions: TodoConditions; // aploo refreshfetch conditions
-  TODOTYPES = this.toddService.todoTypes(); // todo types wrt routes
+  TODOTYPES = this.todoService.todoTypes(); // todo types wrt routes
   todoCurrentType: string; // current route
   queryStr = '';
   compltedCount = 0;
@@ -76,7 +76,7 @@ export class TodoInboxComponent implements OnInit, AfterViewInit, OnDestroy {
   private fetchTodosSubscription: Subscription;
 
   constructor(
-    private toddService: TodoService,
+    private todoService: TodoService,
     private activatedRoute: ActivatedRoute,
     private appService: AppService,
     private toastr: UtilityService,
@@ -120,8 +120,8 @@ export class TodoInboxComponent implements OnInit, AfterViewInit, OnDestroy {
           const { label = null } = params;
           const { q = '' } = query;
           if (!label) {
-            this.todoCurrentType = this.toddService.getCurentRoute();
-            this.conditions = this.toddService.getConditions(this.todoCurrentType);
+            this.todoCurrentType = this.todoService.getCurentRoute();
+            this.conditions = this.todoService.getConditions(this.todoCurrentType);
           } else {
             this.todoCurrentType = label;
             this.tabs = {
@@ -136,7 +136,7 @@ export class TodoInboxComponent implements OnInit, AfterViewInit, OnDestroy {
             };
             // eslint-disable-next-line no-underscore-dangle
             const labelId = labels.filter(obj => (obj.name).toLowerCase() === label.toLowerCase())[0]._id;
-            this.conditions = this.toddService.getConditions(labelId, 'labels');
+            this.conditions = this.todoService.getConditions(labelId, 'labels');
           }
           if (q) {
             this.queryStr = q;
@@ -147,14 +147,14 @@ export class TodoInboxComponent implements OnInit, AfterViewInit, OnDestroy {
             this.loader = true;
             const newQuery = { ...this.conditions, filter: { ...this.conditions.filter, isCompleted: true } };
             return combineLatest([
-              this.toddService.listTodosCount(newQuery),
-              this.toddService.listCompletedTodos(this.conditions)
+              this.todoService.countByTodoType(newQuery),
+              this.todoService.fetchCompleted(this.conditions)
             ]);
           } else {
             this.extraLoader = true;
             return combineLatest([
-              this.toddService.listTodosCount(query),
-              this.toddService.listTodos(this.conditions)
+              this.todoService.countByTodoType(query),
+              this.todoService.fetchAll(this.conditions)
             ]);
           }
         })
@@ -205,7 +205,7 @@ export class TodoInboxComponent implements OnInit, AfterViewInit, OnDestroy {
       conditions.offset = 1;
     }
     this.extraLoader = false;
-    this.fetchCompletedTodosSubscription = this.toddService.listCompletedTodos(conditions)
+    this.fetchCompletedTodosSubscription = this.todoService.fetchCompleted(conditions)
       .subscribe(({data}) => {
         this.customizeCompleteTodos(data.todoCompleted);
       });
@@ -245,7 +245,7 @@ export class TodoInboxComponent implements OnInit, AfterViewInit, OnDestroy {
     if(subTasks.length) {
       postBody.subTasks = subTasks;
     }
-    this.toddService
+    this.todoService
       .updateTodo(postBody, this.conditions)
       .subscribe(() => {
         this.todo = null;
@@ -267,7 +267,7 @@ export class TodoInboxComponent implements OnInit, AfterViewInit, OnDestroy {
         _id: todo._id,
         operationType: 'DELETE'
       };
-      this.deleteReqSubscription = this.toddService
+      this.deleteReqSubscription = this.todoService
         .deleteTodo(postBody, this.conditions)
         .subscribe(() => {
           this.isDeleting = false;
