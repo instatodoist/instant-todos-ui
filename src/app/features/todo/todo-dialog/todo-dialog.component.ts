@@ -220,7 +220,7 @@ export class TodoDialogComponent implements OnInit, OnDestroy {
         const url = this.router.url;
         let project = null;
         if (url.match('lists')) {
-          const splitArr = url.split('/');
+          const splitArr = url.replace(/(\?.*)|(#.*)/g, '').split('/');
           project = splitArr[splitArr.length - 1] || null;
         }
         const { labels = [], projects = [] } = data;
@@ -444,7 +444,7 @@ export class TodoDialogComponent implements OnInit, OnDestroy {
           .createTodo(postBody, this.conditions);
       }
       this.isSubmit = true;
-      $todo.subscribe(
+      this.todoSubscription = $todo.subscribe(
         () => {
           this.isSubmit = false;
           // this.isOpen.emit(false);
@@ -468,6 +468,9 @@ export class TodoDialogComponent implements OnInit, OnDestroy {
   ngOnDestroy(): void {
     if(this.routeSubscription){
       this.routeSubscription.unsubscribe();
+    }
+    if(this.todoSubscription){
+      this.todoSubscription.unsubscribe();
     }
   }
 
