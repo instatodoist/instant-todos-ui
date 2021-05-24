@@ -40,7 +40,7 @@ export class AccountUpdateComponent implements OnInit, AfterViewInit {
 
   getProfile(): void {
     this.authService.profile().subscribe((data) => {
-      this.appService.__updateCoreAppData({
+      this.appService. updateCoreAppData({
         ...this.appService.APP_DATA,
         session: {
           ...this.appService.APP_DATA.session, ...data

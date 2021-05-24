@@ -1,56 +1,56 @@
 import { Apollo } from 'apollo-angular';
 import { Injectable } from '@angular/core';
 import {
-  TODO_PROJECT_ADD_MUTATION,
-  TODO_PROJECT_UPDATE_MUTATION,
-  TODO_PROJECT_DELETE_MUTATION,
-  TODO_PROJECT_QUERY
+  TODO_LABEL_ADD_MUTATION,
+  TODO_LABEL_UPDATE_MUTATION,
+  TODO_LABEL_DELETE_MUTATION,
+  TODO_LABEL_QUERY
 } from '../../graphql/gql/todo.gql';
 
 import { Observable } from 'rxjs';
 import { map } from 'rxjs/operators';
 import {
-  TodoProjectType,
   ISuccessType,
-  IGQLVariable
+  IGQLVariable,
+  TodoLabelType
 } from '../../models';
 
 @Injectable({
   providedIn: 'root'
 })
-export class ProjectService {
+export class TagService {
 
   constructor(
     private apollo: Apollo
   ) { }
 
   // fetch
-  fetchAll(): Observable<TodoProjectType[]> {
+  fetchAll(): Observable<TodoLabelType[]> {
     return this.apollo
       .watchQuery({
-        query: TODO_PROJECT_QUERY,
+        query: TODO_LABEL_QUERY,
         variables: {
           sort: { updatedAt: 'ASC' }
         }
       })
-      .valueChanges.pipe(map(({ data }: any) => data.todoProjectList));
+      .valueChanges.pipe(map(({ data }: any) => data.todoLabelList));
   }
 
   // create
-  create(body: TodoProjectType, conditions: any = null): Observable<ISuccessType>{
+  create(body: TodoLabelType, conditions: any = null): Observable<ISuccessType>{
     const refetchQuery = this.createRefetchQuery(conditions);
-    const defaultDataKey = 'addTodoProject';
-    const postTodo = this.createPayload(body);
+    const defaultDataKey = 'addTodoLabel';
+    const {_id, operationType, ...postBody } = body;
     // initialising gql variables
-    let variables: IGQLVariable<string,  TodoProjectType> = {};
+    let variables: IGQLVariable<string,  TodoLabelType> = {};
     variables = {
       ...variables,
       input: {
-        name: postTodo.name
+        ...postBody
       }
     };
     return this.apollo.mutate({
-      mutation: TODO_PROJECT_ADD_MUTATION,
+      mutation: TODO_LABEL_ADD_MUTATION,
       variables,
       refetchQueries: [
         ...refetchQuery
@@ -60,22 +60,21 @@ export class ProjectService {
   }
 
   // update
-  update(body: TodoProjectType, conditions: any = null): Observable<ISuccessType>{
+  update(body: TodoLabelType, conditions: any = null): Observable<ISuccessType>{
     const refetchQuery = this.createRefetchQuery(conditions);
-    const defaultDataKey = 'updateTodoProject';
-    const postTodo = this.createPayload(body);
+    const defaultDataKey = 'updateTodoLabel';
+    const { _id, operationType, ...postBody } = this.createPayload(body);
     // initialising gql variables
-    let variables: IGQLVariable<string,  TodoProjectType> = {};
+    let variables: IGQLVariable<string,  TodoLabelType> = {};
     variables = {
       ...variables,
       input: {
-        name: postTodo.name
+        ...postBody
       },
-      // eslint-disable-next-line no-underscore-dangle
-      id: postTodo._id
+      id: _id
     };
     return this.apollo.mutate({
-      mutation: TODO_PROJECT_UPDATE_MUTATION,
+      mutation: TODO_LABEL_UPDATE_MUTATION,
       variables,
       refetchQueries: [
         ...refetchQuery
@@ -85,15 +84,15 @@ export class ProjectService {
   }
 
   // delete
-  delete(body: TodoProjectType, conditions: any = null): Observable<ISuccessType>{
+  delete(body: TodoLabelType, conditions: any = null): Observable<ISuccessType>{
     const refetchQuery = this.createRefetchQuery(conditions);
-    const defaultDataKey = 'deleteTodoProject';
+    const defaultDataKey = 'deleteTodoLabel';
     const postTodo = this.createPayload(body);
-    const variables: IGQLVariable<string,  TodoProjectType> = {};
+    const variables: IGQLVariable<string,  TodoLabelType> = {};
     // eslint-disable-next-line no-underscore-dangle
     variables.id = postTodo._id;
     return this.apollo.mutate({
-      mutation: TODO_PROJECT_DELETE_MUTATION,
+      mutation: TODO_LABEL_DELETE_MUTATION,
       variables,
       refetchQueries: [
         ...refetchQuery
@@ -105,7 +104,7 @@ export class ProjectService {
   private createRefetchQuery(conditions: any = null): any{
     // refetch query
     const refetchQuery: any = {
-      query: TODO_PROJECT_QUERY
+      query: TODO_LABEL_QUERY
     };
     if (conditions) {
       refetchQuery.variables = conditions;
@@ -119,8 +118,8 @@ export class ProjectService {
     ];
   }
 
-  private createPayload(body: TodoProjectType): TodoProjectType {
-    const postTodo: TodoProjectType = { ...body };
+  private createPayload(body: TodoLabelType): TodoLabelType {
+    const postTodo: TodoLabelType = { ...body };
     return postTodo;
   }
 }

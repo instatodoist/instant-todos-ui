@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { TodoService, AppService } from '../../../service';
+import { AppService, ProjectService } from '../../../service';
 import { TodoLabelType } from '../../../models/todo.model';
 
 @Component({
@@ -18,7 +18,7 @@ export class TodoProjectListComponent implements OnInit {
 
   constructor(
     private appService: AppService,
-    private todoService: TodoService
+    private projectService: ProjectService
   ) { }
 
   ngOnInit(): void {
@@ -29,8 +29,8 @@ export class TodoProjectListComponent implements OnInit {
   }
 
   getLabels(): void {
-    this.todoService
-      .listTodoProjects()
+    this.projectService
+      .fetchAll()
       .subscribe(response => {
         this.labels = response;
       });

@@ -4,7 +4,7 @@ import { CdkDragDrop, moveItemInArray } from '@angular/cdk/drag-drop';
 import { map, switchMap } from 'rxjs/operators';
 import { combineLatest, of, Subscription } from 'rxjs';
 import { TodoListType, TodoCompletedListType, TodoType, TodoConditions, ITodoTypeCount, ItabName } from '../../../models';
-import { TodoService, AppService, UtilityService } from '../../../service';
+import { TodoService, AppService, UtilityService, ProjectService } from '../../../service';
 import { TodoDialogComponent } from '../todo-dialog/todo-dialog.component';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 
@@ -81,7 +81,8 @@ export class TodoInboxComponent implements OnInit, AfterViewInit, OnDestroy {
     private appService: AppService,
     private toastr: UtilityService,
     private router: Router,
-    private modalService: NgbModal
+    private modalService: NgbModal,
+    private projectService: ProjectService
   ) {
   }
 
@@ -106,7 +107,7 @@ export class TodoInboxComponent implements OnInit, AfterViewInit, OnDestroy {
   fetchTodosOnLoad(){
     this.todoCurrentType = ''; // default to inbox
     this.loader = true;
-    this.fetchTodosSubscription = this.toddService.listTodoProjects()
+    this.fetchTodosSubscription = this.projectService.fetchAll()
       .pipe(
         switchMap(data=> combineLatest([of(data), this.activatedRoute.params, this.activatedRoute.queryParams])),
         map(data => ({

@@ -109,7 +109,7 @@ export class HeaderComponent implements OnInit {
       .subscribe(data => {
         this.session = data;
         // eslint-disable-next-line no-underscore-dangle
-        this.appService.__updateCoreAppData({
+        this.appService. updateCoreAppData({
           ...this.appService.APP_DATA,
           session: this.session
         });

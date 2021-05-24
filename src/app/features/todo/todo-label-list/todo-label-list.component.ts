@@ -1,8 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
-import { TodoService } from '../../../service';
 import { TodoLabelType } from '../../../models';
-import { UtilityService  } from '../../../service';
+import { UtilityService, TagService , TodoService } from '../../../service';
 import { TodoLabelDialogComponent } from '../todo-label-dialog/todo-label-dialog.component';
 
 @Component({
@@ -22,10 +21,11 @@ export class TodoLabelListComponent implements OnInit {
     private todoService: TodoService,
     private toast: UtilityService,
     private modalService: NgbModal,
+    private tagService: TagService
   ) { }
 
   ngOnInit(): void {
-    this.todoService.listTodoLabels().subscribe( data => {
+    this.tagService.fetchAll().subscribe( data => {
       this.labels = data;
     });
   }
@@ -52,8 +52,8 @@ export class TodoLabelListComponent implements OnInit {
   }
 
   todoOperationExec(postBody) {
-    this.todoService
-      .todoLabelOperation(postBody)
+    this.tagService
+      .delete(postBody)
       .subscribe(() => {
         if (postBody.operationType === 'DELETE') {
           this.toast.toastrSuccess('Tag has been deleted');

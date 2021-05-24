@@ -1,8 +1,9 @@
 import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
+import { Subscription } from 'rxjs';
 import { TodoLabelType } from 'src/app/models';
-import { TodoService } from 'src/app/service';
+import { TagService } from 'src/app/service';
 
 @Component({
   selector: 'app-todo-label-dialog',
@@ -14,10 +15,11 @@ export class TodoLabelDialogComponent implements OnInit {
   @Input() label: TodoLabelType;
   @Output() callback: EventEmitter<boolean> = new EventEmitter(false);
   formObj: FormGroup;
+  private tagSubscription: Subscription;
 
   constructor(
     private fb: FormBuilder,
-    private todoService: TodoService,
+    private tagService: TagService,
     public activeModal: NgbActiveModal
   ) { }
 
@@ -63,12 +65,17 @@ export class TodoLabelDialogComponent implements OnInit {
   }
 
   todoOperationExec(postBody: TodoLabelType) {
-    this.todoService
-      .todoLabelOperation(postBody)
-      .subscribe(() => {
-        this.activeModal.dismiss();
-        this.callback.next(true);
-      });
+    let tag$ = null;
+    // eslint-disable-next-line no-underscore-dangle
+    if(this.label?._id){
+      tag$ = this.tagService.update(postBody);
+    } else {
+      tag$ = this.tagService.create(postBody);
+    }
+    this.tagSubscription = tag$.subscribe(() => {
+      this.activeModal.dismiss();
+      this.callback.next(true);
+    });
   }
 
 }

@@ -1,3 +1,4 @@
+/* eslint-disable prefer-arrow/prefer-arrow-functions */
 import { NgModule } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
@@ -72,6 +73,7 @@ import { HttpClient } from '@angular/common/http';
 export class AppModule { }
 
 // required for AOT compilation
+// eslint-disable-next-line @typescript-eslint/naming-convention
 export function HttpLoaderFactory(http: HttpClient): TranslateHttpLoader  {
   return new TranslateHttpLoader(http);
 }

@@ -1,6 +1,5 @@
-import {Apollo, Query} from 'apollo-angular';
+import { Apollo } from 'apollo-angular';
 import { Injectable } from '@angular/core';
-import { environment } from 'src/environments/environment';
 import { Router, ActivatedRoute } from '@angular/router';
 import {
   TODO_LIST_QUERY,
@@ -10,13 +9,6 @@ import {
   TODO_UPDATE_MUTATION,
   TODO_DELETE_MUTATION,
   TODO_ADD_MUTATION,
-  TODO_LABEL_ADD_MUTATION,
-  TODO_LABEL_UPDATE_MUTATION,
-  TODO_LABEL_DELETE_MUTATION,
-  TODO_LABEL_QUERY,
-  TODO_PROJECT_ADD_MUTATION,
-  TODO_PROJECT_UPDATE_MUTATION,
-  TODO_PROJECT_DELETE_MUTATION,
   TODO_PROJECT_QUERY
 } from '../../graphql/gql/todo.gql';
 
@@ -24,12 +16,9 @@ import { Observable, forkJoin } from 'rxjs';
 import { map } from 'rxjs/operators';
 import {
   TodoConditions,
-  TodoListType,
   TodoCompletedListType,
-  TodoLabelType,
   TodoType,
   ITodoTypeCount,
-  TodoProjectType,
   ISuccessType,
   IGQLVariable
 } from '../../models';
@@ -38,7 +27,6 @@ import {
 })
 
 export class TodoService {
-  private API_URL = environment.API_URL; // API Url
   private TODOTYPES = this.todoTypes(); // todo route types
   constructor(
     private apollo: Apollo,
@@ -231,240 +219,6 @@ export class TodoService {
         fetchPolicy: 'network-only'
       })
       .valueChanges.pipe(map(({ data }: any) => data.todoCompleted));
-  }
-
-  /**
-   * @description - fetching todos labels
-   */
-  listTodoLabels(): Observable<TodoLabelType[]> {
-    return this.apollo
-      .watchQuery({
-        query: TODO_LABEL_QUERY,
-        variables: {
-          sort: { updatedAt: 'ASC' }
-        }
-      })
-      .valueChanges.pipe(map(({ data }: any) => data.todoLabelList));
-  }
-
-  /**
-   * @param body - postbody for add/update/delete task
-   * @param conditions - refetch conditions for todos-task wrt apolo
-   */
-  // todoOperation(body: TodoType, conditions: any = null, extraRefetch: TodoConditions = null): Observable<ISuccessType> {
-  //   let gqlOperation = TODO_ADD_MUTATION;
-  //   let defaultDataKey = 'addTodo';
-  //   const operationType = body.operationType;
-  //   // refetch query after add or update
-  //   const refetchQuery: any = {
-  //     query: TODO_LIST_QUERY
-  //   };
-  //   // if passing conditions
-  //   if (conditions) {
-  //     refetchQuery.variables = { ...conditions };
-  //   }
-  //   const refetch = [refetchQuery];
-  //   // initialising input body
-  //   const postTodo: TodoType = {};
-  //   // check notes
-  //   if(body.notes){
-  //     postTodo.notes = body.notes;
-  //   }
-  //   // eslint-disable-next-line no-underscore-dangle
-  //   if(body._id){
-  //     postTodo.noteId = body.noteId;
-  //   }
-  //   // checking title
-  //   if (body.title) {
-  //     postTodo.title = body.title;
-  //   }
-  //   if (body.projectId) {
-  //     postTodo.projectId = body.projectId;
-  //   }
-  //   // checking labels
-  //   if (body.labelIds && body.labelIds.length) {
-  //     postTodo.labelIds = body.labelIds;
-  //   } else {
-  //     postTodo.labelIds = [];
-  //   }
-  //   // checking scheduling
-  //   if (body.scheduledDate) {
-  //     postTodo.scheduledDate = body.scheduledDate;
-  //   } else {
-  //     postTodo.scheduledDate = null;
-  //   }
-  //   postTodo.subTasks = body.subTasks;
-  //   // initialising gql variables
-  //   const variables: IGQLVariable<string,  TodoType> = {};
-  //   switch (operationType) { // checking which operation - 'ADD' | 'UPDATE' | 'DELETE'
-  //   case 'UPDATE':
-  //     gqlOperation = TODO_UPDATE_MUTATION;
-  //     defaultDataKey = 'updateTodo';
-  //     variables.input = {
-  //       ...postTodo,
-  //       isCompleted: !!body.isCompleted
-  //     };
-  //     // eslint-disable-next-line no-underscore-dangle
-  //     variables.id = body._id;
-  //     break;
-  //   case 'DELETE':
-  //     gqlOperation = TODO_DELETE_MUTATION;
-  //     defaultDataKey = 'deleteTodo';
-  //     // eslint-disable-next-line no-underscore-dangle
-  //     variables.id = body._id;
-  //     break;
-  //   default:
-  //     variables.input = postTodo;
-  //     break;
-  //   }
-  //   // const refetch = [refetchQuery];
-  //   return this.apollo.mutate({
-  //     mutation: gqlOperation,
-  //     variables,
-  //     refetchQueries: [
-  //       ...refetch,
-  //       {
-  //         query: TODO_LIST_COUNT_QUERY,
-  //         variables: {
-  //           filter: {
-  //             isCompleted: true
-  //           }
-  //         }
-  //       },
-  //       {
-  //         query: TODO_PROJECT_QUERY,
-  //         variables: {
-  //           sort: { updatedAt: 'ASC' }
-  //         }
-  //       }
-  //     ]
-  //   })
-  //     .pipe(map(({ data }: any) => data[defaultDataKey]));
-  // }
-
-  /**
-   * @param body - postbody for add/update/delete label
-   * @param conditions - refetch conditions for todos-label wrt apolo
-   */
-  todoLabelOperation(body: TodoLabelType, conditions: any = null): Observable<ISuccessType> {
-    let gqlOperation = TODO_LABEL_ADD_MUTATION;
-    let defaultDataKey = 'addTodoLabel';
-    const {_id, operationType, ...postBody } = body;
-    // refetch query after add or update
-    const refetchQuery: any = {
-      query: TODO_LABEL_QUERY
-    };
-    // if passing conditions
-    if (conditions) {
-      refetchQuery.variables = conditions;
-    }
-    // gql variables
-    let variables: IGQLVariable<string,  TodoLabelType> = {};
-    switch (operationType) {
-    case 'UPDATE':
-      gqlOperation = TODO_LABEL_UPDATE_MUTATION;
-      defaultDataKey = 'updateTodoLabel';
-      variables = {
-        ...variables,
-        input: {
-          ...postBody
-        },
-        id: _id
-      };
-      break;
-    case 'DELETE':
-      gqlOperation = TODO_LABEL_DELETE_MUTATION;
-      defaultDataKey = 'deleteTodoLabel';
-      // eslint-disable-next-line no-underscore-dangle
-      variables.id = body._id;
-      break;
-    default:
-      variables = {
-        ...variables,
-        input: {
-          ...postBody
-        }
-      };
-      break;
-    }
-    return this.apollo.mutate({
-      mutation: gqlOperation,
-      variables,
-      refetchQueries: [
-        refetchQuery
-      ]
-    })
-      .pipe(map(({ data }: any) => data[defaultDataKey]));
-  }
-
-  /**
-   * @description - fetching todos labels
-   */
-  listTodoProjects(): Observable<TodoProjectType[]> {
-    return this.apollo
-      .watchQuery({
-        query: TODO_PROJECT_QUERY,
-        variables: {
-          sort: { updatedAt: 'ASC' }
-        }
-      })
-      .valueChanges.pipe(map(({ data }: any) => data.todoProjectList));
-  }
-
-  /**
-   * @param body - postbody for add/update/delete label
-   * @param conditions - refetch conditions for todos-label wrt apolo
-   */
-  todoProjectOperation(body: TodoProjectType, conditions: any = null): Observable<ISuccessType> {
-    let gqlOperation = TODO_PROJECT_ADD_MUTATION;
-    let defaultDataKey = 'addTodoProject';
-    const operationType = body.operationType;
-    // refetch query after add or update
-    const refetchQuery: any = {
-      query: TODO_PROJECT_QUERY
-    };
-    // if passing conditions
-    if (conditions) {
-      refetchQuery.variables = conditions;
-    }
-    // gql variables
-    let variables: IGQLVariable<string,  TodoProjectType> = {};
-    switch (operationType) {
-    case 'UPDATE':
-      gqlOperation = TODO_PROJECT_UPDATE_MUTATION;
-      defaultDataKey = 'updateTodoProject';
-      variables = {
-        ...variables,
-        input: {
-          name: body.name
-        },
-        // eslint-disable-next-line no-underscore-dangle
-        id: body._id
-      };
-      break;
-    case 'DELETE':
-      gqlOperation = TODO_PROJECT_DELETE_MUTATION;
-      defaultDataKey = 'deleteTodoProject';
-      // eslint-disable-next-line no-underscore-dangle
-      variables.id = body._id;
-      break;
-    default:
-      variables = {
-        ...variables,
-        input: {
-          name: body.name
-        }
-      };
-      break;
-    }
-    return this.apollo.mutate({
-      mutation: gqlOperation,
-      variables,
-      refetchQueries: [
-        refetchQuery
-      ]
-    })
-      .pipe(map(({ data }: any) => data[defaultDataKey]));
   }
 
   /**

@@ -8,7 +8,7 @@ import { FormGroup, FormBuilder, FormArray } from '@angular/forms';
 import { combineLatest, Subscription } from 'rxjs';
 import { map } from 'rxjs/operators';
 import * as moment from 'moment';
-import { TodoService, UtilityService } from '../../../service';
+import { TodoService, UtilityService, TagService, ProjectService } from '../../../service';
 import { TodoType, TodoLabelType, TodoConditions, IOperationEnumType, TodoProjectType } from '../../../models';
 import {  SharedModule } from '../../shared/shared.module';
 import { DialogTodoTagsComponent } from '../todo-tag-dialog/dialog-todo-tags.component';
@@ -79,7 +79,9 @@ export class TodoDialogComponent implements OnInit, OnDestroy {
     private todoService: TodoService,
     private toastr: UtilityService,
     public activeModal: NgbActiveModal,
-    private modalService: NgbModal
+    private modalService: NgbModal,
+    private tagService: TagService,
+    private projectService: ProjectService
   ) { }
 
   /**
@@ -204,8 +206,8 @@ export class TodoDialogComponent implements OnInit, OnDestroy {
    */
   private fetchData() {
     this.routeSubscription = combineLatest([ // fetching Tags & Projects/List in the system
-      this.todoService.listTodoLabels(),
-      this.todoService.listTodoProjects()
+      this.tagService.fetchAll(),
+      this.projectService.fetchAll()
     ])
       .pipe(
         map(data => ({

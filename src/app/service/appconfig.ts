@@ -21,14 +21,10 @@ export class AppService implements OnDestroy {
     lang: null
   };
   appSubscription: Subscription;
-
   private currentUrlDataSource = new BehaviorSubject<string>('');
 
+  // eslint-disable-next-line @typescript-eslint/member-ordering
   currentUrlObservable = this.currentUrlDataSource.asObservable();
-
-  updateCurentUrl(data: string): void {
-    this.currentUrlDataSource.next(data);
-  }
 
   constructor(
     private titleService: Title,
@@ -41,7 +37,23 @@ export class AppService implements OnDestroy {
     this.subscribeToAppData();
   }
 
-  __updateCoreAppData(data: IAppData): void {
+  ngOnDestroy(): void {
+    this.appSubscription.unsubscribe();
+  }
+
+  get loaderImage(): string {
+    return '/assets/facelift/images/page-img/page-load-loader.gif';
+  }
+
+  get defautProfileImage(): string {
+    return '/assets/facelift/images/defafault_user.png';
+  }
+
+  updateCurentUrl(data: string): void {
+    this.currentUrlDataSource.next(data);
+  }
+
+   updateCoreAppData(data: IAppData): void {
     this.APP_LEVEL.next(data);
   }
 
@@ -55,25 +67,6 @@ export class AppService implements OnDestroy {
     document.documentElement.style.setProperty('--iq-primary', iqColor);
     document.documentElement.style.setProperty('--iq-light-primary', iqColor2);
     document.documentElement.style.setProperty('--iq-primary-hover', iqColor3);
-  }
-
-  get loaderImage(): string {
-    return '/assets/facelift/images/page-img/page-load-loader.gif';
-  }
-
-  get defautProfileImage(): string {
-    return '/assets/facelift/images/defafault_user.png';
-  }
-
-  // subscribe & update any app level data
-  private subscribeToAppData() {
-    this.APP_LEVEL.subscribe((data: IAppData) => {
-      this.APP_DATA = {...this.APP_DATA, ...data};
-    });
-  }
-
-  ngOnDestroy(): void {
-    this.appSubscription.unsubscribe();
   }
 
   languages(): Observable<ILanguage[]> {
@@ -107,5 +100,12 @@ export class AppService implements OnDestroy {
     if (metaTags && metaTags.length) {
       this.metaService.addTags(metaTags);
     }
+  }
+
+  // subscribe & update any app level data
+  private subscribeToAppData() {
+    this.APP_LEVEL.subscribe((data: IAppData) => {
+      this.APP_DATA = {...this.APP_DATA, ...data};
+    });
   }
 }

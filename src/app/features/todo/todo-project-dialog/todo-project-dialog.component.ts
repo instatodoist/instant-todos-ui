@@ -3,8 +3,8 @@ import {RouterModule} from '@angular/router';
 import {ReactiveFormsModule} from '@angular/forms';
 import { NgModule, Component, OnInit, AfterViewInit, Input, Output, EventEmitter } from '@angular/core';
 import { FormGroup, FormBuilder, Validators } from '@angular/forms';
-import { TodoService, UtilityService } from '../../../service';
-import { TodoType, TodoProjectType, TodoConditions, IOperationEnumType } from '../../../models';
+import { UtilityService, ProjectService } from '../../../service';
+import { TodoProjectType, TodoConditions, IOperationEnumType } from '../../../models';
 import { NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
 
 @Component({
@@ -14,8 +14,6 @@ import { NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
 })
 export class TodoProjectDialogComponent implements OnInit, AfterViewInit {
 
-  @Input()
-  todo: TodoType;
   @Input()
   conditions: TodoConditions = null;
 
@@ -30,9 +28,9 @@ export class TodoProjectDialogComponent implements OnInit, AfterViewInit {
 
   constructor(
     private fb: FormBuilder,
-    private todoService: TodoService,
     private toast: UtilityService,
     public activeModal: NgbActiveModal,
+    private projectService: ProjectService
   ) { }
 
   ngOnInit(): void {
@@ -43,32 +41,32 @@ export class TodoProjectDialogComponent implements OnInit, AfterViewInit {
         operationType: [this.operationType]
       }
     );
-    this.getLabels();
+    this.getProjects();
   }
 
   ngAfterViewInit() {}
 
-  getLabels() {
-    this.todoService
-      .listTodoProjects()
+  getProjects() {
+    this.projectService
+      .fetchAll()
       .subscribe(response => {
         this.labels = response;
       });
   }
 
-  editLabel(label: TodoProjectType) {
+  editLabel(project: TodoProjectType) {
     this.operationType = 'UPDATE';
     this.formObj.patchValue({
-      _id: label._id,
-      name: label.name,
+      _id: project._id,
+      name: project.name,
       operationType: 'UPDATE'
     });
   }
 
-  deleteLabel(label: TodoProjectType) {
+  deleteLabel(project: TodoProjectType) {
     this.operationType = 'DELETE';
     this.todoOperationExec({
-      _id: label._id,
+      _id: project._id,
       operationType: 'DELETE'
     });
   }
@@ -81,9 +79,20 @@ export class TodoProjectDialogComponent implements OnInit, AfterViewInit {
     }
   }
 
-  todoOperationExec(postBody) {
-    this.todoService
-      .todoProjectOperation(postBody)
+  todoOperationExec(postBody: TodoProjectType) {
+    let project$ = null;
+    switch (this.operationType) {
+      case 'ADD':
+        project$ = this.projectService.create(postBody);
+        break;
+      case 'UPDATE':
+        project$ = this.projectService.update(postBody);
+        break;
+      case 'DELETE':
+        project$ = this.projectService.delete(postBody);
+        break;
+      }
+      project$
       .subscribe(
         () => {
         this.loader = false;
