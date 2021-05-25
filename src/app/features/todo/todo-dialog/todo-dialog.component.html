@@ -14,7 +14,7 @@
               <div class="iq-card-body" data-toggle="modal" data-target="#post-modal">
                 <div class="d-flex align-items-center">
                   <div class="user-img img-fluid" *ngIf="todo">
-                    <div class="custom-control custom-radio custom-radio-color-checked custom-control-inline mt-2"
+                    <div class="custom-control custom-radio custom-radio-color-checked custom-control-inline"
                       [ngStyle]="{'margin-right': '0px'}">
                       <input id="task-completed" type="checkbox" class="custom-control-input bg-primary"
                         formControlName="isCompleted">
@@ -27,79 +27,79 @@
               </div>
             </div>
 
-            <div class="row mb-4">
-              <div class="col-lg-12 col-sm-12 mt-2">
-                <textarea class="form-control" id="validationTextarea" placeholder="Add Notes here (Optional)"
-                  formControlName="notes"></textarea>
-              </div>
-            </div>
-
-            <div class="row mb-4">
-              <div class="col-lg-12 col-sm-12 mt-2">
-                <ng-container *ngFor="let label of labels">
-                  <span *ngIf="isChecked(label)" class="badge border mt-2 mr-2 cursor"
-                    [ngStyle]="{ 'color': label?.color, 'border-color': '#ccc !important' }">#{{label?.name}} <i
-                      (click)="checkLabels(label)" class="fa fa-times" aria-hidden="true"></i></span>
-                </ng-container>
-                <span class="badge border border-secondary text-secondary mt-2 mr-2 cursor"
-                  (click)="openListPopup('TAG')"><i class="fa fa-hashtag" aria-hidden="true"></i>Add
-                  Tag</span>
-              </div>
-            </div>
-
-            <!-- Integrate SubTasks-->
-            <ng-container *ngIf="formObj.value._id && !todo?.parent">
-              <ul class="nav nav-tabs" id="myTab-1" role="tablist">
-                <li class="nav-item">
-                  <a class="nav-link active" id="home-tab" data-toggle="tab" href="#home" role="tab"
-                    aria-controls="home" aria-selected="false">SubTasks</a>
-                </li>
-              </ul>
-              <div class="tab-content" id="myTabContent-2">
-                <div class="tab-pane" id="home" role="tabpanel" aria-labelledby="home-tab" style="display: block;">
-                  <div class="row mb-4 ml-3">
-                    <ul class="perfomer-lists m-0 p-0" formArrayName="subTasks" style="width: 100%;">
-                      <li class="d-flex align-items-center mr-4 mb-2"
-                        *ngFor="let item of formObj.get('subTasks')['controls']; let i = index;"
-                        style="border: 1px solid #ccc !important; border-radius: 10px;" (click)="addSubTask()"
-                        [ngStyle]="subTasks.value[i].isCompleted && {'text-decoration': 'line-through'}">
-                        <ng-container [formGroupName]="i">
-                          <div class="user-img img-fluid">
-                            <div
-                              class="custom-control custom-radio custom-radio-color-checked custom-control-inline ml-3 mt-2 mr-0">
-                              <input type="checkbox" id="customCheck-subTask{{i}}"
-                                class="custom-control-input bg-primary" formControlName="isCompleted">
-                              <label class="custom-control-label" for="customCheck-subTask{{i}}"></label>
-                            </div>
-                          </div>
-                          <div class="media-support-info">
-
-                            <input type="text" class="form-control" formControlName="title"
-                              placeholder="Add new substask" style="padding-top: 7px !important; border:none;">
-
-                          </div>
-                          <div class=" ml-auto  ml-4"
-                            *ngIf="formObj.get('subTasks')['controls'].length > 1 && i !== (formObj.get('subTasks')['controls'].length -1)">
-                            <button type="button" class="close ml-4" data-dismiss="alert" aria-label="Close"
-                              (click)="removeSubTask(i)" style="font-size: 15px;">
-                              <i class="fa fa-minus-circle cursor" aria-hidden="true"></i>
-                            </button>
-                          </div>
-                        </ng-container>
-                      </li>
-                    </ul>
+            <div class="row mb-1">
+              <div class="col-lg-12 col-sm-12">
+                <div class="iq-card">
+                  <div class="iq-card-body">
+                    <div class="acc-edit">
+                      <div class="form-group">
+                        <textarea class="form-control" id="validationTextarea" placeholder="Add Notes here (Optional)"
+                          formControlName="notes"></textarea>
+                      </div>
+                    </div>
                   </div>
+                </div>
 
+              </div>
+            </div>
+
+            <div class="row mb-1">
+              <div class="col-lg-12 col-sm-12">
+                <div class="iq-card">
+                  <div class="iq-card-body">
+                    <ng-container *ngFor="let label of labels">
+                      <span *ngIf="isChecked(label)" class="badge border mr-2 cursor"
+                        [ngStyle]="{ 'color': label?.color, 'border-color': '#ccc !important' }">#{{label?.name}} <i
+                          (click)="checkLabels(label)" class="fa fa-times" aria-hidden="true"></i></span>
+                    </ng-container>
+                    <span class="badge border border-secondary text-secondary mr-2 cursor"
+                      (click)="openListPopup('TAG')"><i class="fa fa-hashtag" aria-hidden="true"></i>Add
+                      Tag</span>
+                  </div>
                 </div>
               </div>
-            </ng-container>
+            </div>
+
+            <div class="row" *ngIf="formObj.value._id && !todo?.parent">
+              <div class="col-lg-12">
+                <div class="iq-card">
+                  <div class="iq-card-body">
+                    <ul class="list-group">
+                      <li class="list-group-item d-flex justify-content-between align-items-center" *ngFor="let subTask of todo?.subTasks">
+                        {{subTask?.title}}
+                        <span class="badge badge-primary badge-pill" (click)="$event.stopPropagation(); (subTask?._id);">
+                          <i class="fa fa-minus-circle cursor" aria-hidden="true"></i>
+                        </span>
+                      </li>
+                   </ul>
+                    <div class="acc-edit mt-4" formGroupName="subTodo">
+                      <ng-container *ngIf="isSubTaskEvent">
+                        <div class="form-group">
+                          <label for="subTaskTitle">Add SubTask</label>
+                          <input type="text" class="form-control" id="subTaskTitle" formControlName="title">
+                        </div>
+                        <button type="button" class="btn btn-primary  mr-2"
+                          (click)="addSubTask(formObj.value.subTodo)"
+                          [disabled]="!formObj.value.title">Save</button>
+                        <button type="reset" class="btn iq-bg-danger" (click)="isSubTaskEvent = false;">Cancel</button>
+                      </ng-container>
+                      <ng-container *ngIf="!isSubTaskEvent">
+                        <button type="submit" class="btn btn-primary  mr-2" (click)="isSubTaskEvent = true;">Add
+                          SubTask</button>
+                      </ng-container>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+            </div>
           </div>
           <div class="col-sm-4" style="padding-right: 0px;">
             <div class="iq-card iq-card-block iq-card-stretch iq-card-height">
               <div class="iq-card-header d-flex justify-content-between">
                 <div class="iq-header-title">
                   <h4 class="card-title"> List: </h4>
-                  <div class="btn-group mb-2" role="group" (click)="openListPopup('PROJECT')">
+                  <div class="btn-group mb-1" role="group" (click)="openListPopup('PROJECT')">
 
                     <div *ngIf="currentProject else chooseList" class="badge badge-pill badge-primary mr-2 cursor">
                       {{currentProject | titlecase}}</div>
@@ -136,7 +136,7 @@
       </div>
     </div>
     <hr>
-    <button type="submit" class="btn btn-primary d-block w-100 mb-2" [disabled]="!formObj.valid || isSubmit">
+    <button type="submit" class="btn btn-primary d-block w-100 mb-1" [disabled]="!formObj.valid || isSubmit">
       <span *ngIf="formObj.value._id">{{'save_changes' | translate}}</span>
       <span *ngIf="!formObj.value._id">{{'save' | translate}}</span>
       <i *ngIf="isSubmit" class="fa fa-spinner fa-spin ml-2"></i>

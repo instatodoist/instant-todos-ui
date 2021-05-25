@@ -8,3 +8,4 @@ export { VersionCheckService } from './version-check/version-check.service';
 export { AppService } from './appconfig';
 export { ProjectService } from './project/project.service';
 export { TagService } from './tag/tag.service';
+export { SubTodoService } from './sub-todo/sub-todo.service';

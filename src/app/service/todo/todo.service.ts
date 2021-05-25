@@ -266,12 +266,14 @@ export class TodoService {
   }
 
   // delete
-  deleteTodo(body: TodoType, conditions: any = null): Observable<ISuccessType>{
+  // need to update body type to string only
+  // on refactor
+  deleteTodo(body: TodoType | string, conditions: any = null): Observable<ISuccessType>{
     const refetchQuery = this.createRefetchQuery(conditions);
     const defaultDataKey = 'deleteTodo';
     const variables: IGQLVariable<string,  TodoType> = {};
     // eslint-disable-next-line no-underscore-dangle
-    variables.id = body._id;
+    variables.id = typeof body === 'string'? body: body._id;
     return this.apollo.mutate({
       mutation: TODO_DELETE_MUTATION,
       variables,

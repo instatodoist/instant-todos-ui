@@ -6,10 +6,10 @@ import { Component, OnInit, Input, OnDestroy, NgModule } from '@angular/core';
 import { Router } from '@angular/router';
 import { FormGroup, FormBuilder, FormArray } from '@angular/forms';
 import { combineLatest, Subscription } from 'rxjs';
-import { map } from 'rxjs/operators';
+import { map, switchMap, take } from 'rxjs/operators';
 import * as moment from 'moment';
-import { TodoService, UtilityService, TagService, ProjectService } from '../../../service';
-import { TodoType, TodoLabelType, TodoConditions, IOperationEnumType, TodoProjectType } from '../../../models';
+import { TodoService, UtilityService, TagService, ProjectService, SubTodoService } from '../../../service';
+import { TodoType, TodoLabelType, TodoConditions, IOperationEnumType, TodoProjectType, ISubTask } from '../../../models';
 import {  SharedModule } from '../../shared/shared.module';
 import { DialogTodoTagsComponent } from '../todo-tag-dialog/dialog-todo-tags.component';
 import { TodoProjectListDialogComponent } from '../todo-project-list-dialog/todo-projects-dialog.component';
@@ -42,6 +42,7 @@ type TscheduledObj = { [ key in TScheduledString ]: Ischeduled };
  */
 interface ITodoFormModel extends TodoType {
   scheduledType?: TScheduledString;
+  subTodos?: ISubTask;
 }
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
@@ -70,8 +71,10 @@ export class TodoDialogComponent implements OnInit, OnDestroy {
   scheduledObj = this.initscheduledObj();
   scheduledObjKeys = Object.keys(this.scheduledObj);
   subTasksFormArray: FormArray;
+  isSubTaskEvent = false;
   private routeSubscription: Subscription;
   private todoSubscription: Subscription;
+  private subTaskSubscription: Subscription;
 
   constructor(
     private router: Router,
@@ -81,14 +84,15 @@ export class TodoDialogComponent implements OnInit, OnDestroy {
     public activeModal: NgbActiveModal,
     private modalService: NgbModal,
     private tagService: TagService,
-    private projectService: ProjectService
+    private projectService: ProjectService,
+    private subTodoService: SubTodoService
   ) { }
 
   /**
    * Lifecycle Method
    */
   ngOnInit(): void {
-    this.formObj = this.createForm({
+    this.formObj = this.fb.group({
       _id: '',
       title: '',
       scheduling: false,
@@ -100,10 +104,26 @@ export class TodoDialogComponent implements OnInit, OnDestroy {
       scheduledType: 'TODAY',
       notes: '',
       noteId: '',
-      subTasks: this.createFormArray()
+      subTodo: this.fb.group({
+        title: '',
+        todoId: ''
+      })
     });
     this.populateTodoModal(); // Listen to subscription to choose if popup called
     this.fetchData();
+  }
+
+  /**
+   * Lifecycle Method
+   */
+  // eslint-disable-next-line @typescript-eslint/member-ordering
+  ngOnDestroy(): void {
+    if(this.routeSubscription){
+      this.routeSubscription.unsubscribe();
+    }
+    if(this.todoSubscription){
+      this.todoSubscription.unsubscribe();
+    }
   }
 
   get formValue(): ITodoFormModel {
@@ -111,27 +131,157 @@ export class TodoDialogComponent implements OnInit, OnDestroy {
   }
 
   /**
-   * Create type safe form group object
+   * Get all subtasks as form array
    */
-  private createForm(model: ITodoFormModel): FormGroup {
-    return this.fb.group(model);
+   get subTasks(): FormArray {
+    return this.formObj.get('subTasks') as FormArray;
   }
+
+  // /**
+  //  * Create type safe form group object
+  //  */
+  // private createForm(model: ITodoFormModel): FormGroup {
+  //   return this.fb.group(model);
+  // }
+
+  // private createSubTaskForm(model: ISubTask): FormGroup {
+  //   return this.fb.group(model);
+  // }
 
   /**
    * Create type safe form group object
    */
-  private createFormArray()  {
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    return this.fb.array([ this.initSubTasks() ]) as any;
-  }
+  // private createFormArray()  {
+  //   // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  //   return this.fb.array([ this.initSubTasks() ]) as any;
+  // }
 
   /**
    * Initiate subTask form group
    */
-  private initSubTasks() {
-    return this.createForm({
-      title: '',
-      isCompleted: false
+  // private initSubTasks() {
+  //   return this.createForm({
+  //     title: '',
+  //     isCompleted: false
+  //   });
+  // }
+
+  /**
+   * auto checked the labels if exist
+   *
+   * @param label - label Object
+   */
+  // eslint-disable-next-line @typescript-eslint/member-ordering
+  isChecked(label: TodoLabelType): boolean {
+    return this.formObj.value.labelIds && this.formObj.value.labelIds.indexOf(label._id) !== -1 ? true : false;
+  }
+
+  /**
+   * check & uncheck labels
+   *
+   * @param label - label object
+   */
+  // eslint-disable-next-line @typescript-eslint/member-ordering
+  checkLabels(label: TodoLabelType): void {
+    const labelId = label._id;
+    const index = this.formObj.value.labelIds.indexOf(labelId);
+    if (index === -1) {
+      this.formObj.value.labelIds.push(labelId);
+    } else {
+      this.formObj.value.labelIds.splice(index, 1);
+    }
+  }
+
+  /**
+   * Check scheduledDate
+   *
+   * @param scheduledDate - Date
+   */
+  // eslint-disable-next-line @typescript-eslint/member-ordering
+  initialiseDate(scheduledDate: Date): string {
+    if (scheduledDate) {
+      if (moment(scheduledDate).isSame(moment(), 'day')) {
+        return 'TODAY';
+      }
+      return 'CUSTOM';
+    }
+    return 'NO_DUE_DATE';
+  }
+
+  /**
+   * open nested popups for project, tag & date
+   *
+   * @param nestedModalId - modelId
+   * @param type - model type - PROJECT, TAG, DATE
+   */
+  // eslint-disable-next-line @typescript-eslint/member-ordering
+  openListPopup(popupType: string, scheduledType?: TScheduledString): void {
+    if(popupType === 'PROJECT'){
+      const modalRef = this.modalService.open(TodoProjectListDialogComponent, {size: 'lg', scrollable: true});
+      modalRef.componentInstance.projects = this.projects;
+      modalRef.componentInstance.projectId = this.formObj.value.projectId;
+      modalRef.componentInstance.callback.subscribe((projectId: string) => {
+        this.callbackProject(projectId);
+      });
+    } else if(popupType === 'TAG'){
+      const modalRef = this.modalService.open(DialogTodoTagsComponent, {size: 'lg', scrollable: true});
+      modalRef.componentInstance.labels = this.labels;
+      modalRef.componentInstance.labelIds = this.formObj.value.labelIds;
+      modalRef.componentInstance.callback.subscribe((tagIds: string[]) => {
+        this.callbackLabel(tagIds);
+      });
+    } else if(popupType === 'DATE'){
+      if (scheduledType === 'CUSTOM') {
+        this.formObj.patchValue({
+          scheduledType
+        });
+        const modalRef = this.modalService.open(CustomDateModalComponent, {centered: true});
+        modalRef.componentInstance.operationType = this.formObj.value.operationType;
+        modalRef.componentInstance.scheduledAt = this.formObj.value.scheduledDate;
+        modalRef.componentInstance.callback.subscribe((date: any) => {
+          this.callbackDate(date);
+        });
+      } else {
+        this.formObj.patchValue({
+          scheduledType,
+          scheduledDate: this.scheduledObj[scheduledType].value
+        });
+      }
+    }
+  }
+
+  /**
+   * get projectId from child component vai Output
+   *
+   * @param data - projectId
+   */
+  callbackProject(data: string): void {
+    const projectName = this.projects.filter(obj => (obj._id) === data)[0].name;
+    this.currentProject = projectName;
+    this.formObj.patchValue({
+      projectId: data
+    });
+  }
+
+  /**
+   * get labels from child component vai Output
+   *
+   * @param data - labels/Tags Arrray
+   */
+  callbackLabel(data: string[]): void {
+    this.formObj.patchValue({
+      labelIds: data
+    });
+  }
+
+  /**
+   * get date from child component vai Output
+   *
+   * @param data - Date
+   */
+  callbackDate(data: string): void {
+    this.formObj.patchValue({
+      scheduledDate: data
     });
   }
 
@@ -139,12 +289,18 @@ export class TodoDialogComponent implements OnInit, OnDestroy {
    * Add subask onject
    */
   // eslint-disable-next-line @typescript-eslint/member-ordering
-  addSubTask(): void {
-    const subTasksEmpty = this.formObj.value.subTasks.filter((item: TodoType) => !item.isCompleted && !item.title);
-    if (subTasksEmpty.length < 2) {
-      this.subTasksFormArray = this.formObj.get('subTasks') as FormArray;
-      this.subTasksFormArray.push(this.initSubTasks());
-    }
+  addSubTask(subTask?: ISubTask): void {
+    const postBody = {...subTask, todoId: this.todo._id};
+    this.subTaskSubscription = this.subTodoService.createSubTodo(postBody, this.conditions)
+      .pipe(
+        switchMap(()=> this.fetchTodos(this.conditions))
+      )
+      .subscribe(({data})=>{
+        const { todoList } = data;
+        const currentTodo = todoList.data.find(todo=> todo._id === this.todo._id);
+        this.todo = {...this.todo, ...currentTodo, subTodo: { title: '', todoId: '' }};
+        this.isSubTaskEvent = false;
+      });
   }
 
   /**
@@ -152,20 +308,61 @@ export class TodoDialogComponent implements OnInit, OnDestroy {
    *
    * @param itemIndex - index for subtask object
    */
-  // eslint-disable-next-line @typescript-eslint/member-ordering
-  removeSubTask(itemIndex: number): void {
-    this.subTasksFormArray = this.formObj.get('subTasks') as FormArray;
-    if (itemIndex > -1) {
-      this.subTasksFormArray.removeAt(itemIndex);
-    }
+  removeSubTask(id: string): void {
+    this.subTaskSubscription = this.todoService.deleteTodo(id)
+      .pipe(
+        switchMap(()=> this.fetchTodos(this.conditions))
+      )
+      .subscribe(({data})=>{
+        const { todoList } = data;
+        const currentTodo = todoList.data.find(todo=> todo._id === this.todo._id);
+        this.todo = currentTodo;
+        this.toastr.toastrSuccess('Sub Task deleted');
+      });
   }
 
   /**
-   * Get all subtasks as form array
+   * add/update the task
    */
-  get subTasks(): FormArray {
-    return this.formObj.get('subTasks') as FormArray;
+  // eslint-disable-next-line @typescript-eslint/member-ordering
+  submit(): void {
+    if (this.formObj.valid) {
+      let $todo = null;
+      const postBody = { ...this.formValue};
+      delete postBody.subTodos;
+      delete postBody.subTasks;
+      if(!postBody.noteId){
+        delete postBody.noteId;
+      }
+      if (postBody._id) {
+        // postBody.subTasks = filteredSubTasks;
+        $todo =  this.todoService
+          .updateTodo(postBody, this.conditions);
+      } else {
+        $todo =  this.todoService
+          .createTodo(postBody, this.conditions);
+      }
+      this.isSubmit = true;
+      this.todoSubscription = $todo.subscribe(
+        () => {
+          this.isSubmit = false;
+          // this.isOpen.emit(false);
+          this.activeModal.dismiss();
+          let message = 'Task created';
+          if (this.formObj.value._id) {
+            message = 'Task updated';
+          }
+          this.toastr.toastrSuccess(message);
+        },
+        () => {
+          this.isSubmit = false;
+        });
+    }
   }
+
+  private fetchTodos(conditions: any){
+    return this.todoService.fetchAll(conditions).pipe(take(2));
+  };
 
   /**
    * Creating scheduled hashmap
@@ -278,199 +475,17 @@ export class TodoDialogComponent implements OnInit, OnDestroy {
         notes: this.todo && this.todo.comments.length ? this.todo.comments[0].description: '',
         noteId: this.todo && this.todo.comments.length ? this.todo.comments[0]._id: ''
       });
-      if (this.todo?.subTasks?.length) {
-        const subTasksControl = this.subTasks;
-        (this.formObj.get('subTasks') as FormArray).clear();
-        // Sort subtasks by title
-        const subTasks = this.todo.subTasks
-          .sort((a, b) => a.title.localeCompare(b.title));
-        subTasks.forEach((element: TodoType) => {
-          subTasksControl.push(this.fb.group(element));
-        });
-        this.addSubTask();
-      }
-    }
-  }
-
-  /**
-   * auto checked the labels if exist
-   *
-   * @param label - label Object
-   */
-  // eslint-disable-next-line @typescript-eslint/member-ordering
-  isChecked(label: TodoLabelType): boolean {
-    return this.formObj.value.labelIds && this.formObj.value.labelIds.indexOf(label._id) !== -1 ? true : false;
-  }
-
-  /**
-   * check & uncheck labels
-   *
-   * @param label - label object
-   */
-  // eslint-disable-next-line @typescript-eslint/member-ordering
-  checkLabels(label: TodoLabelType): void {
-    const labelId = label._id;
-    const index = this.formObj.value.labelIds.indexOf(labelId);
-    if (index === -1) {
-      this.formObj.value.labelIds.push(labelId);
-    } else {
-      this.formObj.value.labelIds.splice(index, 1);
-    }
-  }
-
-  /**
-   * Check scheduledDate
-   *
-   * @param scheduledDate - Date
-   */
-  // eslint-disable-next-line @typescript-eslint/member-ordering
-  initialiseDate(scheduledDate: Date): string {
-    if (scheduledDate) {
-      if (moment(scheduledDate).isSame(moment(), 'day')) {
-        return 'TODAY';
-      }
-      return 'CUSTOM';
-    }
-    return 'NO_DUE_DATE';
-  }
-
-  /**
-   * open nested popups for project, tag & date
-   *
-   * @param nestedModalId - modelId
-   * @param type - model type - PROJECT, TAG, DATE
-   */
-  // eslint-disable-next-line @typescript-eslint/member-ordering
-  openListPopup(popupType: string, scheduledType?: TScheduledString): void {
-    if(popupType === 'PROJECT'){
-      const modalRef = this.modalService.open(TodoProjectListDialogComponent, {size: 'lg', scrollable: true});
-      modalRef.componentInstance.projects = this.projects;
-      modalRef.componentInstance.projectId = this.formObj.value.projectId;
-      modalRef.componentInstance.callback.subscribe((projectId: string) => {
-        this.callbackProject(projectId);
-      });
-    } else if(popupType === 'TAG'){
-      const modalRef = this.modalService.open(DialogTodoTagsComponent, {size: 'lg', scrollable: true});
-      modalRef.componentInstance.labels = this.labels;
-      modalRef.componentInstance.labelIds = this.formObj.value.labelIds;
-      modalRef.componentInstance.callback.subscribe((tagIds: string[]) => {
-        this.callbackLabel(tagIds);
-      });
-    } else if(popupType === 'DATE'){
-      if (scheduledType === 'CUSTOM') {
-        this.formObj.patchValue({
-          scheduledType
-        });
-        const modalRef = this.modalService.open(CustomDateModalComponent, {centered: true});
-        modalRef.componentInstance.operationType = this.formObj.value.operationType;
-        modalRef.componentInstance.scheduledAt = this.formObj.value.scheduledDate;
-        modalRef.componentInstance.callback.subscribe((date: any) => {
-          this.callbackDate(date);
-        });
-      } else {
-        this.formObj.patchValue({
-          scheduledType,
-          scheduledDate: this.scheduledObj[scheduledType].value
-        });
-      }
-    }
-  }
-
-  /**
-   * get projectId from child component vai Output
-   *
-   * @param data - projectId
-   */
-  // eslint-disable-next-line @typescript-eslint/member-ordering
-  callbackProject(data: string): void {
-    const projectName = this.projects.filter(obj => (obj._id) === data)[0].name;
-    this.currentProject = projectName;
-    this.formObj.patchValue({
-      projectId: data
-    });
-  }
-
-  /**
-   * get labels from child component vai Output
-   *
-   * @param data - labels/Tags Arrray
-   */
-  // eslint-disable-next-line @typescript-eslint/member-ordering
-  callbackLabel(data: string[]): void {
-    this.formObj.patchValue({
-      labelIds: data
-    });
-  }
-
-  /**
-   * get date from child component vai Output
-   *
-   * @param data - Date
-   */
-  // eslint-disable-next-line @typescript-eslint/member-ordering
-  callbackDate(data: string): void {
-    this.formObj.patchValue({
-      scheduledDate: data
-    });
-  }
-
-  /**
-   * add/update the task
-   */
-  // eslint-disable-next-line @typescript-eslint/member-ordering
-  submit(): void {
-    if (this.formObj.valid) {
-      let $todo = null;
-      const postBody = this.formValue;
-      const { subTasks } = postBody;
-      let filteredSubTasks = subTasks.filter((item: TodoType) => item.title);
-      filteredSubTasks = filteredSubTasks.map((item: TodoType) => {
-        const { isCompleted, title } = item;
-        return {
-          isCompleted,
-          title
-        };
-      });
-      if(!postBody.noteId){
-        delete postBody.noteId;
-      }
-      if (postBody._id) {
-        postBody.subTasks = filteredSubTasks;
-        $todo =  this.todoService
-          .updateTodo(postBody, this.conditions);
-      } else {
-        delete postBody.subTasks;
-        $todo =  this.todoService
-          .createTodo(postBody, this.conditions);
-      }
-      this.isSubmit = true;
-      this.todoSubscription = $todo.subscribe(
-        () => {
-          this.isSubmit = false;
-          // this.isOpen.emit(false);
-          this.activeModal.dismiss();
-          let message = 'Task created';
-          if (this.formObj.value._id) {
-            message = 'Task updated';
-          }
-          this.toastr.toastrSuccess(message);
-        },
-        () => {
-          this.isSubmit = false;
-        });
-    }
-  }
-
-  /**
-   * Lifecycle Method
-   */
-  // eslint-disable-next-line @typescript-eslint/member-ordering
-  ngOnDestroy(): void {
-    if(this.routeSubscription){
-      this.routeSubscription.unsubscribe();
-    }
-    if(this.todoSubscription){
-      this.todoSubscription.unsubscribe();
+      // if (this.todo?.subTasks?.length) {
+      //   const subTasksControl = this.subTasks;
+      //   (this.formObj.get('subTasks') as FormArray).clear();
+      //   // Sort subtasks by title
+      //   const subTasks = this.todo.subTasks
+      //     .sort((a, b) => a.title.localeCompare(b.title));
+      //   subTasks.forEach((element: TodoType) => {
+      //     subTasksControl.push(this.fb.group(element));
+      //   });
+      //   this.addSubTask();
+      // }
     }
   }
 
