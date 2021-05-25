@@ -472,8 +472,8 @@ export class TodoDialogComponent implements OnInit, OnDestroy {
         labelIds: this.labelIdVal,
         operationType: this.todo._id ? 'UPDATE' : 'ADD',
         isCompleted: this.todo && this.todo.isCompleted ? true : false,
-        notes: this.todo && this.todo.comments.length ? this.todo.comments[0].description: '',
-        noteId: this.todo && this.todo.comments.length ? this.todo.comments[0]._id: ''
+        notes: this.todo && this.todo?.comments?.length ? this.todo.comments[0].description: '',
+        noteId: this.todo && this.todo?.comments?.length ? this.todo.comments[0]._id: ''
       });
       // if (this.todo?.subTasks?.length) {
       //   const subTasksControl = this.subTasks;
