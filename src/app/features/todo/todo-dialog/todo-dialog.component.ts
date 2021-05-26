@@ -137,6 +137,21 @@ export class TodoDialogComponent implements OnInit, OnDestroy {
     return this.formObj.get('subTasks') as FormArray;
   }
 
+  markComplete(subTask?: TodoType): void {
+    const postBody = { todoId: this.todo._id, isCompleted: true } as ISubTask;
+    this.subTaskSubscription = this.subTodoService.updateSubTodo(subTask._id, postBody, this.conditions)
+      .pipe(
+        switchMap(()=> this.fetchTodos(this.conditions))
+      )
+      .subscribe(({data})=>{
+        const { todoList } = data;
+        const currentTodo = todoList.data.find(todo=> todo._id === this.todo._id);
+        this.todo = {...this.todo, ...currentTodo, subTodo: { title: '', todoId: '' }};
+        this.isSubTaskEvent = false;
+        this.toastr.toastrSuccess('Sub Task updated');
+      });
+  }
+
   // /**
   //  * Create type safe form group object
   //  */
@@ -300,6 +315,13 @@ export class TodoDialogComponent implements OnInit, OnDestroy {
         const currentTodo = todoList.data.find(todo=> todo._id === this.todo._id);
         this.todo = {...this.todo, ...currentTodo, subTodo: { title: '', todoId: '' }};
         this.isSubTaskEvent = false;
+        this.formObj.patchValue({
+          subTodo: {
+            ...this.formObj.value.subTodo,
+            title: ''
+          }
+        });
+        this.toastr.toastrSuccess('Sub Task added');
       });
   }
 

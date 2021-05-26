@@ -11,7 +11,7 @@ export const SUB_TODO_ADD_MUTATION = gql`
 `;
 
 export const SUB_TODO_UPDATE_MUTATION = gql`
-  mutation updateSubTodo( $id: ID!, $input: SubTaskInputType!) {
+  mutation updateSubTodo( $id: ID!, $input: SubTaskUpdateInputType!) {
     updateSubTodo(id: $id, input: $input){
       message
       ok

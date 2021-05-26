@@ -56,10 +56,7 @@ export class SubTodoService {
     const variables: IGQLVariable<string,  ISubTask> = {
       // eslint-disable-next-line no-underscore-dangle
       id: subTodoId,
-      input: {
-        todoId: body.todoId,
-        title: body.title
-      }
+      input: {...body}
     };
     return this.apollo.mutate({
       mutation: SUB_TODO_UPDATE_MUTATION,
