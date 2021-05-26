@@ -36,6 +36,7 @@ export interface ITodoTypeCount {
 export interface ISubTask{
   title: string;
   todoId: string;
+  isCompleted?: boolean;
 }
 
 export interface TodoType {
