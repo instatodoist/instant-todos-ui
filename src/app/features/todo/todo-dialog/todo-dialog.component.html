@@ -68,10 +68,10 @@
                       <li class="list-group-item d-flex justify-content-between align-items-center" *ngFor="let subTask of todo?.subTasks">
                         <span>
                           <input type="radio" id="customCheck-subTask{{subTask._id}}"
-                        class="" (change)="markComplete(subTask)">
+                        class="" (change)="updateSubTask(subTask)">
                         </span>
                         {{subTask?.title}}
-                        <span class="badge badge-primary badge-pill" (click)="$event.stopPropagation(); (subTask?._id);">
+                        <span class="badge badge-primary badge-pill" (click)="$event.stopPropagation(); removeSubTask(subTask?._id);">
                           <i class="fa fa-minus-circle cursor" aria-hidden="true"></i>
                         </span>
                       </li>

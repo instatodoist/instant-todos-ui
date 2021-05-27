@@ -163,7 +163,12 @@ export class TodoInboxComponent implements OnInit, AfterViewInit, OnDestroy {
         const [countObj, dataList] = response;
         const { data = {} } = dataList;
         if(data.hasOwnProperty('todoList')){
-          this.todos = data.todoList;
+          const todos = {...data.todoList};
+          this.todos = {
+            ...this.todos,
+            totalCount: todos.totalCount,
+            data: this.todoService.sortArrayByDate(todos.data, 'createdAt')
+          };
         } else if(data.hasOwnProperty('todoCompleted')){
           this.customizeCompleteTodos(data.todoCompleted, true);
         }

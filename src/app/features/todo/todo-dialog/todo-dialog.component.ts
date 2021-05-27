@@ -137,21 +137,6 @@ export class TodoDialogComponent implements OnInit, OnDestroy {
     return this.formObj.get('subTasks') as FormArray;
   }
 
-  markComplete(subTask?: TodoType): void {
-    const postBody = { todoId: this.todo._id, isCompleted: true } as ISubTask;
-    this.subTaskSubscription = this.subTodoService.updateSubTodo(subTask._id, postBody, this.conditions)
-      .pipe(
-        switchMap(()=> this.fetchTodos(this.conditions))
-      )
-      .subscribe(({data})=>{
-        const { todoList } = data;
-        const currentTodo = todoList.data.find(todo=> todo._id === this.todo._id);
-        this.todo = {...this.todo, ...currentTodo, subTodo: { title: '', todoId: '' }};
-        this.isSubTaskEvent = false;
-        this.toastr.toastrSuccess('Sub Task updated');
-      });
-  }
-
   // /**
   //  * Create type safe form group object
   //  */
@@ -312,8 +297,9 @@ export class TodoDialogComponent implements OnInit, OnDestroy {
       )
       .subscribe(({data})=>{
         const { todoList } = data;
-        const currentTodo = todoList.data.find(todo=> todo._id === this.todo._id);
-        this.todo = {...this.todo, ...currentTodo, subTodo: { title: '', todoId: '' }};
+        const sortedTodos = this.todoService.sortArrayByDate(todoList.data, 'createdAt');
+        const currentTodo = sortedTodos.find(todo=> todo._id === this.todo._id);
+        this.todo = {...this.todo, ...currentTodo, subTodo: { title: '', todoId: '' }} as any;
         this.isSubTaskEvent = false;
         this.formObj.patchValue({
           subTodo: {
@@ -337,9 +323,26 @@ export class TodoDialogComponent implements OnInit, OnDestroy {
       )
       .subscribe(({data})=>{
         const { todoList } = data;
-        const currentTodo = todoList.data.find(todo=> todo._id === this.todo._id);
-        this.todo = currentTodo;
+        const sortedTodos = this.todoService.sortArrayByDate(todoList.data, 'createdAt');
+        const currentTodo = sortedTodos.find(todo=> todo._id === this.todo._id);
+        this.todo = {...currentTodo};
         this.toastr.toastrSuccess('Sub Task deleted');
+      });
+  }
+
+  updateSubTask(subTask?: TodoType): void {
+    const postBody = { todoId: this.todo._id, isCompleted: true } as ISubTask;
+    this.subTaskSubscription = this.subTodoService.updateSubTodo(subTask._id, postBody, this.conditions)
+      .pipe(
+        switchMap(()=> this.fetchTodos(this.conditions))
+      )
+      .subscribe(({data})=>{
+        const { todoList } = data;
+        const sortedTodos = this.todoService.sortArrayByDate(todoList.data, 'createdAt');
+        const currentTodo = sortedTodos.find(todo=> todo._id === this.todo._id);
+        this.todo = {...this.todo, ...currentTodo, subTodo: { title: '', todoId: '' }} as any;
+        this.isSubTaskEvent = false;
+        this.toastr.toastrSuccess('Sub Task updated');
       });
   }
 

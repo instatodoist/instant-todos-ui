@@ -192,6 +192,15 @@ export class TodoService {
       .valueChanges;
   }
 
+  sortArrayByDate(data: TodoType[], key: string): TodoType[]{
+    return data.map((item: TodoType)=>{
+      const subTasks: TodoType[] = item.subTasks || [];
+      const subTasksMapped = subTasks.length? (item.subTasks.slice()
+        .sort((a, b)=> new Date(a[key]).getTime() - new Date(b[key]).getTime())) : [];
+      return {...item, subTasks:  subTasksMapped};
+    });
+  }
+
   /**
    * @param conditions - filter params while fetching todos
    */

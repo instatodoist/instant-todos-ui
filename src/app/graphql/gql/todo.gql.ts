@@ -58,6 +58,7 @@ ToDo.fragments = {
         projectId
         isCompleted
         scheduledDate
+        createdAt
         parent
       }
       parent
