@@ -4,7 +4,7 @@
   <div class="form-group">
     <label for="exampleInputEmail1">{{'auth.email' | translate}}</label>
     <input type="email" class="form-control mb-0" id="exampleInputEmail1" placeholder="Enter email"
-      formControlName="email" required>
+      formControlName="email" tabindex="1" required>
     <div>
       <span
         *ngIf="signinForm.controls.email.touched && signinForm.controls.email.errors && signinForm.controls.username.errors.required">{{'auth.email_required' | translate}}
@@ -15,7 +15,7 @@
     <label for="exampleInputPassword1">{{'auth.password' | translate}}</label>
     <a routerLink="/auth/forgot-password" class="float-right">{{'auth.forgot_password' | translate}}</a>
     <input type="password" class="form-control mb-0" id="exampleInputPassword1" placeholder="Password"
-      formControlName="password" required>
+      formControlName="password" tabindex="2" required>
     <div>
       <span
         *ngIf="signinForm.controls.password.touched && signinForm.controls.password.errors && signinForm.controls.password.errors.required">
