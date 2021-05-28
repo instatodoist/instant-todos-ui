@@ -252,18 +252,17 @@ export class TodoService {
   }
 
   // update
-  updateTodo(body: TodoType, conditions: any = null): Observable<ISuccessType>{
+  updateTodo(todoId: string, body: TodoType, conditions: any = null): Observable<ISuccessType>{
     const refetchQuery = this.createRefetchQuery(conditions);
     const defaultDataKey = 'updateTodo';
     const postTodo = this.createTodoPayload(body);
     // initialising gql variables
-    const variables: IGQLVariable<string,  TodoType> = {};
-    variables.input = {
-      ...postTodo,
-      isCompleted: !!body.isCompleted
+    const variables: IGQLVariable<string,  TodoType> = {
+      id: todoId,
+      input: {
+        ...postTodo
+      }
     };
-    // eslint-disable-next-line no-underscore-dangle
-    variables.id = body._id;
     return this.apollo.mutate({
       mutation: TODO_UPDATE_MUTATION,
       variables,

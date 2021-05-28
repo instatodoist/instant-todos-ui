@@ -231,15 +231,16 @@ export class TodoInboxComponent implements OnInit, AfterViewInit, OnDestroy {
   /**
    * @param todo - todo object
    */
-   markComplete(todo: TodoType): void {
+   updateTodo(todo: TodoType): void {
     this.todo = { ...todo };
     const postBody: TodoType = {
       // eslint-disable-next-line no-underscore-dangle
       _id: this.todo._id,
       isCompleted: !this.todo.isCompleted,
     };
+    const {_id: id, ...body} = postBody;
     this.todoService
-      .updateTodo(postBody, this.conditions)
+      .updateTodo(id, body, this.conditions)
       .subscribe(() => {
         this.todo = null;
         // navigate to today route if no pending task
@@ -255,13 +256,9 @@ export class TodoInboxComponent implements OnInit, AfterViewInit, OnDestroy {
   deleteTodo(todo: TodoType): void {
     if (todo.deleteRequest) {
       this.isDeleting = true;
-      const postBody: TodoType = {
-        // eslint-disable-next-line no-underscore-dangle
-        _id: todo._id,
-        operationType: 'DELETE'
-      };
+      const { _id: id, ..._} = todo;
       this.deleteReqSubscription = this.todoService
-        .deleteTodo(postBody, this.conditions)
+        .deleteTodo(id, this.conditions)
         .subscribe(() => {
           this.isDeleting = false;
           this.toastr.toastrSuccess('Task Deleted');

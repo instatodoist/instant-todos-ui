@@ -137,35 +137,6 @@ export class TodoDialogComponent implements OnInit, OnDestroy {
     return this.formObj.get('subTasks') as FormArray;
   }
 
-  // /**
-  //  * Create type safe form group object
-  //  */
-  // private createForm(model: ITodoFormModel): FormGroup {
-  //   return this.fb.group(model);
-  // }
-
-  // private createSubTaskForm(model: ISubTask): FormGroup {
-  //   return this.fb.group(model);
-  // }
-
-  /**
-   * Create type safe form group object
-   */
-  // private createFormArray()  {
-  //   // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  //   return this.fb.array([ this.initSubTasks() ]) as any;
-  // }
-
-  /**
-   * Initiate subTask form group
-   */
-  // private initSubTasks() {
-  //   return this.createForm({
-  //     title: '',
-  //     isCompleted: false
-  //   });
-  // }
-
   /**
    * auto checked the labels if exist
    *
@@ -190,22 +161,6 @@ export class TodoDialogComponent implements OnInit, OnDestroy {
     } else {
       this.formObj.value.labelIds.splice(index, 1);
     }
-  }
-
-  /**
-   * Check scheduledDate
-   *
-   * @param scheduledDate - Date
-   */
-  // eslint-disable-next-line @typescript-eslint/member-ordering
-  initialiseDate(scheduledDate: Date): string {
-    if (scheduledDate) {
-      if (moment(scheduledDate).isSame(moment(), 'day')) {
-        return 'TODAY';
-      }
-      return 'CUSTOM';
-    }
-    return 'NO_DUE_DATE';
   }
 
   /**
@@ -248,41 +203,6 @@ export class TodoDialogComponent implements OnInit, OnDestroy {
         });
       }
     }
-  }
-
-  /**
-   * get projectId from child component vai Output
-   *
-   * @param data - projectId
-   */
-  callbackProject(data: string): void {
-    const projectName = this.projects.filter(obj => (obj._id) === data)[0].name;
-    this.currentProject = projectName;
-    this.formObj.patchValue({
-      projectId: data
-    });
-  }
-
-  /**
-   * get labels from child component vai Output
-   *
-   * @param data - labels/Tags Arrray
-   */
-  callbackLabel(data: string[]): void {
-    this.formObj.patchValue({
-      labelIds: data
-    });
-  }
-
-  /**
-   * get date from child component vai Output
-   *
-   * @param data - Date
-   */
-  callbackDate(data: string): void {
-    this.formObj.patchValue({
-      scheduledDate: data
-    });
   }
 
   /**
@@ -359,13 +279,14 @@ export class TodoDialogComponent implements OnInit, OnDestroy {
       if(!postBody.noteId){
         delete postBody.noteId;
       }
+      const {_id: id, ...body} = postBody;
       if (postBody._id) {
         // postBody.subTasks = filteredSubTasks;
         $todo =  this.todoService
-          .updateTodo(postBody, this.conditions);
+          .updateTodo(id, body, this.conditions);
       } else {
         $todo =  this.todoService
-          .createTodo(postBody, this.conditions);
+          .createTodo(body, this.conditions);
       }
       this.isSubmit = true;
       this.todoSubscription = $todo.subscribe(
@@ -388,6 +309,57 @@ export class TodoDialogComponent implements OnInit, OnDestroy {
   private fetchTodos(conditions: any){
     return this.todoService.fetchAll(conditions).pipe(take(2));
   };
+
+  /**
+   * Check scheduledDate
+   *
+   * @param scheduledDate - Date
+   */
+  // eslint-disable-next-line @typescript-eslint/member-ordering
+  private initialiseDate(scheduledDate: Date): string {
+    if (scheduledDate) {
+      if (moment(scheduledDate).isSame(moment(), 'day')) {
+        return 'TODAY';
+      }
+      return 'CUSTOM';
+    }
+    return 'NO_DUE_DATE';
+  }
+
+  /**
+   * get projectId from child component vai Output
+   *
+   * @param data - projectId
+   */
+   private callbackProject(data: string): void {
+    const projectName = this.projects.filter(obj => (obj._id) === data)[0].name;
+    this.currentProject = projectName;
+    this.formObj.patchValue({
+      projectId: data
+    });
+  }
+
+  /**
+   * get labels from child component vai Output
+   *
+   * @param data - labels/Tags Arrray
+   */
+  private callbackLabel(data: string[]): void {
+    this.formObj.patchValue({
+      labelIds: data
+    });
+  }
+
+  /**
+   * get date from child component vai Output
+   *
+   * @param data - Date
+   */
+  private callbackDate(data: string): void {
+    this.formObj.patchValue({
+      scheduledDate: data
+    });
+  }
 
   /**
    * Creating scheduled hashmap
@@ -500,17 +472,6 @@ export class TodoDialogComponent implements OnInit, OnDestroy {
         notes: this.todo && this.todo?.comments?.length ? this.todo.comments[0].description: '',
         noteId: this.todo && this.todo?.comments?.length ? this.todo.comments[0]._id: ''
       });
-      // if (this.todo?.subTasks?.length) {
-      //   const subTasksControl = this.subTasks;
-      //   (this.formObj.get('subTasks') as FormArray).clear();
-      //   // Sort subtasks by title
-      //   const subTasks = this.todo.subTasks
-      //     .sort((a, b) => a.title.localeCompare(b.title));
-      //   subTasks.forEach((element: TodoType) => {
-      //     subTasksControl.push(this.fb.group(element));
-      //   });
-      //   this.addSubTask();
-      // }
     }
   }
 
