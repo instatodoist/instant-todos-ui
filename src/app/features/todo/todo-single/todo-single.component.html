@@ -36,7 +36,7 @@ padding-bottom: 10px;" [ngClass]="{'i-am-subtask': isSubTask }" (click)="openPop
       <ng-container>
         <span
           *ngIf="todo?.project?.name && ( todoCurrentType === TODOTYPES?.today || todoCurrentType === TODOTYPES?.pending || todoCurrentType === TODOTYPES?.upcoming || todoCurrentType === TODOTYPES?.inbox)"
-          [routerLink]="['/tasks/labels', todo.project.name]"
+          [routerLink]="['/tasks/lists', todo.project.name]"
           class="badge badge-primary ml-2 mr-2 cursor">{{todo?.project?.name}}
         </span>
         <span *ngIf="todoCurrentType !== TODOTYPES?.today"
