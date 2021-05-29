@@ -171,7 +171,7 @@ export const TODO_LIST_COUNT_QUERY = gql`
 `;
 
 export const TODO_COMPLETED_COUNT_QUERY = gql`
-  query{
+  query todoCompleted{
     todoCompleted {
       totalCount
     }
@@ -206,7 +206,7 @@ export const TODO_LABEL_DELETE_MUTATION = gql`
 `;
 
 export const TODO_LABEL_QUERY = gql`
-  query {
+  query todoLabelList{
     todoLabelList {
       name
       _id
@@ -250,7 +250,7 @@ export const TODO_PROJECT_DELETE_MUTATION = gql`
 `;
 
 export const TODO_PROJECT_QUERY = gql`
-  query {
+  query todoProjectList {
     todoProjectList {
       name
       _id
