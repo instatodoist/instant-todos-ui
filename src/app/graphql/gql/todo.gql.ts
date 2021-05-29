@@ -33,6 +33,7 @@ ToDo.fragments = {
     fragment TodoFields on TodoType {
       _id
       title
+      notes
       labels {
         color
         name
@@ -41,10 +42,10 @@ ToDo.fragments = {
       project {
         name
       }
-      comments {
-        description
-        _id
-      }
+      # comments {
+      #   description
+      #   _id
+      # }
       subTasks {
         _id
         title

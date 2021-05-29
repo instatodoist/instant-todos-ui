@@ -300,8 +300,8 @@ export class TodoService {
       postTodo.notes = body.notes;
     }
     // eslint-disable-next-line no-underscore-dangle
-    if(body._id){
-      postTodo.noteId = body.noteId;
+    if(body.notes){
+      postTodo.notes = body.notes;
     }
     // checking title
     if (body.title) {

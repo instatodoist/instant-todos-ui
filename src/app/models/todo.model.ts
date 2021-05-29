@@ -56,8 +56,7 @@ export interface TodoType {
   subTasks?: TodoType[];
   parent?: string;
   notes?: string;
-  comments?: IComment[];
-  noteId?: string;
+  // comments?: IComment[];
   list?: TodoType[];
 }
 

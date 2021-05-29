@@ -103,7 +103,6 @@ export class TodoDialogComponent implements OnInit, OnDestroy {
       isCompleted: false,
       scheduledType: 'TODAY',
       notes: '',
-      noteId: '',
       subTodo: this.fb.group({
         title: '',
         todoId: ''
@@ -276,9 +275,6 @@ export class TodoDialogComponent implements OnInit, OnDestroy {
       const postBody = { ...this.formValue};
       delete postBody.subTodos;
       delete postBody.subTasks;
-      if(!postBody.noteId){
-        delete postBody.noteId;
-      }
       const {_id: id, ...body} = postBody;
       if (postBody._id) {
         // postBody.subTasks = filteredSubTasks;
@@ -469,8 +465,7 @@ export class TodoDialogComponent implements OnInit, OnDestroy {
         labelIds: this.labelIdVal,
         operationType: this.todo._id ? 'UPDATE' : 'ADD',
         isCompleted: this.todo && this.todo.isCompleted ? true : false,
-        notes: this.todo && this.todo?.comments?.length ? this.todo.comments[0].description: '',
-        noteId: this.todo && this.todo?.comments?.length ? this.todo.comments[0]._id: ''
+        notes: this.todo && this.todo?.notes?.length ? this.todo.notes: '',
       });
     }
   }
