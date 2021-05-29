@@ -1,6 +1,7 @@
 import {gql} from 'apollo-angular';
 
 
+// eslint-disable-next-line @typescript-eslint/naming-convention
 const ToDo: any = {};
 
 ToDo.fragments = {
