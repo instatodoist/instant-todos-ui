@@ -299,10 +299,6 @@ export class TodoService {
     if(body.notes){
       postTodo.notes = body.notes;
     }
-    // eslint-disable-next-line no-underscore-dangle
-    if(body.notes){
-      postTodo.notes = body.notes;
-    }
     // checking title
     if (body.title) {
       postTodo.title = body.title;
@@ -311,16 +307,16 @@ export class TodoService {
       postTodo.projectId = body.projectId;
     }
     // checking labels
-    if (body.labelIds && body.labelIds.length) {
-      postTodo.labelIds = body.labelIds;
-    } else {
-      postTodo.labelIds = [];
+    if(body.hasOwnProperty('labelIds')){
+      postTodo.labelIds = body.labelIds || [];
     }
     // checking scheduling
-    if (body.scheduledDate) {
-      postTodo.scheduledDate = body.scheduledDate;
-    } else {
-      postTodo.scheduledDate = null;
+    if (body.hasOwnProperty('scheduledDate')) {
+      postTodo.scheduledDate = body.scheduledDate || null;
+    }
+    // checking scheduling
+    if (body.hasOwnProperty('isCompleted')) {
+      postTodo.isCompleted = body.isCompleted || false;
     }
     return postTodo;
   }
