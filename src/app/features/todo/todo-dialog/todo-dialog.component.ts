@@ -281,6 +281,7 @@ export class TodoDialogComponent implements OnInit, OnDestroy {
         $todo =  this.todoService
           .updateTodo(id, body, this.conditions);
       } else {
+        delete body.isCompleted;
         $todo =  this.todoService
           .createTodo(body, this.conditions);
       }
