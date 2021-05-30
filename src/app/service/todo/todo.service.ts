@@ -106,7 +106,7 @@ export class TodoService {
         offset: 1,
         first: 50,
         sort: {
-          updatedAt: 'ASC'
+          updatedAt: 'DESC'
         },
         filter: {
           type: 'today'
