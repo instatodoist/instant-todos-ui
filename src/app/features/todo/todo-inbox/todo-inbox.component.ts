@@ -261,7 +261,8 @@ export class TodoInboxComponent implements OnInit, AfterViewInit, OnDestroy {
           }
         })
       )
-      .subscribe(response => {
+      .subscribe(
+        response => {
         const [countObj, dataList] = response;
         const { data = {} } = dataList;
         if (data.hasOwnProperty('todoList')) {
@@ -286,7 +287,12 @@ export class TodoInboxComponent implements OnInit, AfterViewInit, OnDestroy {
         if (this.todoCurrentType) {
           this.appService.configureSeo(this.todoCurrentType);
         }
-      });
+      },
+      ()=>{
+        this.extraLoader = false;
+        this.loader = false;
+      }
+      );
   }
 
 }
