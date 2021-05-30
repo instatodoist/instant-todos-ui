@@ -351,7 +351,7 @@ export class TodoDialogComponent implements OnInit, OnDestroy {
    *
    * @param data - Date
    */
-  private callbackDate(data: string): void {
+  private callbackDate(data: Date): void {
     this.formObj.patchValue({
       scheduledDate: data
     });
@@ -460,7 +460,7 @@ export class TodoDialogComponent implements OnInit, OnDestroy {
         _id: this.todo && this.todo._id || '',
         title: this.todo && this.todo.title || '',
         projectId: this.todo && this.todo.projectId || '',
-        scheduledDate: this.todo && this.todo.scheduledDate ? this.todo.scheduledDate : '',
+        scheduledDate: this.todo && this.todo.scheduledDate ? this.todo.scheduledDate : null,
         scheduledType: this.initialiseDate(this.todo.scheduledDate),
         labelIds: this.labelIdVal,
         operationType: this.todo._id ? 'UPDATE' : 'ADD',

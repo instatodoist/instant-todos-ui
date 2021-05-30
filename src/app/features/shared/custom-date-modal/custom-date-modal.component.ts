@@ -8,25 +8,26 @@ type Operation = 'ADD' | 'UPDATE';
 })
 export class CustomDateModalComponent implements OnInit, AfterViewInit {
   @Input() operationType: Operation;
-  @Input() scheduledAt = '';
-  @Output() callback: EventEmitter<string> = new EventEmitter<string>();
-  model: NgbDateStruct;
+  @Input() scheduledAt = null;
+  @Output() callback: EventEmitter<Date> = new EventEmitter<Date>();
+  model: Date;
   date: {year: number; month: number; day: number};
 
   constructor(
     public activeModal: NgbActiveModal
   ) {}
 
-  ngOnInit() {}
+  ngOnInit() {
+    console.log(this.scheduledAt, 'ssssss ');
+  }
 
   ngAfterViewInit() {}
 
   isDisabled = (date: NgbDate, current: {month: number; year: number; day: number}) => date.month < current.month ||
-    (date.month === current.month && date.day < current.day) ||
-    date.year < current.year;
+    (date.month === current.month && date.day < current.day) || date.year < current.year;
 
-  onEvent(model: NgbDateStruct) {
-    this.callback.next(`${model.month}-${model.day}-${model.year}`);
+  onEvent(model: any) {
+    this.callback.next(model);
     this.activeModal.dismiss();
   }
 

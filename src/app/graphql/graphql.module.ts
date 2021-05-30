@@ -60,6 +60,11 @@ export class GraphqlModule {
             utilityService.toastrError(message)
           );
           return throwError(errors);
+        } else if(errors && status === 500){
+          errors.map(({ message }) =>
+            utilityService.toastrError('Internal Server Error, Please try after some time.')
+          );
+          return throwError(errors);
         }
       }
       this.authService.logout();
