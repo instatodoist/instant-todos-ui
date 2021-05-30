@@ -6,10 +6,12 @@ import {
   ComponentFactoryResolver,
   Injector,
   ComponentRef,
-  AfterViewInit
+  AfterViewInit,
+  Inject
 } from '@angular/core';
 import { Router } from '@angular/router';
 import { combineLatest } from 'rxjs';
+import { DOCUMENT } from '@angular/common';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 
 import { TodoService, AppService } from '../../../../service';
@@ -31,6 +33,7 @@ export class SidebarComponent implements OnInit, AfterViewInit {
   count: ITodoTypeCount;
   navLinks: INavLink[];
   currentUrl = '';
+  isSidebarCollapse = false;
 
   constructor(
     private router: Router,
@@ -38,7 +41,8 @@ export class SidebarComponent implements OnInit, AfterViewInit {
     private todoService: TodoService,
     private appService: AppService,
     private componentFactoryResolver: ComponentFactoryResolver,
-    private modalService: NgbModal
+    private modalService: NgbModal,
+    @Inject(DOCUMENT) private document: Document
   ) { }
 
   ngOnInit(): void {
@@ -131,6 +135,20 @@ export class SidebarComponent implements OnInit, AfterViewInit {
     });
   }
 
+  // eslint-disable-next-line @typescript-eslint/member-ordering
+  lazyLoadComponent(): void{
+    this.modalService.open(TodoProjectDialogComponent, {size: 'lg', scrollable: true});
+  }
+
+  adjustSidebar(): void{
+    const collapseClassExist = this.document.body.classList.contains('sidebar-main');
+    if(collapseClassExist){
+      this.isSidebarCollapse = false;
+    } else {
+      this.isSidebarCollapse = true;
+    }
+  }
+
   private nav(): INavLink[] {
     return [
       {
@@ -188,11 +206,6 @@ export class SidebarComponent implements OnInit, AfterViewInit {
         ]
       }
     ];
-  }
-
-  // eslint-disable-next-line @typescript-eslint/member-ordering
-  lazyLoadComponent(): void{
-    this.modalService.open(TodoProjectDialogComponent, {size: 'lg', scrollable: true});
   }
 
 }

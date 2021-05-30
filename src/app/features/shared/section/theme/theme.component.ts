@@ -45,7 +45,6 @@ export class ThemeComponent implements AfterViewInit {
       jQuery(this).parent().addClass('active');
     });
     jQuery('.wrapper-menu').click(function() {
-      console.log(jQuery(this));
       jQuery(this).toggleClass('open');
       jQuery('body').toggleClass('sidebar-main');
     });

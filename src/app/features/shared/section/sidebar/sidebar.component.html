@@ -7,14 +7,16 @@
     <div class="iq-menu-bt align-self-center">
       <div class="wrapper-menu">
         <div class="main-circle"><i class="fas fa-bars"></i></div>
-        <div class="hover-circle"><i class="fas fa-times"></i></div>
+        <div class="hover-circle"><i class="fas fa-times" (click)="adjustSidebar()"></i></div>
       </div>
     </div>
   </div>
   <div id="sidebar-scrollbar">
     <nav class="iq-sidebar-menu">
       <ul id="iq-sidebar-toggle" class="iq-menu">
-        <li *ngFor="let link of navLinks" [ngClass]="{'active': link?.active &&  link?.name !== 'Lists'}">
+        <li *ngFor="let link of navLinks" [ngClass]="{'active': link?.active &&  link?.name !== 'Lists'}"
+          placement="bottom" ngbTooltip="{{ isSidebarCollapse? (('' + link.slug ) | translate) : '' }}"
+          [ngStyle]="link?.name === 'Lists' && { 'background-color': 'rgb(170 140 140 / 10%)'}">
           <ng-container *ngIf="!link?.children">
             <a [routerLink]="link?.link" class="iq-waves-effect" routerLinkActive>
               <i class="iq-arrow-left" [ngClass]="link?.icon"></i><span>{{('' + link?.slug ) | translate}}</span>
