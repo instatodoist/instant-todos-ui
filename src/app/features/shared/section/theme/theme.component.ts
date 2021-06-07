@@ -1,18 +1,25 @@
-import { Component, Input, AfterViewInit } from '@angular/core';
-import { AppService } from '../../../../service';
+import { Component, AfterViewInit } from '@angular/core';
+import { AppService, UtilityService } from '../../../../service';
 
 @Component({
   selector: 'app-theme',
   template: `
     <div class="iq-colorbox color-fix">
-      <div class="buy-button">
+      <div class="buy-button" (click)="openThemePicker()">
         <a class="color-full">
         <i class="fas fa-random cursor"></i>
         </a>
       </div>
       <div class="clearfix color-picker">
         <ul class="iq-colorselect clearfix">
-          <li *ngFor="let theme of this.themeOptions(); let i = index" [ngClass]="'color-' + (i + 1)" [attr.data-style]="'iq-color-' + ( i+1 )" [attr.data-color]="theme"></li>
+          <li
+            *ngFor="let theme of this.themeOptions(); let i = index"
+            [ngClass]="'color-' + (i + 1)"
+            [class.selectedTheme]="theme === defaultTheme"
+            [attr.data-style]="'iq-color-' + ( i+1 )"
+            [attr.data-color]="theme"
+            (click)="setTheme(theme)">
+          </li>
         </ul>
       </div>
     </div>
@@ -21,13 +28,18 @@ import { AppService } from '../../../../service';
 })
 export class ThemeComponent implements AfterViewInit {
 
-  @Input() jQuery;
+  jQuery: any = this.utilityService.JQuery;
   defaultTheme = this.appService.APP_DATA.config.theme;
-  constructor(private appService: AppService) {}
+  fn: (iqColor: string) => void = this.appService.changeTheme;
+
+  constructor(
+    private appService: AppService,
+    private utilityService: UtilityService
+  ) {}
 
   ngAfterViewInit(): void {
-    this.changeThemeJs();
     this.sidemenuJs();
+    this.setTheme(this.defaultTheme);
   }
 
   sidemenuJs(): void {
@@ -50,39 +62,25 @@ export class ThemeComponent implements AfterViewInit {
     });
   }
 
-  changeThemeJs(): void {
+  openThemePicker(){
     const jQuery = this.jQuery;
-    if (this.appService.APP_DATA.config.tClass) {
-      jQuery('.iq-colorbox .iq-colorselect .iq-colormark').removeClass('iq-colormark');
-      jQuery('.iq-colorselect').find(`li.${this.appService.APP_DATA.config.tClass}`).addClass('iq-colormark');
-    }
-    const updateThemFunc = this.appService.changeTheme;
-    updateThemFunc(this.defaultTheme);
     const styleSwitcher = jQuery('.iq-colorbox');
     const panelWidth = styleSwitcher.outerWidth(true);
-    // eslint-disable-next-line prefer-arrow/prefer-arrow-functions
-    jQuery('.iq-colorbox .color-full').on('click', function() {
-      if (jQuery('.iq-colorbox.color-fix').length > 0) {
-        styleSwitcher.animate({ right: '0px' });
-        jQuery('.iq-colorbox.color-fix').removeClass('color-fix');
-        jQuery('.iq-colorbox').addClass('opened');
-      } else {
-        jQuery('.iq-colorbox.opened').removeClass('opened');
-        jQuery('.iq-colorbox').addClass('color-fix');
-        styleSwitcher.animate({ right: '-' + panelWidth });
-      }
-      return false;
-    });
+    if (jQuery('.iq-colorbox.color-fix').length > 0) {
+      styleSwitcher.animate({ right: '0px' });
+      jQuery('.iq-colorbox.color-fix').removeClass('color-fix');
+      jQuery('.iq-colorbox').addClass('opened');
+    } else {
+      jQuery('.iq-colorbox.opened').removeClass('opened');
+      jQuery('.iq-colorbox').addClass('color-fix');
+      styleSwitcher.animate({ right: '-' + panelWidth });
+    }
+    return false;
+  }
 
-    jQuery('.iq-colorbox .iq-colorselect li').on('click', function() {
-      const jQuerythis = jQuery(this);
-      const className = jQuerythis.attr('class');
-      localStorage.setItem('defaultThemeClass', className);
-      const iqColor = jQuerythis.css('background-color');
-      jQuery('.iq-colorbox .iq-colorselect .iq-colormark').removeClass('iq-colormark');
-      jQuerythis.addClass('iq-colormark');
-      updateThemFunc(iqColor);
-    });
+  setTheme(theme: string){
+    this.defaultTheme = theme;
+    this.appService.changeTheme(theme);
   }
 
   themeOptions(): string[] {

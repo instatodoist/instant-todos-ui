@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/naming-convention */
 import { Title, Meta } from '@angular/platform-browser';
 import { Injectable, OnDestroy } from '@angular/core';
 import { BehaviorSubject, Subscription, of, Observable } from 'rxjs';
@@ -9,7 +10,6 @@ import { LsService } from '../service/ls.service';
 })
 
 export class AppService implements OnDestroy {
-  APP_LEVEL: BehaviorSubject<IAppData>;
   APP_DATA: IAppData = {
     config: {
       theme: localStorage.getItem('defaultTheme') || 'rgb(255, 0, 0)',
@@ -20,6 +20,7 @@ export class AppService implements OnDestroy {
     session: null,
     lang: null
   };
+  APP_LEVEL: BehaviorSubject<IAppData> = new BehaviorSubject(this.APP_DATA);
   appSubscription: Subscription;
   private currentUrlDataSource = new BehaviorSubject<string>('');
 
@@ -31,8 +32,6 @@ export class AppService implements OnDestroy {
     private metaService: Meta,
     private lsService: LsService
   ) {
-    // initialize app level data
-    this.APP_LEVEL = new BehaviorSubject(this.APP_DATA);
     // initialize the modal config
     this.subscribeToAppData();
   }
@@ -67,6 +66,11 @@ export class AppService implements OnDestroy {
     document.documentElement.style.setProperty('--iq-primary', iqColor);
     document.documentElement.style.setProperty('--iq-light-primary', iqColor2);
     document.documentElement.style.setProperty('--iq-primary-hover', iqColor3);
+    this.APP_DATA = {
+      ...this.APP_DATA, config: {
+        ...this.APP_DATA.config, theme: iqColor
+      }
+    };
   }
 
   languages(): Observable<ILanguage[]> {
