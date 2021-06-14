@@ -9,3 +9,4 @@ export { AppService } from './appconfig';
 export { ProjectService } from './project/project.service';
 export { TagService } from './tag/tag.service';
 export { SubTodoService } from './sub-todo/sub-todo.service';
+export { SettingService } from './setting/setting.service';

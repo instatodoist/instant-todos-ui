@@ -2,8 +2,9 @@ import { Component, OnInit } from '@angular/core';
 import { FormBuilder, Validators } from '@angular/forms';
 import { SocialAuthService } from 'angularx-social-login';
 import {  GoogleLoginProvider } from 'angularx-social-login';
-import { LsService, AuthService, AppService } from '../../../service';
+import { LsService, AuthService, AppService, SettingService } from '../../../service';
 import { IUserProfile } from '../../../models';
+import { switchMap } from 'rxjs/operators';
 
 @Component({
   selector: 'app-auth',
@@ -24,7 +25,8 @@ export class AuthComponent implements OnInit {
     private authService: AuthService,
     private lsService: LsService,
     private appService: AppService,
-    private socialService: SocialAuthService
+    private socialService: SocialAuthService,
+    private settingService: SettingService
   ) { }
 
   ngOnInit(): void {}
@@ -33,15 +35,21 @@ export class AuthComponent implements OnInit {
   signIn(): void {
     this.loader = true;
     this.isSubmit = true;
+
     this.authService.signIn(this.signinForm.value)
-      .subscribe(
-        (response: any) => {
+      .pipe(
+        switchMap((response: any)=>{
           const data = response.login;
-          this.loader = false;
           this.lsService.setValue('isLoggedIn', true);
           this.lsService.setValue('__token', data.token);
-          // this.router.navigate(['tasks/today']);
-          // Kind of hack will fix after for the timebeing
+          return this.settingService.fetch();
+        })
+      )
+      .subscribe(
+        (setting)=>{
+          // set default theme
+          localStorage.setItem('defaultTheme', setting.theme);
+          this.loader = false;
           window.location.reload();
         },
         () => {
@@ -62,6 +70,7 @@ export class AuthComponent implements OnInit {
             lastname: user.lastName || '',
             email: user.email,
             gID: user.id,
+            // eslint-disable-next-line @typescript-eslint/naming-convention
             profile_image: user.photoUrl
           };
           this.authService.googleLogin(postBody)

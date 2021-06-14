@@ -1,5 +1,5 @@
 import { Component, AfterViewInit } from '@angular/core';
-import { AppService, UtilityService } from '../../../../service';
+import { AppService, UtilityService, SettingService } from '../../../../service';
 
 @Component({
   selector: 'app-theme',
@@ -18,7 +18,7 @@ import { AppService, UtilityService } from '../../../../service';
             [class.selectedTheme]="theme === defaultTheme"
             [attr.data-style]="'iq-color-' + ( i+1 )"
             [attr.data-color]="theme"
-            (click)="setTheme(theme)">
+            (click)="setTheme(theme, true)">
           </li>
         </ul>
       </div>
@@ -34,7 +34,8 @@ export class ThemeComponent implements AfterViewInit {
 
   constructor(
     private appService: AppService,
-    private utilityService: UtilityService
+    private utilityService: UtilityService,
+    private settingService: SettingService
   ) {}
 
   ngAfterViewInit(): void {
@@ -78,9 +79,13 @@ export class ThemeComponent implements AfterViewInit {
     return false;
   }
 
-  setTheme(theme: string){
+  setTheme(theme: string, onDemand: boolean = false){
     this.defaultTheme = theme;
     this.appService.changeTheme(theme);
+    if(onDemand){
+      this.settingService.update({ theme })
+      .subscribe();
+    }
   }
 
   themeOptions(): string[] {
