@@ -2,6 +2,7 @@ import { IGql }  from './common.model';
 
 export interface IConfiSetting {
   theme?: string;
+  lang?: string;
 }
 
 export interface IConfigSettingResponse {

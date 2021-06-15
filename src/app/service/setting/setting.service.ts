@@ -40,7 +40,7 @@ export class SettingService {
     // initialising gql variables
     const variables: IGQLVariable<string,  IConfiSetting> = {
       input: {
-        theme: body.theme
+        ...body
       },
     };
     return this.apollo.mutate({

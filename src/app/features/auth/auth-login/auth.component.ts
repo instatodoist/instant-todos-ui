@@ -5,6 +5,7 @@ import {  GoogleLoginProvider } from 'angularx-social-login';
 import { LsService, AuthService, AppService, SettingService } from '../../../service';
 import { IUserProfile } from '../../../models';
 import { switchMap } from 'rxjs/operators';
+import { combineLatest } from 'rxjs';
 
 @Component({
   selector: 'app-auth',
@@ -35,28 +36,35 @@ export class AuthComponent implements OnInit {
   signIn(): void {
     this.loader = true;
     this.isSubmit = true;
-
     this.authService.signIn(this.signinForm.value)
       .pipe(
         switchMap((response: any)=>{
           const data = response.login;
           this.lsService.setValue('isLoggedIn', true);
           this.lsService.setValue('__token', data.token);
-          return this.settingService.fetch();
+          return combineLatest([this.settingService.fetch(), this.appService.languages()]);
         })
       )
-      .subscribe(
-        (setting)=>{
-          // set default theme
-          localStorage.setItem('defaultTheme', setting.theme);
-          this.loader = false;
-          window.location.reload();
-        },
-        () => {
-          this.isSubmit = false;
-          this.loader = false;
-        }
-      );
+      .subscribe(([setting, languages])=>{
+        const lang = setting?.lang || 'en';
+        // set default theme
+        this.lsService.setValue('defaultTheme', setting.theme);
+        // set default language
+        this.lsService.setValue('lng', lang);
+        const selectedLang = this.appService.selectedLanguage(lang, languages);
+        // set lang object
+        this.lsService.setValue('lang', JSON.stringify(selectedLang));
+        this.isSubmit = false;
+        this.loader = false;
+        // reload window
+        window.location.reload();
+      },
+      (err) => {
+        console.log(err);
+        this.isSubmit = false;
+        this.loader = false;
+      }
+    );
   }
 
   signInWithGoogle(): void {

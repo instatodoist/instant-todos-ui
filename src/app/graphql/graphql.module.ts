@@ -31,8 +31,6 @@ export class GraphqlModule {
     const httpLink2 = httpLink.create({
       uri: environment.API_URL
     });
-
-    const accessToken = lsService.getValue('__token');
     // auth link
     const authLink = setContext((_, { headers }) =>
       // get the authentication token from local storage if it exists
@@ -41,7 +39,7 @@ export class GraphqlModule {
       ({
         headers: {
           ...headers,
-          authorization: accessToken ? `Bearer ${accessToken}` : ''
+          authorization: lsService.getValue('__token') ? `Bearer ${lsService.getValue('__token')}` : ''
         }
       }));
     // error link

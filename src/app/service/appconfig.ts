@@ -99,6 +99,10 @@ export class AppService implements OnDestroy {
     return of(lang);
   }
 
+  selectedLanguage(lang: string, languages: ILanguage[]): ILanguage {
+    return languages.find(item=>item.value === lang);
+  };
+
   configureSeo(title: string, metaTags: IMetaTag[] = null): void {
     this.titleService.setTitle(`${title} | InstaTodos`);
     if (metaTags && metaTags.length) {

@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { Subscription } from 'rxjs';
 import { TranslateService } from '@ngx-translate/core';
-import { AppService, UtilityService } from '../../../service';
+import { AppService, UtilityService, SettingService } from '../../../service';
 import { ILanguage } from '../../../models';
 
 @Component({
@@ -36,7 +36,8 @@ export class MultilingualComponent implements OnInit {
   constructor(
     private translate: TranslateService,
     private appService: AppService,
-    private utilityService: UtilityService
+    private utilityService: UtilityService,
+    private settingService: SettingService
   ) { }
 
   ngOnInit(): void {
@@ -57,26 +58,29 @@ export class MultilingualComponent implements OnInit {
     this.translate.use(lang.value);
     this.defaultLang = lang;
     localStorage.setItem('lang', JSON.stringify(lang));
+    localStorage.setItem('lng', lang.value);
     this.appService. updateCoreAppData({ ...this.appService.APP_DATA, lang });
-    // this.languages = this.languages.filter(item => item.value !== lang.value);
+    this.settingService.update({
+      lang: lang.value
+    }).subscribe();
   }
 
   /**
    * fetch all the languages for internationalization
    */
   getLanguages(): void {
-    this.languages$ = this.appService.languages().subscribe((response) => {
-      const languages = response;
-      if (localStorage.getItem('lang')) {
-        const language: ILanguage = JSON.parse(localStorage.getItem('lang'));
-        this.defaultLang = languages.filter(item => item.value === language.value)[0];
-      } else {
-        this.defaultLang = languages.filter(item => item.value === 'en')[0];
-      }
-      this.translate.use(this.defaultLang.value);
-      this.languages = languages;
-      // this.languages = languages.filter(item => item.value !== this.defaultLang.value);
-    });
+    this.languages$ = this.appService.languages()
+      .subscribe((response) => {
+        const languages = response;
+        if (localStorage.getItem('lng')) {
+          const selectedLang = this.appService.selectedLanguage(localStorage.getItem('lng'), languages);
+          this.defaultLang = selectedLang;
+        } else {
+          this.defaultLang = this.appService.selectedLanguage('en', languages);
+        }
+        this.translate.use(this.defaultLang?.value || 'en');
+        this.languages = languages;
+      });
   }
 
 }
