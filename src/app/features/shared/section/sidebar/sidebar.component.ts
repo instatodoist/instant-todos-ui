@@ -53,7 +53,7 @@ export class SidebarComponent implements OnInit, AfterViewInit {
       }
     };
     combineLatest([
-      this.appService.currentUrlObservable,
+      this.appService.currentUrlDataSource$,
       this.todoService.countByTodoType(query)
     ])
       .subscribe((response: any) => {

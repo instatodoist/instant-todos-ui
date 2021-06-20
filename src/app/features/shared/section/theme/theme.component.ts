@@ -29,8 +29,8 @@ import { AppService, UtilityService, SettingService } from '../../../../service'
 export class ThemeComponent implements AfterViewInit {
 
   jQuery: any = this.utilityService.JQuery;
-  defaultTheme = this.appService.APP_DATA.config.theme;
-  fn: (iqColor: string) => void = this.appService.changeTheme;
+  defaultTheme = this.appService.ROOT_STATE.config.theme;
+  fn: (iqColor: string) => void = this.appService.setTheme;
 
   constructor(
     private appService: AppService,
@@ -81,7 +81,7 @@ export class ThemeComponent implements AfterViewInit {
 
   setTheme(theme: string, onDemand: boolean = false){
     this.defaultTheme = theme;
-    this.appService.changeTheme(theme);
+    this.appService.setTheme(theme);
     if(onDemand){
       this.settingService.update({ theme })
       .subscribe();

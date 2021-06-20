@@ -23,7 +23,7 @@ export class TodoProjectListComponent implements OnInit {
 
   ngOnInit(): void {
     this.getLabels();
-    this.appService.currentUrlObservable.subscribe( url => {
+    this.appService.currentUrlDataSource$.subscribe( url => {
       this.currentUrl = url;
     });
   }

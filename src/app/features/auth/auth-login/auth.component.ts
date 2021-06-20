@@ -40,27 +40,23 @@ export class AuthComponent implements OnInit {
       .pipe(
         switchMap((response: any)=>{
           const data = response.login;
-          this.lsService.setValue('isLoggedIn', true);
-          this.lsService.setValue('__token', data.token);
+          this.appService.setSession(data);
           return combineLatest([this.settingService.fetch(), this.appService.languages()]);
         })
       )
       .subscribe(([setting, languages])=>{
-        const lang = setting?.lang || 'en';
         // set default theme
-        this.lsService.setValue('defaultTheme', setting.theme);
+        this.appService.setTheme(setting.theme);
         // set default language
-        this.lsService.setValue('lng', lang);
-        const selectedLang = this.appService.selectedLanguage(lang, languages);
-        // set lang object
-        this.lsService.setValue('lang', JSON.stringify(selectedLang));
+        const selectedLang = this.appService.selectedLanguage(setting?.lang, languages);
+        this.appService.setLanguage(selectedLang);
         this.isSubmit = false;
         this.loader = false;
         // reload window
         window.location.reload();
       },
       (err) => {
-        console.log(err);
+        console.log(err, 'Auth Error');
         this.isSubmit = false;
         this.loader = false;
       }
@@ -94,7 +90,7 @@ export class AuthComponent implements OnInit {
             );
         });
     } catch(err) {
-      console.log(err);
+      console.log(err, 'Auth G Error');
     }
   }
 }

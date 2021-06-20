@@ -51,12 +51,13 @@ export interface ILanguage {
 export interface IAppData {
   config: {
     theme: string;
-    tClass: string;
+    lang?: ILanguage;
+    lng?: string;
+    currentUrl?: string;
   };
   isLoggedIn: boolean;
   token: string;
   session: IUserProfile;
-  lang: ILanguage;
 }
 
 export type IMetaTag = {

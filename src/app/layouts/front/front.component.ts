@@ -42,7 +42,7 @@ export class FrontComponent implements OnInit, AfterViewInit {
   ngOnInit(): void { }
 
   ngAfterViewInit(): void {
-    this.appService.changeTheme(this.appService.APP_DATA.config.theme);
+    this.appService.setTheme(this.appService.ROOT_STATE.config.theme);
     $('.owl-carousel').each(function() {
       const jQuerycarousel = $(this);
       jQuerycarousel.owlCarousel({

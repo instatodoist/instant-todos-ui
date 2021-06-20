@@ -47,7 +47,7 @@ export class GoalComponent implements OnInit, OnDestroy {
   ) { }
 
   ngOnInit(): void {
-    this.currentUrlSubscription = this.appService.currentUrlObservable.subscribe((url: string) => {
+    this.currentUrlSubscription = this.appService.currentUrlDataSource$.subscribe((url: string) => {
       if (url) {
         const currentRoute = this.routes.filter(item => item.url === url);
         if (currentRoute.length) {

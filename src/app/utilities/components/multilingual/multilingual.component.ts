@@ -57,9 +57,8 @@ export class MultilingualComponent implements OnInit {
   onChangeLanguage(lang: ILanguage): void {
     this.translate.use(lang.value);
     this.defaultLang = lang;
-    localStorage.setItem('lang', JSON.stringify(lang));
-    localStorage.setItem('lng', lang.value);
-    this.appService. updateCoreAppData({ ...this.appService.APP_DATA, lang });
+    // update root state
+    this.appService.setLanguage(lang);
     this.settingService.update({
       lang: lang.value
     }).subscribe();
@@ -80,6 +79,8 @@ export class MultilingualComponent implements OnInit {
         }
         this.translate.use(this.defaultLang?.value || 'en');
         this.languages = languages;
+        // update root state
+        this.appService.setLanguage(this.defaultLang);
       });
   }
 

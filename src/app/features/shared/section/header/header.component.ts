@@ -43,7 +43,7 @@ export class HeaderComponent implements OnInit {
         query: urlTree.queryParams.q
       });
     }
-    this.appService.APP_LEVEL.subscribe(({ session }) => {
+    this.appService.ROOT_STATE$.subscribe(({ session }) => {
       this.session = session;
     });
   }
@@ -109,8 +109,8 @@ export class HeaderComponent implements OnInit {
       .subscribe(data => {
         this.session = data;
         // eslint-disable-next-line no-underscore-dangle
-        this.appService. updateCoreAppData({
-          ...this.appService.APP_DATA,
+        this.appService.setRootState({
+          ...this.appService.ROOT_STATE,
           session: this.session
         });
       });

@@ -27,7 +27,7 @@ export class AccountUpdateComponent implements OnInit, AfterViewInit {
       profileImg: [null]
     });
     // this.getProfile();
-    this.appService.APP_LEVEL.subscribe(({session}) => {
+    this.appService.ROOT_STATE$.subscribe(({session}) => {
       this.formObj.patchValue({
         firstname: session?.firstname || '',
         lastname: session?.lastname || ''
@@ -40,10 +40,10 @@ export class AccountUpdateComponent implements OnInit, AfterViewInit {
 
   getProfile(): void {
     this.authService.profile().subscribe((data) => {
-      this.appService. updateCoreAppData({
-        ...this.appService.APP_DATA,
+      this.appService.setRootState({
+        ...this.appService.ROOT_STATE,
         session: {
-          ...this.appService.APP_DATA.session, ...data
+          ...this.appService.ROOT_STATE.session, ...data
         }
       });
     });

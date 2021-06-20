@@ -2,7 +2,7 @@
 import { Title, Meta } from '@angular/platform-browser';
 import { Injectable, OnDestroy } from '@angular/core';
 import { BehaviorSubject, Subscription, of, Observable } from 'rxjs';
-import { IAppData, ILanguage, IMetaTag } from './../models';
+import { IAppData, ILanguage, IMetaTag, ILoginResponse } from './../models';
 import { LsService } from '../service/ls.service';
 
 @Injectable({
@@ -10,35 +10,35 @@ import { LsService } from '../service/ls.service';
 })
 
 export class AppService implements OnDestroy {
-  APP_DATA: IAppData = {
+  // root state
+  ROOT_STATE: IAppData = {
     config: {
       theme: localStorage.getItem('defaultTheme') || 'rgb(255, 0, 0)',
-      tClass: localStorage.getItem('defaultThemeClass') || 'color-9'
+      lng: 'en',
+      lang: null,
+      currentUrl: null
     },
     isLoggedIn: Boolean(this.lsService.getValue('isLoggedIn')) || false,
     token: this.lsService.getValue('__token') || null,
-    session: null,
-    lang: null
+    session: null
   };
-  APP_LEVEL: BehaviorSubject<IAppData> = new BehaviorSubject(this.APP_DATA);
-  appSubscription: Subscription;
-  private currentUrlDataSource = new BehaviorSubject<string>('');
 
+  // subject
+  ROOT_STATE$$: BehaviorSubject<IAppData> = new BehaviorSubject(this.ROOT_STATE);
+  ROOT_STATE$ = this.ROOT_STATE$$.asObservable();
+
+  // use to get current url
+  private currentUrlDataSource$$ = new BehaviorSubject<string>('');
   // eslint-disable-next-line @typescript-eslint/member-ordering
-  currentUrlObservable = this.currentUrlDataSource.asObservable();
+  currentUrlDataSource$ = this.currentUrlDataSource$$.asObservable();
 
   constructor(
     private titleService: Title,
     private metaService: Meta,
     private lsService: LsService
-  ) {
-    // initialize the modal config
-    this.subscribeToAppData();
-  }
+  ) {}
 
-  ngOnDestroy(): void {
-    this.appSubscription.unsubscribe();
-  }
+  ngOnDestroy(): void {}
 
   get loaderImage(): string {
     return '/assets/facelift/images/page-img/page-load-loader.gif';
@@ -48,15 +48,22 @@ export class AppService implements OnDestroy {
     return '/assets/facelift/images/defafault_user.png';
   }
 
-  updateCurentUrl(data: string): void {
-    this.currentUrlDataSource.next(data);
+  setAppCurrentUrl(data: string): void {
+    this.currentUrlDataSource$$.next(data);
   }
 
-   updateCoreAppData(data: IAppData): void {
-    this.APP_LEVEL.next(data);
+  setRootState(data: IAppData): void {
+    this.ROOT_STATE$$.next(data);
   }
 
-  changeTheme(iqColor: string): void {
+  // set session
+  setSession(user: ILoginResponse): void {
+    this.lsService.setValue('isLoggedIn', true);
+    this.lsService.setValue('__token', user.token);
+  }
+
+  // set app theme
+  setTheme(iqColor: string): void {
     localStorage.setItem('defaultTheme', iqColor);
     const str = iqColor;
     const res = str.replace('rgb(', '');
@@ -66,13 +73,28 @@ export class AppService implements OnDestroy {
     document.documentElement.style.setProperty('--iq-primary', iqColor);
     document.documentElement.style.setProperty('--iq-light-primary', iqColor2);
     document.documentElement.style.setProperty('--iq-primary-hover', iqColor3);
-    this.APP_DATA = {
-      ...this.APP_DATA, config: {
-        ...this.APP_DATA.config, theme: iqColor
+    this.ROOT_STATE = {
+      ...this.ROOT_STATE, config: {
+        ...this.ROOT_STATE.config, theme: iqColor
       }
     };
   }
 
+  // set multilanguage flag
+  setLanguage(lang: ILanguage): void {
+    localStorage.setItem('lang', JSON.stringify(lang));
+    localStorage.setItem('lng', lang.value);
+    this.setRootState({
+       ...this.ROOT_STATE,
+       config: {
+         ...this.ROOT_STATE.config,
+         lang,
+         lng: lang.value
+       }
+    });
+  }
+
+  // grab available languages
   languages(): Observable<ILanguage[]> {
     const lang = [
       {
@@ -99,7 +121,8 @@ export class AppService implements OnDestroy {
     return of(lang);
   }
 
-  selectedLanguage(lang: string, languages: ILanguage[]): ILanguage {
+  // get default language
+  selectedLanguage(lang: string = 'en', languages: ILanguage[]): ILanguage {
     return languages.find(item=>item.value === lang);
   };
 
@@ -108,12 +131,5 @@ export class AppService implements OnDestroy {
     if (metaTags && metaTags.length) {
       this.metaService.addTags(metaTags);
     }
-  }
-
-  // subscribe & update any app level data
-  private subscribeToAppData() {
-    this.APP_LEVEL.subscribe((data: IAppData) => {
-      this.APP_DATA = {...this.APP_DATA, ...data};
-    });
   }
 }

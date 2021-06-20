@@ -46,7 +46,7 @@ export class AppComponent implements OnInit, OnDestroy, AfterViewInit {
             gtag('send', 'pageview');
           }
           window.scroll(0, 0); // scroll to top on route change
-          this.appService.updateCurentUrl(this.router.url); // update current url via through Behaviour Subject
+          this.appService.setAppCurrentUrl(this.router.url); // update current url via through Behaviour Subject
           return of(true);
         }),
         map(() => {
