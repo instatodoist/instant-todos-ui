@@ -10,13 +10,12 @@ import { Subscription } from 'rxjs';
       <div class="col-lg-12">
         <div class="iq-card iq-card-block iq-card-stretch iq-card-height">
           <div class="iq-card-body">
-            <ul class="nav nav-pills mb-1 nav-fill" id="myTab-1" role="tablist">
-              <li class="nav-item" *ngFor="let route of routes">
-                <a class="nav-link" id="home-tab" [routerLink]="route.url" [ngClass]="{'active': route.isActive}">
-                  {{route.name}}
-                </a>
-              </li>
-            </ul>
+          <nav mat-tab-nav-bar>
+            <a mat-tab-link *ngFor="let route of routes"
+              [routerLink]="route.url"
+              [active]="route.isActive"
+            > {{route.name}} </a>
+          </nav>
           </div>
         </div>
       </div>

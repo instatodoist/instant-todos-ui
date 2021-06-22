@@ -14,6 +14,8 @@ import { InfiniteScrollComponent } from './infinite-scroll/infinite-scroll.compo
 import { GoalDialogComponent } from '../goal/goal-dialog/goal-dialog.component';
 import {TodoProjectListComponent} from '../todo/todo-project-list/todo-project-list.component';
 import { MultilingualComponent } from '../../utilities/components/multilingual/multilingual.component';
+import { MaterialModule  } from '../material/material.module';
+
 @NgModule({
   declarations: [
     TodoProjectListComponent,
@@ -34,7 +36,8 @@ import { MultilingualComponent } from '../../utilities/components/multilingual/m
     }),
     QuilljsModule,
     LazyLoadImageModule,
-    NgbModule
+    NgbModule,
+    MaterialModule
   ],
   exports: [
     TodoProjectListComponent,
@@ -45,7 +48,8 @@ import { MultilingualComponent } from '../../utilities/components/multilingual/m
     FooterComponent,
     LazyLoadImageModule,
     MultilingualComponent,
-    NgbModule
+    NgbModule,
+    MaterialModule
   ],
   providers: [{provide: NgbDateAdapter, useClass: NgbDateNativeUTCAdapter}]
 })
