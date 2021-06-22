@@ -13,7 +13,6 @@ import { GoalDialogComponent } from '../goal/goal-dialog/goal-dialog.component';
 import {TodoProjectListComponent} from '../todo/todo-project-list/todo-project-list.component';
 import { MultilingualComponent } from '../../utilities/components/multilingual/multilingual.component';
 import { MaterialModule  } from '../material/material.module';
-import {MatSnackBarModule} from '@angular/material/snack-bar';
 
 @NgModule({
   declarations: [
@@ -32,7 +31,6 @@ import {MatSnackBarModule} from '@angular/material/snack-bar';
     QuilljsModule,
     LazyLoadImageModule,
     MaterialModule,
-    MatSnackBarModule
   ],
   exports: [
     TodoProjectListComponent,
@@ -44,7 +42,6 @@ import {MatSnackBarModule} from '@angular/material/snack-bar';
     LazyLoadImageModule,
     MultilingualComponent,
     MaterialModule,
-    MatSnackBarModule
   ],
 })
 export class SharedModule {
