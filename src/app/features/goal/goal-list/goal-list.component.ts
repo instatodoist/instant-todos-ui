@@ -2,7 +2,7 @@ import { Component, OnInit, OnDestroy } from '@angular/core';
 import { Subscription } from 'rxjs';
 import { ActivatedRoute } from '@angular/router';
 import { switchMap } from 'rxjs/operators';
-import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
+import { MatDialog } from '@angular/material/dialog';
 
 import { IGoalListType, IGoalConditions, IGoalType, IOperationEnumType, ITemplateOperation } from '../../../models';
 import { GoalService, AppService, UtilityService } from '../../../service';
@@ -29,7 +29,7 @@ export class GoalListComponent implements OnInit, OnDestroy {
     private goalService: GoalService,
     private appService: AppService,
     private utilityService: UtilityService,
-    private modalService: NgbModal
+    public dialog: MatDialog
   ) {
     this.conditions = {
       filter: {
@@ -73,10 +73,14 @@ export class GoalListComponent implements OnInit, OnDestroy {
 
   openUpdatePopUp(goal: IGoalType = null, type: ITemplateOperation = 'IS_UPDATE'): void {
     if (type === 'IS_UPDATE') {
-      const modelRef = this.modalService.open(GoalDialogComponent, {size: 'lg'});
-      modelRef.componentInstance.goal = goal;
+      this.dialog.open(GoalDialogComponent, {
+        data: goal,
+        width: '40%',
+      });
     } else {
-      this.modalService.open(GoalDialogComponent, {size: 'lg'});
+      this.dialog.open(GoalDialogComponent, {
+        width: '40%',
+      });
     }
   }
 

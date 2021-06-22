@@ -48,6 +48,11 @@ $instatodo-theme: mat.define-light-theme((
 // @import './assets/facelift/css/flatpickr.min.css';
 @import '~ngx-toastr/toastr.css';
 
+html, body { height: 100%; }
+body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; }
+
+/** custom css*/
+
 .selectedTheme {
   border: 5px solid black !important;
 }
@@ -66,5 +71,6 @@ $instatodo-theme: mat.define-light-theme((
   box-shadow: none !important;
 }
 
-html, body { height: 100%; }
-body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; }
+.mat-dialog-container {
+  border-radius: 15px !important;
+}

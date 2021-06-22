@@ -1,8 +1,8 @@
-import { Component, OnInit, Input } from '@angular/core';
+import { Component, OnInit, Input, Inject } from '@angular/core';
 import { FormGroup, FormBuilder, Validators } from '@angular/forms';
+import {MAT_DIALOG_DATA, MatDialogRef} from '@angular/material/dialog';
 import { GoalService, UtilityService } from '../../../service';
 import { IGoalType, IExternalModal, IGoalConditions } from '../../../models';
-import { NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
 type IGoalPopupType = 'GOAL_ADD' | 'GOAL_UPDATE';
 
 @Component({
@@ -29,8 +29,11 @@ export class GoalDialogComponent implements OnInit {
     private goalService: GoalService,
     private fb: FormBuilder,
     private toastr: UtilityService,
-    public activeModal: NgbActiveModal
-  ) { }
+    @Inject(MAT_DIALOG_DATA) public data: IGoalType,
+    public dialogRef: MatDialogRef<GoalDialogComponent>
+  ) {
+    this.goal = data;
+  }
 
   ngOnInit(): void {
     this.QUILL_OPTIONS = {
@@ -82,7 +85,7 @@ export class GoalDialogComponent implements OnInit {
       this.goalService.goalOperation(this.formObj.value, this.conditions)
         .subscribe(() => {
           this.isSubmit = false;
-          this.activeModal.dismiss();
+          this.dialogRef.close();
           let message = 'Note created';
           // eslint-disable-next-line no-underscore-dangle
           if (this.formObj.value._id) {
