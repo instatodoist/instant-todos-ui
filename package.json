@@ -41,9 +41,7 @@
     "moment": "^2.29.1",
     "ng-lazyload-image": "^9.1.0",
     "ng2-charts": "^2.4.2",
-    "ngx-pagination": "^5.0.0",
     "ngx-quilljs": "0.0.10",
-    "ngx-toastr": "^13.1.0",
     "rxjs": "^6.6.3",
     "tslib": "^2.0.0",
     "zone.js": "~0.11.4"

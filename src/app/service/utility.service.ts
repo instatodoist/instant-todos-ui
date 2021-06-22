@@ -1,10 +1,9 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
-import {Observable} from '@apollo/client/core';
-import { Injectable, ViewContainerRef, ComponentRef, Injector, ComponentFactoryResolver, TemplateRef, ViewRef } from '@angular/core';
-import { ToastrService } from 'ngx-toastr';
+import { Injectable, ViewContainerRef } from '@angular/core';
+import {MatSnackBar} from '@angular/material/snack-bar';
 
 import { TranslateService } from '@ngx-translate/core';
-import { IDialogRef, TDialogTempRef, TDialogCompRef, ILanguage } from '../models';
+import { ILanguage } from '../models';
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 declare let $: any;
@@ -15,11 +14,14 @@ declare let $: any;
 export class UtilityService {
 
   vcRefRoot: ViewContainerRef;
+  config = {
+    duration: 5000
+  };
 
   constructor(
     // private injector: Injector,
     // private componentFactoryResolver: ComponentFactoryResolver,
-    private iziToast: ToastrService,
+    private snackBar: MatSnackBar,
     private translateService: TranslateService
   ) { }
 
@@ -40,22 +42,22 @@ export class UtilityService {
 
   // error toaster
   toastrError(message: string): void {
-    this.iziToast.error(message);
+    this.snackBar.open(message, '', { ...this.config });
   }
 
   // error toaster
   toastrWarning(message: string): void {
-    this.iziToast.warning(message);
+    this.snackBar.open(message, '', { ...this.config });
   }
 
   // success Toastr
   toastrSuccess(message: string): void {
-    this.iziToast.success(message);
+    this.snackBar.open(message, '', { ...this.config });
   }
 
   // destroy toaster
   toastrDismiss(): void {
-    // this.iziToast.destroy();
+    this.snackBar.dismiss();
   }
 
   // parse GraphQl Errors

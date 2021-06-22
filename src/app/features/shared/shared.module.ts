@@ -1,7 +1,6 @@
 import { NgModule, ModuleWithProviders } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import {RouterModule} from '@angular/router';
-import { ToastrModule } from 'ngx-toastr';
 import { TranslateModule } from '@ngx-translate/core';
 import { ReactiveFormsModule } from '@angular/forms';
 import { QuilljsModule } from 'ngx-quilljs';
@@ -14,6 +13,7 @@ import { GoalDialogComponent } from '../goal/goal-dialog/goal-dialog.component';
 import {TodoProjectListComponent} from '../todo/todo-project-list/todo-project-list.component';
 import { MultilingualComponent } from '../../utilities/components/multilingual/multilingual.component';
 import { MaterialModule  } from '../material/material.module';
+import {MatSnackBarModule} from '@angular/material/snack-bar';
 
 @NgModule({
   declarations: [
@@ -29,13 +29,10 @@ import { MaterialModule  } from '../material/material.module';
     RouterModule,
     ReactiveFormsModule,
     TranslateModule,
-    ToastrModule.forRoot({
-      positionClass: 'toast-bottom-right',
-      preventDuplicates: true
-    }),
     QuilljsModule,
     LazyLoadImageModule,
-    MaterialModule
+    MaterialModule,
+    MatSnackBarModule
   ],
   exports: [
     TodoProjectListComponent,
@@ -46,7 +43,8 @@ import { MaterialModule  } from '../material/material.module';
     FooterComponent,
     LazyLoadImageModule,
     MultilingualComponent,
-    MaterialModule
+    MaterialModule,
+    MatSnackBarModule
   ],
 })
 export class SharedModule {
