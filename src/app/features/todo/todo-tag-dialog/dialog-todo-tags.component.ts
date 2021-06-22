@@ -1,7 +1,6 @@
 /* eslint-disable no-underscore-dangle */
 import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
 import { TodoLabelType } from '../../../models';
-import { NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 
 @Component({
@@ -15,9 +14,7 @@ export class DialogTodoTagsComponent implements OnInit {
   @Input() labels: TodoLabelType[] = [];
   @Output() callback: EventEmitter<string[]> = new EventEmitter<string[]>();
 
-  constructor(
-    public activeModal: NgbActiveModal
-  ) { }
+  constructor() { }
 
   ngOnInit(): void { }
 

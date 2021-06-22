@@ -12,7 +12,7 @@ import {
 import { Router } from '@angular/router';
 import { combineLatest } from 'rxjs';
 import { DOCUMENT } from '@angular/common';
-import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
+import {MatDialog} from '@angular/material/dialog';
 
 import { TodoService, AppService } from '../../../../service';
 import { ITodoTypeCount, INavLink } from '../../../../models';
@@ -41,7 +41,7 @@ export class SidebarComponent implements OnInit, AfterViewInit {
     private todoService: TodoService,
     private appService: AppService,
     private componentFactoryResolver: ComponentFactoryResolver,
-    private modalService: NgbModal,
+    private modalService: MatDialog,
     @Inject(DOCUMENT) private document: Document
   ) { }
 
@@ -137,7 +137,9 @@ export class SidebarComponent implements OnInit, AfterViewInit {
 
   // eslint-disable-next-line @typescript-eslint/member-ordering
   lazyLoadComponent(): void{
-    this.modalService.open(TodoProjectDialogComponent, {size: 'lg', scrollable: true});
+    this.modalService.open(TodoProjectDialogComponent, {
+      width: '50%'
+    });
   }
 
   adjustSidebar(): void{

@@ -6,7 +6,7 @@ import { AuthService, AppService, UtilityService } from '../../../../service';
 import { Subscription } from 'rxjs';
 import { ILanguage, IUserProfile } from '../../../../models';
 import { TodoDialogComponent } from '../../../todo/todo-dialog/todo-dialog.component';
-import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
+import {MatDialog} from '@angular/material/dialog';
 
 @Component({
   selector: 'app-header',
@@ -32,7 +32,7 @@ export class HeaderComponent implements OnInit {
     private authService: AuthService,
     private appService: AppService,
     private utilityService: UtilityService,
-    private modalService: NgbModal
+    public dialog: MatDialog
   ) {
     this.formObj = this.fb.group({
       query: ['']
@@ -98,7 +98,9 @@ export class HeaderComponent implements OnInit {
    * open popup
    */
   openPopUp(): void {
-    this.modalService.open(TodoDialogComponent, {size: 'lg'});
+    this.dialog.open(TodoDialogComponent, {
+      width: '50%'
+    });
   }
 
   /**

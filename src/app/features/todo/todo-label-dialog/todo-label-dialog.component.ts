@@ -1,6 +1,6 @@
 import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
-import { NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
+import {MatDialogRef} from '@angular/material/dialog';
 import { Subscription } from 'rxjs';
 import { TodoLabelType } from 'src/app/models';
 import { TagService } from 'src/app/service';
@@ -20,7 +20,7 @@ export class TodoLabelDialogComponent implements OnInit {
   constructor(
     private fb: FormBuilder,
     private tagService: TagService,
-    public activeModal: NgbActiveModal
+    public activeModal: MatDialogRef<TodoLabelDialogComponent>
   ) { }
 
   ngOnInit(): void {
@@ -73,7 +73,7 @@ export class TodoLabelDialogComponent implements OnInit {
       tag$ = this.tagService.create(postBody);
     }
     this.tagSubscription = tag$.subscribe(() => {
-      this.activeModal.dismiss();
+      this.activeModal.close();
       this.callback.next(true);
     });
   }

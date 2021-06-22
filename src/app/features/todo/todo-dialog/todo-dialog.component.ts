@@ -2,18 +2,18 @@
 /* eslint-disable @typescript-eslint/naming-convention */
 import { CommonModule } from '@angular/common';
 import { ReactiveFormsModule, FormsModule } from '@angular/forms';
-import { Component, OnInit, Input, OnDestroy, NgModule } from '@angular/core';
+import { Component, OnInit, Input, OnDestroy, NgModule, Inject } from '@angular/core';
 import { Router } from '@angular/router';
 import { FormGroup, FormBuilder, FormArray } from '@angular/forms';
 import { combineLatest, Subscription } from 'rxjs';
 import { map, switchMap, take } from 'rxjs/operators';
 import * as moment from 'moment';
+import {MatDialog, MatDialogRef, MAT_DIALOG_DATA} from '@angular/material/dialog';
 import { TodoService, UtilityService, TagService, ProjectService, SubTodoService } from '../../../service';
 import { TodoType, TodoLabelType, TodoConditions, IOperationEnumType, TodoProjectType, ISubTask } from '../../../models';
 import {  SharedModule } from '../../shared/shared.module';
 import { DialogTodoTagsComponent } from '../todo-tag-dialog/dialog-todo-tags.component';
 import { TodoProjectListDialogComponent } from '../todo-project-list-dialog/todo-projects-dialog.component';
-import { NgbActiveModal, NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { CustomDateModalComponent } from '../../shared/custom-date-modal/custom-date-modal.component';
 
 /**
@@ -81,12 +81,13 @@ export class TodoDialogComponent implements OnInit, OnDestroy {
     private fb: FormBuilder,
     private todoService: TodoService,
     private toastr: UtilityService,
-    public activeModal: NgbActiveModal,
-    private modalService: NgbModal,
     private tagService: TagService,
     private projectService: ProjectService,
-    private subTodoService: SubTodoService
-  ) { }
+    private subTodoService: SubTodoService,
+    public dialog: MatDialog,
+    @Inject(MAT_DIALOG_DATA) public data: TodoType,
+    public dialogRef: MatDialogRef<TodoDialogComponent>,
+  ) {}
 
   /**
    * Lifecycle Method
@@ -171,14 +172,18 @@ export class TodoDialogComponent implements OnInit, OnDestroy {
   // eslint-disable-next-line @typescript-eslint/member-ordering
   openListPopup(popupType: string, scheduledType?: TScheduledString): void {
     if(popupType === 'PROJECT'){
-      const modalRef = this.modalService.open(TodoProjectListDialogComponent, {size: 'lg', scrollable: true});
+      const modalRef = this.dialog.open(TodoProjectListDialogComponent, {
+        width: '50%'
+      });
       modalRef.componentInstance.projects = this.projects;
       modalRef.componentInstance.projectId = this.formObj.value.projectId;
       modalRef.componentInstance.callback.subscribe((projectId: string) => {
         this.callbackProject(projectId);
       });
     } else if(popupType === 'TAG'){
-      const modalRef = this.modalService.open(DialogTodoTagsComponent, {size: 'lg', scrollable: true});
+      const modalRef = this.dialog.open(DialogTodoTagsComponent, {
+        width: '50%'
+      });
       modalRef.componentInstance.labels = this.labels;
       modalRef.componentInstance.labelIds = this.formObj.value.labelIds;
       modalRef.componentInstance.callback.subscribe((tagIds: string[]) => {
@@ -189,7 +194,9 @@ export class TodoDialogComponent implements OnInit, OnDestroy {
         this.formObj.patchValue({
           scheduledType
         });
-        const modalRef = this.modalService.open(CustomDateModalComponent, {centered: true});
+        const modalRef = this.dialog.open(CustomDateModalComponent, {
+          width: '50%'
+        });
         modalRef.componentInstance.operationType = this.formObj.value.operationType;
         modalRef.componentInstance.scheduledAt = this.formObj.value.scheduledDate;
         modalRef.componentInstance.callback.subscribe((date: any) => {
@@ -290,7 +297,7 @@ export class TodoDialogComponent implements OnInit, OnDestroy {
         () => {
           this.isSubmit = false;
           // this.isOpen.emit(false);
-          this.activeModal.dismiss();
+          this.dialogRef.close();
           let message = 'Task created';
           if (this.formObj.value._id) {
             message = 'Task updated';

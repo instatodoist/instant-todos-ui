@@ -6,7 +6,7 @@ import { combineLatest, of, Subscription } from 'rxjs';
 import { TodoListType, TodoCompletedListType, TodoType, TodoConditions, ITodoTypeCount, ItabName } from '../../../models';
 import { TodoService, AppService, UtilityService, ProjectService } from '../../../service';
 import { TodoDialogComponent } from '../todo-dialog/todo-dialog.component';
-import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
+import {MatDialog, MatDialogRef} from '@angular/material/dialog';
 
 // declare let $: any;
 @Component({
@@ -81,7 +81,7 @@ export class TodoInboxComponent implements OnInit, AfterViewInit, OnDestroy {
     private appService: AppService,
     private toastr: UtilityService,
     private router: Router,
-    private modalService: NgbModal,
+    public dialog: MatDialog,
     private projectService: ProjectService
   ) {
   }
@@ -109,9 +109,8 @@ export class TodoInboxComponent implements OnInit, AfterViewInit, OnDestroy {
    * @param popupType - update/delete
    */
   openPopUp(todo: TodoType): void {
-    const modelRef = this.modalService.open(TodoDialogComponent, {
-      size: 'lg',
-      scrollable: true
+    const modelRef = this.dialog.open(TodoDialogComponent, {
+      width: '50%'
     });
     modelRef.componentInstance.todo = todo;
   }

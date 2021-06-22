@@ -1,5 +1,5 @@
 import { Component, OnInit, Input, Output, AfterViewInit, EventEmitter } from '@angular/core';
-import {NgbDateStruct, NgbActiveModal, NgbDate} from '@ng-bootstrap/ng-bootstrap';
+import {MatDialogRef, MAT_DIALOG_DATA} from '@angular/material/dialog';
 type Operation = 'ADD' | 'UPDATE';
 @Component({
   selector: 'app-custom-date-modal',
@@ -14,21 +14,20 @@ export class CustomDateModalComponent implements OnInit, AfterViewInit {
   date: {year: number; month: number; day: number};
 
   constructor(
-    public activeModal: NgbActiveModal
+    public dialogRef: MatDialogRef<CustomDateModalComponent>
   ) {}
 
-  ngOnInit() {
-    console.log(this.scheduledAt, 'ssssss ');
-  }
+  ngOnInit() {}
 
   ngAfterViewInit() {}
 
-  isDisabled = (date: NgbDate, current: {month: number; year: number; day: number}) => date.month < current.month ||
-    (date.month === current.month && date.day < current.day) || date.year < current.year;
+  isDisabled() {
+
+  }
 
   onEvent(model: any) {
     this.callback.next(model);
-    this.activeModal.dismiss();
+    this.dialogRef.close();
   }
 
 }

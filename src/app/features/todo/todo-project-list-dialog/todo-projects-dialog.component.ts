@@ -1,7 +1,7 @@
 import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
 import { FormGroup } from '@angular/forms';
-import { NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
 import { TodoProjectType } from '../../../models';
+import {MatDialogRef} from '@angular/material/dialog';
 
 @Component({
   selector: 'app-dialog-todo-projects',
@@ -14,8 +14,8 @@ export class TodoProjectListDialogComponent implements OnInit {
   @Output() callback: EventEmitter<string> = new EventEmitter<string>();
   formObj: FormGroup;
   constructor(
-    public activeModal: NgbActiveModal,
-  ) { }
+    public dialogRef: MatDialogRef<TodoProjectListDialogComponent>
+  ) {}
 
   ngOnInit(): void {}
 
@@ -23,7 +23,7 @@ export class TodoProjectListDialogComponent implements OnInit {
     // eslint-disable-next-line no-underscore-dangle
     this.projectId = project._id;
     this.callback.next(this.projectId);
-    this.activeModal.dismiss();
+    this.dialogRef.close(this.projectId);
   }
 
 }

@@ -15,7 +15,7 @@
     <nav class="iq-sidebar-menu">
       <ul id="iq-sidebar-toggle" class="iq-menu">
         <li *ngFor="let link of navLinks" [ngClass]="{'active': link?.active &&  link?.name !== 'Lists'}"
-          placement="bottom" ngbTooltip="{{ isSidebarCollapse? (('' + link.slug ) | translate) : '' }}"
+          placement="bottom"
           [ngStyle]="link?.name === 'Lists' && { 'background-color': 'rgb(170 140 140 / 10%)'}">
           <ng-container *ngIf="!link?.children">
             <a [routerLink]="link?.link" class="iq-waves-effect" routerLinkActive>

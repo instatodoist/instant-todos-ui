@@ -4,7 +4,6 @@ import {RouterModule} from '@angular/router';
 import { ToastrModule } from 'ngx-toastr';
 import { TranslateModule } from '@ngx-translate/core';
 import { ReactiveFormsModule } from '@angular/forms';
-import { NgbDateAdapter, NgbDateNativeUTCAdapter, NgbModule } from '@ng-bootstrap/ng-bootstrap';
 import { QuilljsModule } from 'ngx-quilljs';
 import { LazyLoadImageModule } from 'ng-lazyload-image';
 import { AppService } from '../../service';
@@ -36,7 +35,6 @@ import { MaterialModule  } from '../material/material.module';
     }),
     QuilljsModule,
     LazyLoadImageModule,
-    NgbModule,
     MaterialModule
   ],
   exports: [
@@ -48,10 +46,8 @@ import { MaterialModule  } from '../material/material.module';
     FooterComponent,
     LazyLoadImageModule,
     MultilingualComponent,
-    NgbModule,
     MaterialModule
   ],
-  providers: [{provide: NgbDateAdapter, useClass: NgbDateNativeUTCAdapter}]
 })
 export class SharedModule {
   static forRoot(): ModuleWithProviders<SharedModule> {

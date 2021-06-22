@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
+import {MatDialog} from '@angular/material/dialog';
 import { TodoLabelType } from '../../../models';
 import { UtilityService, TagService , TodoService } from '../../../service';
 import { TodoLabelDialogComponent } from '../todo-label-dialog/todo-label-dialog.component';
@@ -20,7 +20,7 @@ export class TodoLabelListComponent implements OnInit {
   constructor(
     private todoService: TodoService,
     private toast: UtilityService,
-    private modalService: NgbModal,
+    private modalService: MatDialog,
     private tagService: TagService
   ) { }
 
@@ -31,7 +31,9 @@ export class TodoLabelListComponent implements OnInit {
   }
 
   openPopup(label: TodoLabelType = null) {
-    const modelRef = this.modalService.open(TodoLabelDialogComponent, {size: 'small'});
+    const modelRef = this.modalService.open(TodoLabelDialogComponent, {
+      width: '30%'
+    });
     modelRef.componentInstance.label = label;
     modelRef.componentInstance.callback.subscribe(()=>{
       if (this.label) {
