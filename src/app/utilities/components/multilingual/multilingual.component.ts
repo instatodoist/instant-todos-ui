@@ -8,18 +8,16 @@ import { ILanguage } from '../../../models';
   selector: 'app-multilingual',
   template: `
     <li class="nav-item">
-      <a  (click)="hasChild = !hasChild" class="search-toggle iq-waves-effect language-title active" href="javascript:void(0)">
-        <span class="ripple rippleEffect">
-        </span>
-        <img src="{{defaultLang?.logo}}" alt="img-flaf" class="img-fluid mr-1" style="height: 16px; width: 16px;">
-        {{defaultLang?.value | uppercase}}
-        <i class="ri-arrow-down-s-line"></i>
+      <a [matMenuTriggerFor]="menu" class="search-toggle iq-waves-effect language-title active cursor">
+      <img src="{{defaultLang?.logo}}" alt="img-flaf" class="img-fluid mr-1" style="height: 16px; width: 16px;">
+          {{defaultLang?.value | uppercase}}
+          <i class="ri-arrow-down-s-line"></i>
       </a>
-      <div class="iq-sub-dropdown" [ngStyle]=" hasChild && {'display' :  'block' }">
-        <a class="iq-sub-card cursor" *ngFor="let lang of languages" (click)="hasChild = !hasChild; onChangeLanguage(lang)">
+      <mat-menu #menu="matMenu" [ngStyle]=" hasChild && {'display' :  'block' }">
+        <button mat-menu-item *ngFor="let lang of languages" (click)="hasChild = !hasChild; onChangeLanguage(lang)">
           <img src="{{lang?.logo}}" alt="img-flaf" class="img-fluid mr-2">{{lang?.name}}
-        </a>
-      </div>
+        </button>
+      </mat-menu>
     </li>
   `,
   styles: [

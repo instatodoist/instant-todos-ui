@@ -195,7 +195,7 @@ export class TodoDialogComponent implements OnInit, OnDestroy {
           scheduledType
         });
         const modalRef = this.dialog.open(CustomDateModalComponent, {
-          width: '50%'
+          width: '40%'
         });
         modalRef.componentInstance.operationType = this.formObj.value.operationType;
         modalRef.componentInstance.scheduledAt = this.formObj.value.scheduledDate;

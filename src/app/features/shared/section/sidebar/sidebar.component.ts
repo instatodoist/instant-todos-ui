@@ -24,6 +24,9 @@ import { TodoProjectDialogComponent } from '../../../todo/todo-project-dialog/to
     .iq-menu-custom {
       padding-bottom: 100% !important;
     }
+    .mat-icon{
+      margin-right: 20px;
+    }
   `]
 })
 export class SidebarComponent implements OnInit, AfterViewInit {
@@ -156,41 +159,41 @@ export class SidebarComponent implements OnInit, AfterViewInit {
       {
         name: 'Smart Analysis',
         slug: 'smart-analysis',
-        icon: 'fa fa-calendar',
+        icon: 'analytics',
         link: '/smart-analysis'
       },
       {
         name: 'Today',
         slug: 'today',
-        icon: 'fa fa-calendar',
+        icon: 'calendar_today',
         link: '/tasks/today',
         count: 0
       },
       {
         name: 'Pending',
         slug: 'pending',
-        icon: 'far fa-calendar-times',
+        icon: 'pending_actions',
         link: '/tasks/pending',
         count: 0
       },
       {
         name: 'Upcoming',
         slug: 'upcoming',
-        icon: 'far fa-calendar-plus',
+        icon: 'upcoming',
         link: '/tasks/upcoming',
         count: 0
       },
       {
         name: 'Completed',
         slug: 'completed',
-        icon: 'fa fa-check',
+        icon: 'check_circle',
         link: '/tasks/completed',
         count: 0
       },
       {
         name: 'Inbox',
         slug: 'inbox',
-        icon: 'fa fa-inbox',
+        icon: 'inbox',
         link: '/tasks/inbox',
         count: 0
       },

@@ -18,8 +18,10 @@
           placement="bottom"
           [ngStyle]="link?.name === 'Lists' && { 'background-color': 'rgb(170 140 140 / 10%)'}">
           <ng-container *ngIf="!link?.children">
-            <a [routerLink]="link?.link" class="iq-waves-effect" routerLinkActive>
-              <i class="iq-arrow-left" [ngClass]="link?.icon"></i><span>{{('' + link?.slug ) | translate}}</span>
+            <a [routerLink]="link?.link" class="iq-waves-effect" routerLinkActive style="line-height: 40px;">
+              <mat-icon class="iq-arrow-left" aria-hidden="false">{{ link?.icon }}</mat-icon>
+              <span>{{('' + link?.slug ) | translate}}</span>
+              <!-- <i class="iq-arrow-left" [ngClass]="link?.icon"></i><span>{{('' + link?.slug ) | translate}}</span> -->
               <span class="badge badge-primary ml-2 p-1" *ngIf="link?.count">
                 {{link?.count ? link?.count : ''}}
               </span>
@@ -37,7 +39,8 @@
               <ng-container *ngIf="link?.name !== 'Lists'">
                 <li *ngFor="let data of link?.children">
                   <a class="nav-link" [routerLink]="data?.link">
-                    <i [ngClass]="data?.icon"></i>{{('' + data?.slug ) | translate}}
+                    <mat-icon aria-hidden="false">{{ data?.icon }}</mat-icon>
+                    <span>{{('' + data?.slug ) | translate}}</span>
                     <span class="badge badge-primary ml-2 p-1" *ngIf="data?.count">
                       {{data?.count ? data?.count : ''}}
                     </span>

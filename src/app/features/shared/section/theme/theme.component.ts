@@ -7,7 +7,7 @@ import { AppService, UtilityService, SettingService } from '../../../../service'
     <div class="iq-colorbox color-fix">
       <div class="buy-button" (click)="openThemePicker()">
         <a class="color-full">
-        <i class="fas fa-random cursor"></i>
+        <mat-icon aria-hidden="false">adjust</mat-icon>
         </a>
       </div>
       <div class="clearfix color-picker">

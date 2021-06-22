@@ -10,8 +10,7 @@ export class CustomDateModalComponent implements OnInit, AfterViewInit {
   @Input() operationType: Operation;
   @Input() scheduledAt = null;
   @Output() callback: EventEmitter<Date> = new EventEmitter<Date>();
-  model: Date;
-  date: {year: number; month: number; day: number};
+  model: Date | null;;
 
   constructor(
     public dialogRef: MatDialogRef<CustomDateModalComponent>

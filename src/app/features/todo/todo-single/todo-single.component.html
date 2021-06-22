@@ -50,9 +50,9 @@ padding-bottom: 10px;" [ngClass]="{'i-am-subtask': isSubTask }" (click)="openPop
             <button type="button" class="close ml-4" data-dismiss="alert" aria-label="Close">
               <span class="text-primary todo-actions" *ngIf="todo?.deleteRequest"
                 (click)="$event.stopPropagation(); deleteTodo(todo)">
-                <i class="fa fa-info-circle mr-2" aria-hidden="true"></i>click to confirm
+                click to confirm
               </span>
-              <i *ngIf="!todo?.deleteRequest" class="fa fa-minus-circle cursor" aria-hidden="true"></i>
+              <mat-icon *ngIf="!todo?.deleteRequest">remove_circle</mat-icon>
             </button>
           </div>
         </ng-container>

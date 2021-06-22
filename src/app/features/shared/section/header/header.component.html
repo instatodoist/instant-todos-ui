@@ -32,15 +32,13 @@
             <!-- PopUp [TODO]-->
             <a title="Add Task" href="javascript:void(0)" (click)="openPopUp()"
               class="iq-waves-effect btn-primary rounded">
-              <span class="ripple rippleEffect"></span>
-              <i class="fa fa-plus" aria-hidden="true"></i>
+              <mat-icon aria-hidden="false">add</mat-icon>
             </a>
           </li>
 
           <li class="nav-item nav-icon">
             <a title="Notes" href="javascript:void(0)" class="iq-waves-effect btn-primary rounded" routerLink="/notes">
-              <span class="ripple rippleEffect"></span>
-              <i class="fa fa-sticky-note" aria-hidden="true"></i>
+              <mat-icon aria-hidden="false">notes</mat-icon>
             </a>
           </li>
           <ng-container>
@@ -59,16 +57,20 @@
           </a>
           <mat-menu #menu="matMenu">
             <button mat-menu-item routerLink="/profile/update">
-              <!-- <mat-icon>dialpad</mat-icon> -->
+              <mat-icon aria-hidden="false" aria-label="Account">account_circle</mat-icon>
               <span>{{'auth.my_profile' | translate}}</span>
             </button>
             <button mat-menu-item routerLink="/tasks/tags">
-              <!-- <mat-icon>dialpad</mat-icon> -->
+              <mat-icon aria-hidden="false" aria-label="Label">label_important</mat-icon>
               <span>{{'label_text' | translate}}</span>
             </button>
             <button mat-menu-item routerLink="/profile/password">
-              <!-- <mat-icon>dialpad</mat-icon> -->
+              <mat-icon aria-hidden="false" aria-label="Password">password</mat-icon>
               <span>{{'auth.change_password' | translate}}</span>
+            </button>
+            <button mat-menu-item (click)="signOut()">
+              <mat-icon aria-hidden="false" aria-label="Label">logout</mat-icon>
+              <span>{{'auth.sign_out' | translate}}</span>
             </button>
             
           </mat-menu>

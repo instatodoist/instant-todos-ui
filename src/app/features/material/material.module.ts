@@ -7,6 +7,9 @@ import { FlexLayoutModule } from '@angular/flex-layout';
 import {MatDialogModule} from '@angular/material/dialog';
 import {MatSnackBarModule} from '@angular/material/snack-bar';
 import {MatMenuModule} from '@angular/material/menu';
+import {MatIconModule} from '@angular/material/icon';
+import {MatDatepickerModule} from '@angular/material/datepicker';
+import {MatNativeDateModule} from '@angular/material/core';
 
 @NgModule({
   declarations: [],
@@ -17,7 +20,10 @@ import {MatMenuModule} from '@angular/material/menu';
     MatTabsModule,
     MatCardModule,
     MatSnackBarModule,
-    MatMenuModule
+    MatMenuModule,
+    MatIconModule,
+    MatDatepickerModule,
+    MatNativeDateModule
   ],
   exports: [
     FlexLayoutModule,
@@ -26,7 +32,9 @@ import {MatMenuModule} from '@angular/material/menu';
     MatCardModule,
     MatDialogModule,
     MatSnackBarModule,
-    MatMenuModule
+    MatMenuModule,
+    MatIconModule,
+    MatDatepickerModule
   ]
 })
 export class MaterialModule { }

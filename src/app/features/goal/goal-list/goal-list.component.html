@@ -26,17 +26,19 @@
                     </a>
                   </label> -->
               <label class="ml-2 mb-0 iq-bg-primary rounded cursor" (click)="openUpdatePopUp(goal)">
-                <a><i class="fa fa-pencil-alt" aria-hidden="true"></i></a>
+                <a>
+                  <mat-icon aria-hidden="false">edit</mat-icon>
+              </a>
               </label>
               <label class="ml-2 mb-0 iq-bg-primary rounded" (click)="updateGoal(goal, 'IS_ARCHIEVED')"
                 data-toggle="tooltip" data-placement="top" data-original-title="Tooltip on top">
                 <a>
-                  <i class="fa fa-archive cursor" aria-hidden="true"></i>
+                  <mat-icon aria-hidden="false">delete</mat-icon>
                 </a>
               </label>
               <label class="ml-2 mb-0 rounded iq-bg-primary" (click)="updateGoal(goal, 'IS_DELETED')">
                 <a>
-                  <i class="far fa-trash-alt"></i>
+                  <mat-icon aria-hidden="false">delete_forever</mat-icon>
                 </a>
               </label>
             </div>

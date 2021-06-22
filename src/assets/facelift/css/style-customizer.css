@@ -33,7 +33,7 @@ Design and Developed by: iqonicthemes.in
 .iq-colorbox .color-picker { background-color: var(--iq-white); position: absolute; padding: 15px 30px; height: 100%;  border-top: none; }
 .iq-colorbox.color-fix { box-shadow: none; }
 .iq-colorbox.opened .color-picker { opacity: 1; }
-.iq-colorbox a.color-full { position: absolute; top: 200px; right: 300px; background: var(--iq-white); width: 45px; height: 45px; line-height: 45px; display: block; font-size: 24px; color: #000; text-align: center; text-decoration: none;-webkit-box-shadow: 0px 0px 15px 0px rgba(0, 0, 0, 0.1); -moz-box-shadow: 0px 0px 15px 0px rgba(0, 0, 0, 0.1); box-shadow: 0px 0px 15px 0px rgba(0, 0, 0, 0.1);}
+.iq-colorbox a.color-full { position: absolute; top: 320px; right: 300px; background: var(--iq-white); width: 45px; height: 45px; line-height: 45px; display: block; font-size: 24px; color: #000; text-align: center; text-decoration: none;-webkit-box-shadow: 0px 0px 15px 0px rgba(0, 0, 0, 0.1); -moz-box-shadow: 0px 0px 15px 0px rgba(0, 0, 0, 0.1); box-shadow: 0px 0px 15px 0px rgba(0, 0, 0, 0.1);}
 .iq-colorbox.opened a.color-full { left: -45px;  border-color: transparent;}
 .iq-colorbox ul { margin: 0; padding: 5px 0 0 0; list-style: none; font-size: 0; }
 .iq-colorbox ul li { position: relative; width: 50px; height: 40px; float: left; display: inline-block; cursor: pointer; margin: 0 10px 10px 0; -webkit-transition: all linear 0.5s; -moz-transition: all linear 0.5s; -o-transition: all linear 0.5s; -ms-transition: all linear 0.5s; transition: all linear 0.5s; border-radius: 5px; }
