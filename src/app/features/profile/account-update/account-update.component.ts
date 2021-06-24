@@ -32,7 +32,9 @@ export class AccountUpdateComponent implements OnInit, AfterViewInit {
         firstname: session?.firstname || '',
         lastname: session?.lastname || ''
       });
-      this.uploadedImage = session?.profilePic?.url;
+      if(session?.profilePic?.url){
+        this.uploadedImage = session?.profilePic?.url;
+      }
     });
   }
 

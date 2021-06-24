@@ -37,7 +37,6 @@ export class AuthService {
   logout(): boolean {
     this.lsService.deleteValue(this.authKey);
     this.lsService.deleteValue('__token');
-    this.lsService.clearAll();
     return true;
   }
 
