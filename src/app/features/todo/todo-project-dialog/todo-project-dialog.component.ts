@@ -3,6 +3,7 @@ import {RouterModule} from '@angular/router';
 import {ReactiveFormsModule} from '@angular/forms';
 import { NgModule, Component, OnInit, AfterViewInit, Input, Output, EventEmitter } from '@angular/core';
 import { FormGroup, FormBuilder, Validators } from '@angular/forms';
+import { SharedModule } from '../../shared/shared.module';
 import { UtilityService, ProjectService } from '../../../service';
 import { TodoProjectType, TodoConditions, IOperationEnumType } from '../../../models';
 import {MatDialogRef} from '@angular/material/dialog';
@@ -120,7 +121,8 @@ export class TodoProjectDialogComponent implements OnInit, AfterViewInit {
   imports: [
     CommonModule,
     RouterModule,
-    ReactiveFormsModule
+    ReactiveFormsModule,
+    SharedModule
   ],
   declarations: [
     TodoProjectDialogComponent

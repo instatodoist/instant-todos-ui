@@ -6,8 +6,12 @@
     </a>
     <div class="iq-menu-bt align-self-center">
       <div class="wrapper-menu">
-        <div class="main-circle"><i class="fas fa-bars"></i></div>
-        <div class="hover-circle"><i class="fas fa-times" (click)="adjustSidebar()"></i></div>
+        <div class="main-circle">
+          <mat-icon aria-hidden="false" (click)="adjustSidebar()">reorder</mat-icon>
+        </div>
+        <div class="hover-circle">
+          <mat-icon aria-hidden="false" (click)="adjustSidebar()">reorder</mat-icon>
+        </div>
       </div>
     </div>
   </div>
@@ -18,7 +22,9 @@
           placement="bottom"
           [ngStyle]="link?.name === 'Lists' && { 'background-color': 'rgb(170 140 140 / 10%)'}">
           <ng-container *ngIf="!link?.children">
-            <a [routerLink]="link?.link" class="iq-waves-effect" routerLinkActive style="line-height: 40px;">
+            <a [routerLink]="link?.link" class="iq-waves-effect" routerLinkActive [ngStyle]="{'line-height': '40px'}"  #tooltip="matTooltip"
+            matTooltip="{{isSidebarCollapse? (('' + link?.slug ) | translate) : ''}}"
+            [matTooltipPosition]="'right'">
               <mat-icon class="iq-arrow-left" aria-hidden="false">{{ link?.icon }}</mat-icon>
               <span>{{('' + link?.slug ) | translate}}</span>
               <!-- <i class="iq-arrow-left" [ngClass]="link?.icon"></i><span>{{('' + link?.slug ) | translate}}</span> -->
@@ -32,8 +38,10 @@
             <a class="iq-waves-effect ml-2">
               <span class="ripple rippleEffect"></span>
               <span>{{('' + link?.slug ) | translate}}</span>
-              <i class="fa fa-pencil-alt ml-2 cursor" aria-hidden="true" style="font-size: 14px;"
-                (click)="lazyLoadComponent()"></i>
+              <mat-icon aria-hidden="false" (click)="lazyLoadComponent()" [ngStyle]="{'font-size': '14px', 'height': '12px'}" class="cursor">edit</mat-icon>
+              <!-- <i class="fa fa-pencil-alt ml-2 cursor" aria-hidden="true" style="font-size: 14px;"
+                (click)="lazyLoadComponent()">
+              </i> -->
             </a>
             <ul id="{{link?.name}}" class="iq-submenu" [ngClass]="{'iq-menu-custom':  link?.name === 'Lists' }">
               <ng-container *ngIf="link?.name !== 'Lists'">
@@ -48,7 +56,7 @@
                 </li>
               </ng-container>
               <ng-container *ngIf="link?.name === 'Lists'">
-                <app-todo-project-list></app-todo-project-list>
+                <app-todo-project-list [isSidebarCollapse]="isSidebarCollapse"></app-todo-project-list>
               </ng-container>
             </ul>
           </ng-container>

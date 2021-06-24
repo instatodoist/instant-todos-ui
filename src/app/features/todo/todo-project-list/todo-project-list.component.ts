@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, Input, OnInit } from '@angular/core';
 import { AppService, ProjectService } from '../../../service';
 import { TodoLabelType } from '../../../models/todo.model';
 
@@ -13,6 +13,8 @@ import { TodoLabelType } from '../../../models/todo.model';
 })
 export class TodoProjectListComponent implements OnInit {
 
+  @Input()
+  isSidebarCollapse = false;
   labels: TodoLabelType[];
   currentUrl = '';
 

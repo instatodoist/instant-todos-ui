@@ -1,6 +1,8 @@
 <li *ngFor="let data of labels" [ngClass]="{ 'child-labels': currentUrl === '/tasks/lists/' + data?.name }">
   <a [routerLink]="['/tasks/lists', data?.name]">
-    <i class="fa fa-tag" aria-hidden="true"></i>
+    <mat-icon aria-hidden="false" #tooltip="matTooltip"
+    matTooltip="{{isSidebarCollapse? (('' + data?.name ) | translate) : ''}}"
+    [matTooltipPosition]="'right'">label</mat-icon>
     {{data?.name | titlecase}}
     <span class="badge badge-primary ml-2 p-1" *ngIf="data?.count">
       {{data?.count ? data?.count : ''}}

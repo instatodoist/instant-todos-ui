@@ -26,7 +26,8 @@
         <ul class="suggestions-lists m-0 p-0">
           <li class="d-flex mb-4 align-items-center" *ngFor="let label of labels; let i = index">
             <div class="profile-icon iq-bg-primary cursor" (click)="deleteLabel(label)">
-              <span><i class="fa fa-times" aria-hidden="true"></i>
+              <span>
+                <mat-icon aria-hidden="false">delete</mat-icon>
               </span>
             </div>
             <div class="media-support-info ml-3">
@@ -35,7 +36,7 @@
             <div class="media-support-amount ml-3 cursor" (click)="editLabel(label)">
               <h6>
                 <span class="text-secondary">
-                  <i class="fa fa-pencil-alt"></i>
+                  <mat-icon aria-hidden="false" [ngStyle]="{'font-size': '14px'}">edit</mat-icon>
                 </span>
               </h6>
             </div>
