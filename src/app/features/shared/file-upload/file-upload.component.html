@@ -1,17 +1,7 @@
-<!-- <div>
-    <input type="file" accept=".png, .jpg, .jpeg, .pdf" class="file-upload-default {{placeholder}}">
-    <div class="input-group col-xs-12">
-        <input type="text" class="form-control file-upload-info" disabled placeholder="{{placeholder}}">
-        <span class="input-group-append">
-            <button class="file-upload-browse btn btn-primary" type="button">Upload</button>
-        </span>
-    </div>
-</div> -->
-
 <div class="profile-img-edit upload-files">
   <img class="profile-pic" [src]="src" alt="profile-pic">
   <div class="p-image">
-    <i class="fa fa-pencil-alt upload-button" (click)="onEvent($event)"></i>
+    <mat-icon aria-hidden="false" (click)="onEvent($event)">edit</mat-icon>
     <input class="file-upload" type="file" accept="image/*">
   </div>
 </div>
