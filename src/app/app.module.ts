@@ -4,9 +4,9 @@ import { BrowserModule } from '@angular/platform-browser';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { ReactiveFormsModule, FormsModule } from '@angular/forms';
 import { SocialLoginModule, SocialAuthServiceConfig, GoogleLoginProvider } from 'angularx-social-login';
-import { AuthModule } from './features/auth/auth.module';
+import { AuthModule } from './modules/auth/auth.module';
 import { AppRoutingModule } from './app-routing.module';
-import { SharedModule } from './features/shared/shared.module';
+import { SharedModule } from './modules/shared/shared.module';
 import { GraphqlModule } from './graphql/graphql.module';
 import { GoogleAnalyticService } from './service/analytics/google-analytic.service';
 
@@ -14,10 +14,10 @@ import { CanActivateAuthenticateGuard } from './guards/can-activate-authenticate
 
 import { AppComponent } from './app.component';
 import { InnerLayoutComponent } from './layouts/inner-layout/inner-layout.component';
-import { HeaderComponent } from './features/shared/section/header/header.component';
-import { ThemeComponent } from './features/shared/section/theme/theme.component';
-import { SidebarComponent } from './features/shared/section/sidebar/sidebar.component';
-import { PageNotFoundComponent } from './features/shared/page-not-found/page-not-found.component';
+import { HeaderComponent } from './modules/shared/section/header/header.component';
+import { ThemeComponent } from './modules/shared/section/theme/theme.component';
+import { SidebarComponent } from './modules/shared/section/sidebar/sidebar.component';
+import { PageNotFoundComponent } from './modules/shared/page-not-found/page-not-found.component';
 import { ServiceWorkerModule } from '@angular/service-worker';
 import { environment } from '../environments/environment';
 import { TranslateLoader, TranslateModule } from '@ngx-translate/core';
