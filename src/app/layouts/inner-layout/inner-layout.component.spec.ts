@@ -1,20 +1,20 @@
 import { ComponentFixture, TestBed, waitForAsync } from '@angular/core/testing';
 
-import { FrontComponent } from './front.component';
+import { InnerLayoutComponent } from './inner-layout.component';
 
-describe('FrontComponent', () => {
-  let component: FrontComponent;
-  let fixture: ComponentFixture<FrontComponent>;
+describe('AdminComponent', () => {
+  let component: InnerLayoutComponent;
+  let fixture: ComponentFixture<InnerLayoutComponent>;
 
   beforeEach(waitForAsync(() => {
     TestBed.configureTestingModule({
-      declarations: [ FrontComponent ]
+      declarations: [ InnerLayoutComponent ]
     })
       .compileComponents();
   }));
 
   beforeEach(() => {
-    fixture = TestBed.createComponent(FrontComponent);
+    fixture = TestBed.createComponent(InnerLayoutComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });

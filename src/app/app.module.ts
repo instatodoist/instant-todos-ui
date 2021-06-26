@@ -13,7 +13,7 @@ import { GoogleAnalyticService } from './service/analytics/google-analytic.servi
 import { CanActivateAuthenticateGuard } from './guards/can-activate-authenticate.guard';
 
 import { AppComponent } from './app.component';
-import { AdminComponent } from './layouts/admin/admin.component';
+import { InnerLayoutComponent } from './layouts/inner-layout/inner-layout.component';
 import { HeaderComponent } from './features/shared/section/header/header.component';
 import { ThemeComponent } from './features/shared/section/theme/theme.component';
 import { SidebarComponent } from './features/shared/section/sidebar/sidebar.component';
@@ -26,7 +26,7 @@ import { HttpClient } from '@angular/common/http';
 @NgModule({
   declarations: [
     AppComponent,
-    AdminComponent,
+    InnerLayoutComponent,
     HeaderComponent,
     ThemeComponent,
     SidebarComponent,

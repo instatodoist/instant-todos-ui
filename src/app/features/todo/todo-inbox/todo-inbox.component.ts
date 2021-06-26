@@ -125,6 +125,12 @@ export class TodoInboxComponent implements OnInit, AfterViewInit, OnDestroy {
       _id: this.todo._id,
       isCompleted: !this.todo.isCompleted,
     };
+    // eliminate from UI
+    this.todos = {
+      ...this.todos,
+      // eslint-disable-next-line no-underscore-dangle
+      data: this.todos.data.filter(item=> item._id !== todo._id)
+    };
     const { _id: id, ...body } = postBody;
     this.todoService
       .updateTodo(id, body, this.conditions)

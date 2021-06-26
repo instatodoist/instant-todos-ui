@@ -2,7 +2,7 @@
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
 import { AuthComponent } from './auth-login/auth.component';
-import { FrontComponent } from '../../layouts/front/front.component';
+import { AuthLayoutComponent } from '../../layouts/auth-layout/auth-layout.component';
 import { CanActivateAuthenticateGuard } from '../../guards/can-activate-authenticate.guard';
 import { AuthRegisterComponent } from './auth-register/auth-register.component';
 import { AuthVerifyComponent } from './auth-verify/auth-verify.component';
@@ -13,7 +13,7 @@ const authRoutes: Routes = [
   {
     canActivate: [CanActivateAuthenticateGuard],
     path: 'auth',
-    component: FrontComponent,
+    component: AuthLayoutComponent,
     children: [
       {
         path: 'login',

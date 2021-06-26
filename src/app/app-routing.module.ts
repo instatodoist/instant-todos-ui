@@ -1,6 +1,6 @@
 import { NgModule } from '@angular/core';
 import { Routes, RouterModule } from '@angular/router';
-import { AdminComponent } from './layouts/admin/admin.component';
+import { InnerLayoutComponent } from './layouts/inner-layout/inner-layout.component';
 import { CanActivateAuthenticateGuard } from './guards/can-activate-authenticate.guard';
 import { PageNotFoundComponent } from './features/shared/page-not-found/page-not-found.component';
 
@@ -14,22 +14,22 @@ const routes: Routes = [
         loadChildren: () => import('./features/home/home.module').then(m => m.HomeModule)
       },
       {
-        component: AdminComponent,
+        component: InnerLayoutComponent,
         path: 'smart-analysis',
         loadChildren: () => import('./features/smart-analysis/smart-analysis.module').then(m => m.SmartAnalysisModule)
       },
       {
-        component: AdminComponent,
+        component: InnerLayoutComponent,
         path: 'profile',
         loadChildren: () => import('./features/profile/profile.module').then(m => m.ProfileModule)
       },
       {
-        component: AdminComponent,
+        component: InnerLayoutComponent,
         path: 'tasks',
         loadChildren: () => import('./features/todo/todo.module').then(m => m.TodoModule)
       },
       {
-        component: AdminComponent,
+        component: InnerLayoutComponent,
         path: 'notes',
         loadChildren: () => import('./features/goal/goal.module').then(m => m.GoalModule)
       }

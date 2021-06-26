@@ -8,7 +8,7 @@ import { environment } from '../../../environments/environment';
 // Components
 import { HomeLayoutComponent } from '../../layouts/home-layout/home-layout.component';
 import { AuthComponent } from './auth-login/auth.component';
-import { FrontComponent } from '../../layouts/front/front.component';
+import { AuthLayoutComponent } from '../../layouts/auth-layout/auth-layout.component';
 import { AuthRegisterComponent } from './auth-register/auth-register.component';
 import { AuthVerifyComponent } from './auth-verify/auth-verify.component';
 import { AuthForgotComponent } from './auth-forgot/auth-forgot.component';
@@ -17,7 +17,7 @@ import { AuthResetPasswordComponent } from './auth-reset-password/auth-reset-pas
 @NgModule({
   declarations: [
     HomeLayoutComponent,
-    FrontComponent,
+    AuthLayoutComponent,
     AuthComponent,
     AuthRegisterComponent,
     AuthVerifyComponent,
