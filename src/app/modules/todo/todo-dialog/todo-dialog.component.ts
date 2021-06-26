@@ -9,7 +9,7 @@ import { combineLatest, Subscription } from 'rxjs';
 import { map, switchMap, take } from 'rxjs/operators';
 import * as moment from 'moment';
 import {MatDialog, MatDialogRef, MAT_DIALOG_DATA} from '@angular/material/dialog';
-import { TodoService, UtilityService, TagService, ProjectService, SubTodoService } from '../../../service';
+import { TodoService, UtilityService, TagService, ProjectService, SubTodoService } from '../../../services';
 import { TodoType, TodoLabelType, TodoConditions, IOperationEnumType, TodoProjectType, ISubTask } from '../../../models';
 import {  SharedModule } from '../../shared/shared.module';
 import { DialogTodoTagsComponent } from '../todo-tag-dialog/dialog-todo-tags.component';

@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { Router, ActivatedRoute } from '@angular/router';
 import { FormBuilder, Validators, FormGroup } from '@angular/forms';
-import { AuthService } from '../../../service';
+import { AuthService } from '../../../services';
 
 @Component({
   selector: 'app-auth-reset-password',

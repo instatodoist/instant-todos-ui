@@ -1,7 +1,7 @@
 import { Component, OnInit, Input, Inject } from '@angular/core';
 import { FormGroup, FormBuilder, Validators } from '@angular/forms';
 import {MAT_DIALOG_DATA, MatDialogRef} from '@angular/material/dialog';
-import { GoalService, UtilityService } from '../../../service';
+import { GoalService, UtilityService } from '../../../services';
 import { IGoalType, IExternalModal, IGoalConditions } from '../../../models';
 type IGoalPopupType = 'GOAL_ADD' | 'GOAL_UPDATE';
 

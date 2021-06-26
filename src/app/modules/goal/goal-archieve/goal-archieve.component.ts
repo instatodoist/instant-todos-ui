@@ -1,6 +1,6 @@
 import { Component, OnInit, OnDestroy } from '@angular/core';
 import { IGoalListType, IGoalConditions, IGoalType } from '../../../models';
-import { GoalService, AppService } from '../../../service';
+import { GoalService, AppService } from '../../../services';
 import { Subscription } from 'rxjs';
 import { ActivatedRoute } from '@angular/router';
 import { switchMap } from 'rxjs/operators';

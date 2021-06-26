@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { FormGroup, FormBuilder, Validators } from '@angular/forms';
-import { AuthService, UtilityService } from '../../../service';
+import { AuthService, UtilityService } from '../../../services';
 @Component({
   selector: 'app-password-update',
   templateUrl: './password-update.component.html',

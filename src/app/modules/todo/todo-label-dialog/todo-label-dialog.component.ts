@@ -3,7 +3,7 @@ import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import {MatDialogRef} from '@angular/material/dialog';
 import { Subscription } from 'rxjs';
 import { TodoLabelType } from 'src/app/models';
-import { TagService } from 'src/app/service';
+import { TagService } from 'src/app/services';
 
 @Component({
   selector: 'app-todo-label-dialog',

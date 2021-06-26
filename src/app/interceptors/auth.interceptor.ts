@@ -6,7 +6,7 @@ import {
   HttpInterceptor
 } from '@angular/common/http';
 import { Observable } from 'rxjs';
-import {LsService} from '../service/ls.service';
+import {LsService} from '../services/ls/ls.service';
 @Injectable()
 export class AuthInterceptor implements HttpInterceptor {
   constructor(private injector: Injector) {

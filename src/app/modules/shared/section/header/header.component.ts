@@ -2,7 +2,7 @@ import { AfterViewInit, Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { FormGroup, FormBuilder } from '@angular/forms';
 import { debounceTime, distinctUntilChanged } from 'rxjs/operators';
-import { AuthService, AppService, UtilityService } from '../../../../service';
+import { AuthService, AppService, UtilityService } from '../../../../services';
 import { Subscription } from 'rxjs';
 import { ILanguage, IUserProfile } from '../../../../models';
 import { TodoDialogComponent } from '../../../todo/todo-dialog/todo-dialog.component';

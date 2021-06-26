@@ -1,6 +1,6 @@
 import { Component, OnInit, AfterViewInit } from '@angular/core';
 import { FormGroup, FormBuilder } from '@angular/forms';
-import { AuthService, UtilityService, AppService } from '../../../service';
+import { AuthService, UtilityService, AppService } from '../../../services';
 
 @Component({
   selector: 'app-account-update',

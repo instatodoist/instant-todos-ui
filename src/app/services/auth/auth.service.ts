@@ -1,6 +1,6 @@
 import {Apollo} from 'apollo-angular';
 import { Injectable } from '@angular/core';
-import { LsService } from './../../service/ls.service';
+import { LsService } from '../ls/ls.service';
 import { environment } from '../../../environments/environment';
 
 import { map } from 'rxjs/operators';

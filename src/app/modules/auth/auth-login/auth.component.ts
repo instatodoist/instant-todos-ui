@@ -2,7 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { FormBuilder, Validators } from '@angular/forms';
 import { SocialAuthService } from 'angularx-social-login';
 import {  GoogleLoginProvider } from 'angularx-social-login';
-import { LsService, AuthService, AppService, SettingService } from '../../../service';
+import { LsService, AuthService, AppService, SettingService } from '../../../services';
 import { IUserProfile } from '../../../models';
 import { switchMap } from 'rxjs/operators';
 import { combineLatest } from 'rxjs';

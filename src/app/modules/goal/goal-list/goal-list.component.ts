@@ -5,7 +5,7 @@ import { switchMap } from 'rxjs/operators';
 import { MatDialog } from '@angular/material/dialog';
 
 import { IGoalListType, IGoalConditions, IGoalType, IOperationEnumType, ITemplateOperation } from '../../../models';
-import { GoalService, AppService, UtilityService } from '../../../service';
+import { GoalService, AppService, UtilityService } from '../../../services';
 import { GoalDialogComponent } from '../goal-dialog/goal-dialog.component';
 
 @Component({

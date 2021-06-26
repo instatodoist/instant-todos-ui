@@ -1,5 +1,5 @@
 import { Component, AfterViewInit } from '@angular/core';
-import { AppService, UtilityService, SettingService } from '../../../../service';
+import { AppService, UtilityService, SettingService } from '../../../../services';
 
 @Component({
   selector: 'app-theme',

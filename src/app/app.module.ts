@@ -8,7 +8,7 @@ import { AuthModule } from './modules/auth/auth.module';
 import { AppRoutingModule } from './app-routing.module';
 import { SharedModule } from './modules/shared/shared.module';
 import { GraphqlModule } from './graphql/graphql.module';
-import { GoogleAnalyticService } from './service/analytics/google-analytic.service';
+import { GoogleAnalyticService } from './services/analytics/google-analytic.service';
 
 import { CanActivateAuthenticateGuard } from './guards/can-activate-authenticate.guard';
 

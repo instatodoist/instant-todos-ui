@@ -2,7 +2,7 @@ import { TestBed, fakeAsync, tick, waitForAsync } from '@angular/core/testing';
 import { of } from 'rxjs';
 import {delay} from 'rxjs/operators';
 import { AppModule } from './app.module';
-import { AppService } from './service';
+import { AppService } from './services';
 import { AppComponent } from './app.component';
 import { IExternalModal } from './models';
 

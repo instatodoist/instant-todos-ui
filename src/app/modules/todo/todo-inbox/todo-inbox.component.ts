@@ -4,7 +4,7 @@ import { CdkDragDrop, moveItemInArray } from '@angular/cdk/drag-drop';
 import { map, switchMap } from 'rxjs/operators';
 import { combineLatest, of, Subscription } from 'rxjs';
 import { TodoListType, TodoCompletedListType, TodoType, TodoConditions, ITodoTypeCount, ItabName } from '../../../models';
-import { TodoService, AppService, UtilityService, ProjectService } from '../../../service';
+import { TodoService, AppService, UtilityService, ProjectService } from '../../../services';
 import { TodoDialogComponent } from '../todo-dialog/todo-dialog.component';
 import {MatDialog, MatDialogRef} from '@angular/material/dialog';
 

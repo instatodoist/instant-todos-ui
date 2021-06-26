@@ -14,7 +14,7 @@ import { combineLatest } from 'rxjs';
 import { DOCUMENT } from '@angular/common';
 import {MatDialog} from '@angular/material/dialog';
 
-import { TodoService, AppService } from '../../../../service';
+import { TodoService, AppService } from '../../../../services';
 import { ITodoTypeCount, INavLink } from '../../../../models';
 import { TodoProjectDialogComponent } from '../../../todo/todo-project-dialog/todo-project-dialog.component';
 @Component({

@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import {MatDialog} from '@angular/material/dialog';
 import { TodoLabelType } from '../../../models';
-import { UtilityService, TagService , TodoService } from '../../../service';
+import { UtilityService, TagService , TodoService } from '../../../services';
 import { TodoLabelDialogComponent } from '../todo-label-dialog/todo-label-dialog.component';
 
 @Component({

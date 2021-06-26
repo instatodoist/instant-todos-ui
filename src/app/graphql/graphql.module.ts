@@ -6,9 +6,9 @@ import {setContext} from '@apollo/client/link/context';
 import {onError} from '@apollo/client/link/error';
 import { NgModule } from '@angular/core';
 import { environment } from '../../environments/environment';
-import { UtilityService } from '../service/utility.service';
-import { LsService } from '../service/ls.service';
-import { AuthService } from '../service/auth/auth.service';
+import { UtilityService } from '../services/utility/utility.service';
+import { LsService } from '../services/ls/ls.service';
+import { AuthService } from '../services/auth/auth.service';
 import { throwError } from 'rxjs';
 import { Router } from '@angular/router';
 

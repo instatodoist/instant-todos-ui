@@ -1,8 +1,8 @@
 import { Component, OnInit } from '@angular/core';
 import { Subscription } from 'rxjs';
 import { TranslateService } from '@ngx-translate/core';
-import { AppService, UtilityService, SettingService } from '../../../service';
-import { ILanguage } from '../../../models';
+import { AppService, UtilityService, SettingService } from '../../services';
+import { ILanguage } from '../../models';
 
 @Component({
   selector: 'app-multilingual',

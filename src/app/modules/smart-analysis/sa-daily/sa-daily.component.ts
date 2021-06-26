@@ -2,7 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { ChartType, ChartOptions } from 'chart.js';
 import { Label } from 'ng2-charts';
 
-import { TodoService } from '../../../service';
+import { TodoService } from '../../../services';
 
 @Component({
   selector: 'app-sa-daily',

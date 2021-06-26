@@ -2,8 +2,8 @@
 import { Title, Meta } from '@angular/platform-browser';
 import { Injectable, OnDestroy } from '@angular/core';
 import { BehaviorSubject, Subscription, of, Observable } from 'rxjs';
-import { IAppData, ILanguage, IMetaTag, ILoginResponse } from './../models';
-import { LsService } from '../service/ls.service';
+import { IAppData, ILanguage, IMetaTag, ILoginResponse } from '../../models';
+import { LsService } from '../ls/ls.service';
 
 @Injectable({
   providedIn: 'root'

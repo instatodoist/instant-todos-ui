@@ -7,7 +7,7 @@ import {
 } from '@angular/router';
 import { Subscription, EMPTY } from 'rxjs';
 import { filter, map, switchMap } from 'rxjs/operators';
-import { VersionCheckService, AppService, UtilityService } from './service';
+import { VersionCheckService, AppService, UtilityService } from './services';
 import { environment } from '../environments/environment';
 import { of } from 'rxjs';
 

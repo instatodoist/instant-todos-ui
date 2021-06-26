@@ -4,7 +4,7 @@ import {ReactiveFormsModule} from '@angular/forms';
 import { NgModule, Component, OnInit, AfterViewInit, Input, Output, EventEmitter } from '@angular/core';
 import { FormGroup, FormBuilder, Validators } from '@angular/forms';
 import { SharedModule } from '../../shared/shared.module';
-import { UtilityService, ProjectService } from '../../../service';
+import { UtilityService, ProjectService } from '../../../services';
 import { TodoProjectType, TodoConditions, IOperationEnumType } from '../../../models';
 import {MatDialogRef} from '@angular/material/dialog';
 

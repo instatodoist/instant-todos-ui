@@ -1,5 +1,5 @@
 import { Component, OnInit, AfterViewInit } from '@angular/core';
-import { AppService } from '../../service';
+import { AppService } from '../../services';
 declare let $: any;
 
 interface ICarousel {

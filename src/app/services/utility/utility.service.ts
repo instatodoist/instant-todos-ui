@@ -3,7 +3,7 @@ import { Injectable, ViewContainerRef } from '@angular/core';
 import {MatSnackBar} from '@angular/material/snack-bar';
 
 import { TranslateService } from '@ngx-translate/core';
-import { ILanguage } from '../models';
+import { ILanguage } from '../../models';
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 declare let $: any;

@@ -1,5 +1,5 @@
 import { Component, OnInit, AfterViewInit } from '@angular/core';
-import { UtilityService } from '../../service';
+import { UtilityService } from '../../services';
 
 @Component({
   selector: 'app-inner-layout',

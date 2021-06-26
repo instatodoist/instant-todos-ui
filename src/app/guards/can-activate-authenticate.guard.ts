@@ -5,7 +5,7 @@ import {
   RouterStateSnapshot
 } from '@angular/router';
 import { Router } from '@angular/router';
-import { LsService } from '../service/ls.service';
+import { LsService } from '../services/ls/ls.service';
 @Injectable()
 export class CanActivateAuthenticateGuard implements CanActivate {
 

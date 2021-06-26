@@ -1,5 +1,5 @@
 import { Component, Input, OnInit } from '@angular/core';
-import { AppService, ProjectService } from '../../../service';
+import { AppService, ProjectService } from '../../../services';
 import { TodoLabelType } from '../../../models/todo.model';
 
 @Component({
