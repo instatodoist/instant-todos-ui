@@ -48,7 +48,7 @@ export class AuthComponent implements OnInit {
         // set default theme
         this.appService.setTheme(setting.theme);
         // set default language
-        const selectedLang = this.appService.selectedLanguage(setting?.lang, languages);
+        const selectedLang = this.appService.selectedLanguage(setting?.lang || this.lsService.getValue('lng'), languages);
         this.appService.setLanguage(selectedLang);
         this.isSubmit = false;
         this.loader = false;

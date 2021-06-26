@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { Subscription } from 'rxjs';
 import { TranslateService } from '@ngx-translate/core';
-import { AppService, UtilityService, SettingService } from '../../services';
+import { AppService, UtilityService, SettingService, LsService } from '../../services';
 import { ILanguage } from '../../models';
 
 @Component({
@@ -35,7 +35,8 @@ export class MultilingualComponent implements OnInit {
     private translate: TranslateService,
     private appService: AppService,
     private utilityService: UtilityService,
-    private settingService: SettingService
+    private settingService: SettingService,
+    private lsService: LsService
   ) { }
 
   ngOnInit(): void {
@@ -57,9 +58,12 @@ export class MultilingualComponent implements OnInit {
     this.defaultLang = lang;
     // update root state
     this.appService.setLanguage(lang);
-    this.settingService.update({
-      lang: lang.value
-    }).subscribe();
+    // update user setting only if user loggedIn
+    if(this.lsService.getValue('isLoggedIn')){
+      this.settingService.update({
+        lang: lang.value
+      }).subscribe();
+    }
   }
 
   /**
