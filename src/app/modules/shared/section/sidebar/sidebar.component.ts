@@ -5,12 +5,12 @@ import {
   ViewContainerRef,
   ComponentFactoryResolver,
   Injector,
-  ComponentRef,
   AfterViewInit,
-  Inject
+  Inject,
+  OnDestroy
 } from '@angular/core';
 import { Router } from '@angular/router';
-import { combineLatest } from 'rxjs';
+import { combineLatest, Subscription } from 'rxjs';
 import { DOCUMENT } from '@angular/common';
 import {MatDialog} from '@angular/material/dialog';
 
@@ -29,7 +29,7 @@ import { TodoProjectDialogComponent } from '../../../todo/todo-project-dialog/to
     }
   `]
 })
-export class SidebarComponent implements OnInit, AfterViewInit {
+export class SidebarComponent implements OnInit, AfterViewInit, OnDestroy {
   @ViewChild('vcprojects', { read: ViewContainerRef }) projectVcRef: ViewContainerRef;
 
   isOpen = false;
@@ -37,13 +37,13 @@ export class SidebarComponent implements OnInit, AfterViewInit {
   navLinks: INavLink[];
   currentUrl = '';
   isSidebarCollapse = false;
+  private subscriptions = {
+    count: null as Subscription
+  };
 
   constructor(
-    private router: Router,
-    private injector: Injector,
     private todoService: TodoService,
     private appService: AppService,
-    private componentFactoryResolver: ComponentFactoryResolver,
     private modalService: MatDialog,
     @Inject(DOCUMENT) private document: Document
   ) { }
@@ -61,7 +61,26 @@ export class SidebarComponent implements OnInit, AfterViewInit {
     ])
       .subscribe((response: any) => {
         const [currentUrl = '', foo] = response;
-        const { today = 0, pending = 0, inbox = 0, completed = 0, upcoming = 0 } = foo;
+        this.appService.countDataSource$$.next(foo);
+        this.attachActiveClass(currentUrl);
+        this.populateCount();
+        // this.lazyLoadComponent();
+      });
+      // subscribe to count
+      this.subscribeToCount();
+  }
+
+  ngAfterViewInit(): void {}
+
+  ngOnDestroy(){
+    this.subscriptions.count.unsubscribe();
+  }
+
+  subscribeToCount(){
+    this.subscriptions.count = this.appService.countDataSource$
+      .subscribe(response=>{
+        const { today, pending, inbox, completed, upcoming } = response;
+        console.log(response);
         this.count = {
           ...this.count,
           pending,
@@ -70,13 +89,8 @@ export class SidebarComponent implements OnInit, AfterViewInit {
           completed,
           upcoming
         };
-        this.attachActiveClass(currentUrl);
-        this.populateCount();
-        // this.lazyLoadComponent();
       });
   }
-
-  ngAfterViewInit(): void {}
 
   attachActiveClass(currentUrl: string): void {
     this.currentUrl = currentUrl;

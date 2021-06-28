@@ -9,40 +9,10 @@
               {{('' + item.name ) | translate | titlecase}}
 
               <!-- For Todos Other than Completed, Today, Pending-->
-              <ng-container *ngIf="tabs[todoCurrentType].length < 2">
-                <span class="badge badge-primary badge-pill" *ngIf="queryStr">
-                  {{ todos?.totalCount || 0 }}
+              <ng-container>
+                <span class="badge badge-primary badge-pill">
+                  {{ (this.count) && this.count[item.name] }}
                 </span>
-                <span class="badge badge-primary badge-pill" *ngIf="!queryStr">
-                  {{(this.count) && this.count[item.name] || todos?.totalCount || 0}}
-                </span>
-              </ng-container>
-
-              <!-- For Todos - Today, Pending-->
-              <ng-container *ngIf="tabs[todoCurrentType].length === 2">
-                <ng-container *ngIf="!queryStr">
-                  <span *ngIf="todoCurrentType === item.name; else falsyTemplate">
-                    <span class="badge badge-primary badge-pill">{{(this.count) && this.count[item.name] ||
-                      todos?.totalCount || ''}}</span>
-                  </span>
-                  <ng-template #falsyTemplate>
-                    <span class="badge badge-primary badge-pill" *ngIf="i === 0">{{ this.count &&
-                      this.count[TODOTYPES.today] || ''}}</span>
-                    <span class="badge badge-primary badge-pill" *ngIf="i === 1">{{ this.count &&
-                      this.count[TODOTYPES.pending] || ''}}</span>
-                  </ng-template>
-                </ng-container>
-                <ng-container *ngIf="queryStr">
-                  <span *ngIf="todoCurrentType === item.name; else falsyTemplate">
-                    <span class="badge badge-primary badge-pill">{{ todos?.totalCount || ''}}</span>
-                  </span>
-                  <ng-template #falsyTemplate>
-                    <span class="badge badge-primary badge-pill" *ngIf="i === 0">{{ this.count &&
-                      this.count[TODOTYPES.today] || ''}}</span>
-                    <span class="badge badge-primary badge-pill" *ngIf="i === 1">{{ this.count &&
-                      this.count[TODOTYPES.pending] || ''}}</span>
-                  </ng-template>
-                </ng-container>
               </ng-container>
 
             </h4>
@@ -61,7 +31,7 @@
                   (deleteTodoCb)="deleteTodo($event)"></app-todo-single>
               </ng-container>
             </ng-container>
-            
+
             <!-- If No Todos -->
             <ng-container *ngIf="!todos?.data.length">
               <div class="text-center">
@@ -78,6 +48,6 @@
 
       </div>
     </div>
-    
+
   </div>
 </div>

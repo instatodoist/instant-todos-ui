@@ -1,9 +1,11 @@
 /* eslint-disable @typescript-eslint/naming-convention */
 import { Title, Meta } from '@angular/platform-browser';
 import { Injectable, OnDestroy } from '@angular/core';
-import { BehaviorSubject, Subscription, of, Observable } from 'rxjs';
+import { BehaviorSubject, Subscription, of, Observable, combineLatest } from 'rxjs';
 import { IAppData, ILanguage, IMetaTag, ILoginResponse } from '../../models';
 import { LsService } from '../ls/ls.service';
+import { ActivatedRoute } from '@angular/router';
+import { switchMap } from 'rxjs/operators';
 
 @Injectable({
   providedIn: 'root'
@@ -28,14 +30,29 @@ export class AppService implements OnDestroy {
   ROOT_STATE$ = this.ROOT_STATE$$.asObservable();
 
   // use to get current url
+  countDataSource$$ = new BehaviorSubject<any>({
+    pending: 0,
+    today: 0,
+    inbox: 0,
+    completed: 0,
+    upcoming: 0
+  });
+
+  // use to get current url
   private currentUrlDataSource$$ = new BehaviorSubject<string>('');
   // eslint-disable-next-line @typescript-eslint/member-ordering
   currentUrlDataSource$ = this.currentUrlDataSource$$.asObservable();
 
+  // eslint-disable-next-line @typescript-eslint/member-ordering
+  countDataSource$ = this.countDataSource$$.asObservable();
+
+  private params$ = combineLatest([this.activatedRoute.params, this.activatedRoute.queryParams]);
+
   constructor(
     private titleService: Title,
     private metaService: Meta,
-    private lsService: LsService
+    private lsService: LsService,
+    private activatedRoute: ActivatedRoute,
   ) {}
 
   ngOnDestroy(): void {}
@@ -131,5 +148,16 @@ export class AppService implements OnDestroy {
     if (metaTags && metaTags.length) {
       this.metaService.addTags(metaTags);
     }
+  }
+
+  fetchParams() {
+    return this.params$.pipe(
+      switchMap((response) => {
+        const [p, query] = response;
+        const { label = null } = p;
+        const { q = '' } = query;
+        return of({ label, q });
+      })
+    );
   }
 }

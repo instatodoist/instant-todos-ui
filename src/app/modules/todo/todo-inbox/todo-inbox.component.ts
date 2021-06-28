@@ -1,12 +1,18 @@
-import { Component, OnInit, AfterViewInit, OnDestroy, HostListener } from '@angular/core';
-import { ActivatedRoute, Router } from '@angular/router';
+import { Component, OnInit, AfterViewInit, OnDestroy } from '@angular/core';
+import { Router } from '@angular/router';
 import { CdkDragDrop, moveItemInArray } from '@angular/cdk/drag-drop';
-import { map, switchMap } from 'rxjs/operators';
-import { combineLatest, of, Subscription } from 'rxjs';
-import { TodoListType, TodoCompletedListType, TodoType, TodoConditions, ITodoTypeCount, ItabName } from '../../../models';
+import { switchMap } from 'rxjs/operators';
+import { combineLatest, Subscription } from 'rxjs';
+import { TodoListType, TodoType, TodoConditions, ITodoTypeCount, ItabName } from '../../../models';
 import { TodoService, AppService, UtilityService, ProjectService } from '../../../services';
 import { TodoDialogComponent } from '../todo-dialog/todo-dialog.component';
-import {MatDialog, MatDialogRef} from '@angular/material/dialog';
+import {MatDialog} from '@angular/material/dialog';
+
+export interface ISubscription {
+  count: Subscription;
+  delete: Subscription;
+  todos: Subscription;
+}
 
 // declare let $: any;
 @Component({
@@ -28,7 +34,7 @@ export class TodoInboxComponent implements OnInit, AfterViewInit, OnDestroy {
   loaderImage = this.appService.loaderImage;
   isDeleting = false;
   // modalSubscription: Subscription;
-  count: ITodoTypeCount;
+  count: ITodoTypeCount = {};
   tabs: ItabName = {
     [this.TODOTYPES.today]: [
       {
@@ -57,47 +63,51 @@ export class TodoInboxComponent implements OnInit, AfterViewInit, OnDestroy {
         isShown: true,
         link: '/tasks/upcoming'
       }
-    ],
-    [this.TODOTYPES.completed]: [
-      {
-        name: this.TODOTYPES.completed,
-        isShown: true,
-        link: '/tasks/completed'
-      }
     ]
   };
-  private deleteReqSubscription: Subscription;
-
-  private fetchCompletedTodosSubscription: Subscription;
-  private fetchTodosSubscription: Subscription;
+  private subscriptions = {
+    count: null,
+    delete: null,
+    todos: null
+  };
 
   constructor(
     private todoService: TodoService,
-    private activatedRoute: ActivatedRoute,
     private appService: AppService,
     private toastr: UtilityService,
     private router: Router,
     public dialog: MatDialog,
     private projectService: ProjectService
-  ) {
-  }
+  ) {}
 
   ngOnInit(): void {
     this.fetchTodosOnLoad();
+    this.subscribeToCount();
   }
 
   ngAfterViewInit(): void { }
 
   ngOnDestroy(): void {
-    // unsubscript complete
-    if (this.fetchCompletedTodosSubscription) {
-      this.fetchCompletedTodosSubscription.unsubscribe();
-    }
-    // unsubscribe delete
-    if (this.deleteReqSubscription) {
-      this.deleteReqSubscription.unsubscribe();
-    }
-    this.fetchTodosSubscription.unsubscribe();
+    Object.keys(this.subscriptions).map(key=>{
+      if(this.subscriptions[key]){
+        this.subscriptions[key].unsubscribe();
+      }
+    });
+  }
+
+  subscribeToCount(){
+    this.subscriptions.count = this.appService.countDataSource$
+      .subscribe(response=>{
+        const { today, pending, inbox, completed, upcoming } = response;
+        this.count = {
+          ...this.count,
+          pending,
+          today,
+          inbox,
+          completed,
+          upcoming
+        };
+      });
   }
 
   /**
@@ -146,7 +156,7 @@ export class TodoInboxComponent implements OnInit, AfterViewInit, OnDestroy {
     if (todo.deleteRequest) {
       this.isDeleting = true;
       const { _id: id, ..._ } = todo;
-      this.deleteReqSubscription = this.todoService
+      this.subscriptions.delete = this.todoService
         .deleteTodo(id, this.conditions)
         .subscribe(() => {
           this.isDeleting = false;
@@ -165,90 +175,63 @@ export class TodoInboxComponent implements OnInit, AfterViewInit, OnDestroy {
   }
 
   private fetchTodosOnLoad() {
-    this.todoCurrentType = ''; // default to inbox
-    this.loader = true;
-    this.fetchTodosSubscription = this.projectService.fetchAll()
-      .pipe(
-        switchMap(data => combineLatest([of(data), this.activatedRoute.params, this.activatedRoute.queryParams])),
-        map(data => ({
-          labels: data[0],
-          params: data[1],
-          query: data[2]
-        })),
-        switchMap(data => {
-          const { params = null, query = null, labels } = data;
-          const { label = null } = params;
-          const { q = '' } = query;
-          if (!label) {
-            this.todoCurrentType = this.todoService.getCurentRoute();
-            this.conditions = this.todoService.getConditions(this.todoCurrentType);
-          } else {
-            this.todoCurrentType = label;
-            this.tabs = {
-              ...this.tabs,
-              [label]: [
-                {
-                  name: label,
-                  isShown: true,
-                  link: `/tasks/lists/${label}`
-                }
-              ]
-            };
-            // eslint-disable-next-line no-underscore-dangle
-            const labelId = labels.filter(obj => (obj.name).toLowerCase() === label.toLowerCase())[0]._id;
-            this.conditions = this.todoService.getConditions(labelId, 'labels');
-          }
-          if (q) {
-            this.queryStr = q;
-            // eslint-disable-next-line @typescript-eslint/naming-convention
-            this.conditions = { ...this.conditions, filter: { ...this.conditions.filter, title_contains: this.queryStr } };
-          }
-          if (this.todoCurrentType === this.TODOTYPES.completed) {
-            this.loader = true;
-            const newQuery = { ...this.conditions, filter: { ...this.conditions.filter, isCompleted: true } };
-            return combineLatest([
-              this.todoService.countByTodoType(newQuery),
-              this.todoService.fetchCompleted(this.conditions)
-            ]);
-          } else {
-            this.extraLoader = true;
-            return combineLatest([
-              this.todoService.countByTodoType(query),
-              this.todoService.fetchAll(this.conditions)
-            ]);
-          }
-        })
-      )
-      .subscribe(
-        response => {
-        const [countObj, dataList] = response;
-        const { data = {} } = dataList;
-        if (data.hasOwnProperty('todoList')) {
-          const todos = { ...data.todoList };
-          this.todos = {
-            ...this.todos,
-            totalCount: todos.totalCount,
-            data: this.todoService.sortArrayByDate(todos.data, 'createdAt')
-          };
-        }
-        const { today = 0, pending = 0, inbox = 0, completed = 0, upcoming = 0 } = countObj;
-        this.count = {
-          pending,
-          today,
-          inbox,
-          completed,
-          upcoming
-        };
-        this.extraLoader = false;
-        if (this.todoCurrentType) {
-          this.appService.configureSeo(this.todoCurrentType);
-        }
-      },
-      ()=>{
-        this.extraLoader = false;
-        this.loader = false;
+    this.subscriptions.todos = this.fetchTodos$.subscribe(response=>{
+      const { data = {} } = response;
+      const todos = { ...data.todoList };
+      this.todos = {
+        ...this.todos,
+        totalCount: todos.totalCount,
+        data: this.todoService.sortArrayByDate(todos.data, 'createdAt')
+      };
+      this.extraLoader = false;
+      if (this.todoCurrentType) {
+        this.appService.configureSeo(this.todoCurrentType);
       }
-      );
+    });
   }
 
+  // eslint-disable-next-line @typescript-eslint/member-ordering
+  private fetchTodos$ = combineLatest([
+      this.appService.fetchParams(),
+      this.projectService.fetchAll()
+    ])
+    .pipe(
+      switchMap(response=>{
+        const [ params, labels ] = response;
+        const { label, q } = params;
+        if (!label) {
+          this.todoCurrentType = this.todoService.getCurentRoute();
+          this.conditions = this.todoService.getConditions(this.todoCurrentType);
+        } else {
+          this.todoCurrentType = label;
+          this.tabs = {
+            ...this.tabs,
+            [label]: [
+              {
+                name: label,
+                isShown: true,
+                link: `/tasks/lists/${label}`
+              }
+            ]
+          };
+          // eslint-disable-next-line no-underscore-dangle
+          const labelId = labels.filter(obj => (obj.name).toLowerCase() === label.toLowerCase())[0]._id;
+          this.conditions = this.todoService.getConditions(labelId, 'labels');
+        }
+        if (q) {
+          this.queryStr = q;
+          // eslint-disable-next-line @typescript-eslint/naming-convention
+          this.conditions = {
+            ...this.conditions,
+            filter: {
+              ...this.conditions.filter,
+              // eslint-disable-next-line @typescript-eslint/naming-convention
+              title_contains: this.queryStr
+            }
+          };
+        }
+        this.extraLoader = true;
+        return this.todoService.fetchAll(this.conditions);
+      })
+    );
 }

@@ -1,13 +1,14 @@
-import { Component, OnInit } from '@angular/core';
-import { TodoService } from '../../../services';
-import { TodoConditions, TodoCompletedListType } from '../../../models/todo.model';
+import { Component, OnDestroy, OnInit } from '@angular/core';
+import { AppService, TodoService } from '../../../services';
+import { TodoConditions, TodoCompletedListType, ITodoTypeCount } from '../../../models/todo.model';
+import { Subscription } from 'rxjs';
 
 @Component({
   selector: 'app-todo-completed',
   templateUrl: './todo-completed.component.html',
   styleUrls: ['./todo-completed.component.scss']
 })
-export class TodoCompletedComponent implements OnInit {
+export class TodoCompletedComponent implements OnInit, OnDestroy {
 
   todos: TodoCompletedListType = {
     totalCount: 0,
@@ -15,13 +16,23 @@ export class TodoCompletedComponent implements OnInit {
   };
   conditions = this.todoService.getConditions('completed');
   isLoading = false;
+  count: ITodoTypeCount;
+  private subscriptions = {
+    count: null as Subscription
+  };
 
   constructor(
-    private todoService: TodoService
+    private todoService: TodoService,
+    private appService: AppService
   ) { }
 
   ngOnInit(): void {
     this.getCompletedTodos(this.conditions);
+    this.subscribeToCount();
+  }
+
+  ngOnDestroy(): void{
+    this.subscriptions.count.unsubscribe();
   }
 
   loadMore(): void {
@@ -30,6 +41,21 @@ export class TodoCompletedComponent implements OnInit {
       offset: (this.conditions.offset + 1)
     };
     this.getCompletedTodos(this.conditions);
+  }
+
+  private subscribeToCount(){
+    this.subscriptions.count = this.appService.countDataSource$
+      .subscribe(response=>{
+        const { today, pending, inbox, completed, upcoming } = response;
+        this.count = {
+          ...this.count,
+          pending,
+          today,
+          inbox,
+          completed,
+          upcoming
+        };
+      });
   }
 
   private getCompletedTodos(conditions: TodoConditions): void {
