@@ -1,3 +1,4 @@
+import { IGql } from './common.model';
 import { SortEnumType } from './shared.model';
 
 // enum TodoPriorityEnumType {
@@ -121,8 +122,10 @@ export interface TodoLabelListType {
   totalCount: number;
 }
 
-// export interface TodoListResponseType {
-//   todoList: {
-//     data: TodoListType;
-//   };
-// }
+export interface ITodoCompletedResponse {
+  todoCompleted: TodoCompletedListType;
+}
+
+export interface ITodoCompletedGql extends IGql<ITodoCompletedResponse> {
+  data: ITodoCompletedResponse;
+}

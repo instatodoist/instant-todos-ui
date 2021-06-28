@@ -33,7 +33,7 @@ import {MatRadioModule} from '@angular/material/radio';
     MatProgressSpinnerModule,
     MatChipsModule,
     MatButtonModule,
-    MatRadioModule
+    MatRadioModule,
   ],
   exports: [
     FlexLayoutModule,
@@ -49,7 +49,7 @@ import {MatRadioModule} from '@angular/material/radio';
     MatProgressSpinnerModule,
     MatChipsModule,
     MatButtonModule,
-    MatRadioModule
+    MatRadioModule,
   ]
 })
 export class MaterialModule { }

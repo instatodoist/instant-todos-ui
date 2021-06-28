@@ -1,21 +1,55 @@
-<ul class="list-group list-group-flush">
-  <ng-container *ngFor="let todo of todos?.data;">
-    <li class=" d-flex tasks-card" role="alert">
-      <div class="custom-control">
-        <!--  Title -->
-        <label class="">
-          <div class="d-flex align-items-center justify-content-between text-primary">
-            <button type="button" class="btn mb-1 iq-bg-primary">
-              {{todo?._id  | date: 'mediumDate'}}
-              <span class="badge badge-light ml-2">{{todo?.list?.length}}</span>
+<div class="container-fluid todo-inbox">
+  <div class="row">
+    <div class="col-sm-12 col-lg-12">
+      <div class="iq-card">
+        <div class="iq-card-header d-flex justify-content-between">
+          <div class="iq-header-title">
+            <h4 class="card-title">
+              {{('completed' ) | translate | titlecase}}
+              <span class="badge badge-primary badge-pill">
+                {{ todos.totalCount || 0 }}
+              </span>
+            </h4>
+          </div>
+        </div>
+
+        <!-- Section for Completed Todos-->
+        <div class="iq-card-body">
+          <ul class="list-group list-group-flush">
+
+            <ng-container *ngFor="let todo of todos?.data;">
+              <li class="d-flex tasks-card" role="alert">
+                <div class="custom-control">
+
+                  <!--  Title -->
+                  <label class="">
+                    <div class="d-flex align-items-center justify-content-between text-primary">
+                      <button type="button" class="btn mb-1 iq-bg-primary">
+                        {{todo?._id | date: 'mediumDate'}}
+                        <span class="badge badge-light ml-2">{{todo?.list?.length}}</span>
+                      </button>
+                    </div>
+                  </label>
+                </div>
+              </li>
+
+              <!-- Childs-->
+              <app-todo-completed-single *ngFor="let data of todo?.list; let i = index" [todo]="data" [index]="i">
+              </app-todo-completed-single>
+            </ng-container>
+
+          </ul>
+          <div>
+            <button (click)="loadMore()" *ngIf="todos.data.length < todos.totalCount">
+              <span *ngIf="isLoading; else notLoading">Loading ...</span>
+              <ng-template #notLoading>
+                <span>Load More ({{ todos.data.length + '/' + todos.totalCount }} )</span>
+              </ng-template>
             </button>
           </div>
-        </label>
+        </div>
       </div>
-    </li>
+    </div>
 
-    <!-- Childs-->
-    <app-todo-completed-single *ngFor="let data of todo?.list; let i = index" [todo]="data" [index]="i">
-    </app-todo-completed-single>
-  </ng-container>
-</ul>
+  </div>
+</div>

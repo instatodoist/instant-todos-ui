@@ -20,7 +20,8 @@ import {
   TodoType,
   ITodoTypeCount,
   ISuccessType,
-  IGQLVariable
+  IGQLVariable,
+  ITodoCompletedGql
 } from '../../models';
 @Injectable({
   providedIn: 'root'
@@ -204,14 +205,17 @@ export class TodoService {
   /**
    * @param conditions - filter params while fetching todos
    */
-  fetchCompleted(conditions: TodoConditions): Observable<any> {
+  fetchCompleted(conditions: TodoConditions): Observable<TodoCompletedListType> {
     return this.apollo
       .watchQuery({
         query: TODO_COMPLETED_QUERY,
         variables: conditions,
         fetchPolicy: 'cache-and-network'
       })
-      .valueChanges;
+      .valueChanges
+      .pipe(map((response: ITodoCompletedGql)=>
+      response.data.todoCompleted
+    ));
   }
 
   /**

@@ -17,10 +17,6 @@ import {MatDialog, MatDialogRef} from '@angular/material/dialog';
 export class TodoInboxComponent implements OnInit, AfterViewInit, OnDestroy {
   loader = true;
   extraLoader = true;
-  todosC: TodoCompletedListType = {
-    totalCount: 0,
-    data: []
-  };
   todos: TodoListType;
   popupType: string; // popup type - update/delete
   todo: TodoType = null; // single todo object
@@ -159,20 +155,6 @@ export class TodoInboxComponent implements OnInit, AfterViewInit, OnDestroy {
     }
   }
 
-  // eslint-disable-next-line @typescript-eslint/member-ordering
-  @HostListener('scroll', ['$event'])
-  refresh(): void {
-    const { totalCount, data } = this.todosC;
-    // if (this.conditions.offset === ) {
-    //   this.getCompletedTodos(this.conditions);
-    // } else
-    if (data.length < totalCount && this.loader) {
-      const { offset } = this.conditions;
-      this.conditions = { ...this.conditions, offset: offset + 1 };
-      this.getCompletedTodos(this.conditions);
-    }
-  }
-
   get trackIds(): string[] {
     // eslint-disable-next-line no-underscore-dangle
     return this.todos.data.map(track => track._id);
@@ -180,35 +162,6 @@ export class TodoInboxComponent implements OnInit, AfterViewInit, OnDestroy {
 
   onTodoDrop(event: CdkDragDrop<TodoType[]>): void {
     moveItemInArray(event.container.data, event.previousIndex, event.currentIndex);
-  }
-
-  private customizeCompleteTodos(response: any, isDirectCall = false): void {
-    const { totalCount, data = [] } = response;
-    if (isDirectCall) {
-      this.todosC = { ...this.todosC, totalCount, data };
-    } else {
-      this.todosC = { totalCount, data: [...this.todosC.data, ...data] };
-    }
-    if ((totalCount === null) || (data === null) || (data.length === totalCount)) {
-      this.loader = false;
-    } else {
-      this.loader = true;
-    }
-  }
-
-  /**
-   * @param conditions - based on route
-   */
-  private getCompletedTodos(conditions: TodoConditions, isDirectCall = false): void {
-    this.loader = true;
-    if (isDirectCall) {
-      conditions.offset = 1;
-    }
-    this.extraLoader = false;
-    this.fetchCompletedTodosSubscription = this.todoService.fetchCompleted(conditions)
-      .subscribe(({ data }) => {
-        this.customizeCompleteTodos(data.todoCompleted);
-      });
   }
 
   private fetchTodosOnLoad() {
@@ -277,8 +230,6 @@ export class TodoInboxComponent implements OnInit, AfterViewInit, OnDestroy {
             totalCount: todos.totalCount,
             data: this.todoService.sortArrayByDate(todos.data, 'createdAt')
           };
-        } else if (data.hasOwnProperty('todoCompleted')) {
-          this.customizeCompleteTodos(data.todoCompleted, true);
         }
         const { today = 0, pending = 0, inbox = 0, completed = 0, upcoming = 0 } = countObj;
         this.count = {
