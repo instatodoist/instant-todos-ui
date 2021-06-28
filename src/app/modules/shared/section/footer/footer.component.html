@@ -5,11 +5,11 @@
         <li class="list-inline-item" *ngFor="let link of links">
           <a routerLInk="link?.href" [ngClass]="{ 'text-warning': !link?.internal }"
             *ngIf="link?.internal; else external">
-            {{link?.name}}
+            {{ '' + link?.name | translate}}
           </a>
           <ng-template #external>
             <a href="{{link?.href}}" [ngClass]="{ 'text-warning': !link?.internal }" target="_blank">
-              {{link?.name}}
+              {{ '' + link?.name | translate}}
             </a>
           </ng-template>
         </li>

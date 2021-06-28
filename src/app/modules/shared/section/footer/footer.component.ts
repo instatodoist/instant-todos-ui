@@ -35,7 +35,7 @@ export class FooterComponent implements OnInit {
       //   internal: true
       // },
       {
-        name: 'Report an Issue',
+        name: 'report_issue',
         href: 'https://github.com/techyaura/instatodos-ui/issues/new',
         internal: false
       }
