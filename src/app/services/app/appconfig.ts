@@ -1,11 +1,9 @@
 /* eslint-disable @typescript-eslint/naming-convention */
 import { Title, Meta } from '@angular/platform-browser';
 import { Injectable, OnDestroy } from '@angular/core';
-import { BehaviorSubject, Subscription, of, Observable, combineLatest, SubscriptionLike } from 'rxjs';
+import { BehaviorSubject, of, Observable } from 'rxjs';
 import { IAppData, ILanguage, IMetaTag, ILoginResponse, ISubscription } from '../../models';
 import { LsService } from '../ls/ls.service';
-import { ActivatedRoute } from '@angular/router';
-import { switchMap } from 'rxjs/operators';
 
 @Injectable({
   providedIn: 'root'
@@ -46,13 +44,10 @@ export class AppService implements OnDestroy {
   // eslint-disable-next-line @typescript-eslint/member-ordering
   countDataSource$ = this.countDataSource$$.asObservable();
 
-  private params$ = combineLatest([this.activatedRoute.params, this.activatedRoute.queryParams]);
-
   constructor(
     private titleService: Title,
     private metaService: Meta,
-    private lsService: LsService,
-    private activatedRoute: ActivatedRoute,
+    private lsService: LsService
   ) {}
 
   ngOnDestroy(): void {}
@@ -148,17 +143,6 @@ export class AppService implements OnDestroy {
     if (metaTags && metaTags.length) {
       this.metaService.addTags(metaTags);
     }
-  }
-
-  fetchParams() {
-    return this.params$.pipe(
-      switchMap((response) => {
-        const [p, query] = response;
-        const { label = null } = p;
-        const { q = '' } = query;
-        return of({ label, q });
-      })
-    );
   }
 
   unsubscribe(subscriptions: ISubscription){

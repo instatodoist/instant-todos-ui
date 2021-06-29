@@ -1,7 +1,6 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
 import { AppService, TodoService } from '../../../services';
 import { TodoConditions, TodoCompletedListType, ITodoTypeCount, ISubscription } from '../../../models';
-import { Subscription } from 'rxjs';
 
 @Component({
   selector: 'app-todo-completed',

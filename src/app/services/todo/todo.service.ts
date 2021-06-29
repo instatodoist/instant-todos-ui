@@ -81,6 +81,39 @@ export class TodoService {
     };
   }
 
+  todoTabs(){
+    return {
+      [this.TODOTYPES.today]: [
+        {
+          name: this.TODOTYPES.today,
+          isShown: true,
+          link: '/tasks/today'
+        }
+      ],
+      [this.TODOTYPES.pending]: [
+        {
+          name: this.TODOTYPES.pending,
+          isShown: true,
+          link: '/tasks/pending'
+        }
+      ],
+      [this.TODOTYPES.inbox]: [
+        {
+          name: this.TODOTYPES.inbox,
+          isShown: true,
+          link: '/tasks/inbox'
+        }
+      ],
+      [this.TODOTYPES.upcoming]: [
+        {
+          name: this.TODOTYPES.upcoming,
+          isShown: true,
+          link: '/tasks/upcoming'
+        }
+      ]
+    };
+  }
+
   getCurentRoute(): string {
     let todoCurrentType = '';
     if (this.router.url.match('/tasks/today')) { // checking route if today

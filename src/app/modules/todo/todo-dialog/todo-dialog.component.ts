@@ -74,7 +74,6 @@ export class TodoDialogComponent implements OnInit, OnDestroy {
   isSubTaskEvent = false;
   private routeSubscription: Subscription;
   private todoSubscription: Subscription;
-  private subTaskSubscription: Subscription;
 
   constructor(
     private router: Router,
@@ -217,7 +216,7 @@ export class TodoDialogComponent implements OnInit, OnDestroy {
   // eslint-disable-next-line @typescript-eslint/member-ordering
   addSubTask(subTask?: ISubTask): void {
     const postBody = {...subTask, todoId: this.todo._id};
-    this.subTaskSubscription = this.subTodoService.createSubTodo(postBody, this.conditions)
+    this.subTodoService.createSubTodo(postBody, this.conditions)
       .pipe(
         switchMap(()=> this.fetchTodos(this.conditions))
       )
@@ -243,7 +242,7 @@ export class TodoDialogComponent implements OnInit, OnDestroy {
    * @param itemIndex - index for subtask object
    */
   removeSubTask(id: string): void {
-    this.subTaskSubscription = this.todoService.deleteTodo(id)
+    this.todoService.deleteTodo(id)
       .pipe(
         switchMap(()=> this.fetchTodos(this.conditions))
       )
@@ -258,7 +257,7 @@ export class TodoDialogComponent implements OnInit, OnDestroy {
 
   updateSubTask(subTask?: TodoType): void {
     const postBody = { todoId: this.todo._id, isCompleted: true } as ISubTask;
-    this.subTaskSubscription = this.subTodoService.updateSubTodo(subTask._id, postBody, this.conditions)
+    this.subTodoService.updateSubTodo(subTask._id, postBody, this.conditions)
       .pipe(
         switchMap(()=> this.fetchTodos(this.conditions))
       )
