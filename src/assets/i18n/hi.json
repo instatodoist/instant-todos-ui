@@ -39,5 +39,10 @@
   "save_changes": "सहेजें",
   "save": "सहेजें",
   "hello": "हैलो",
-  "available": "उपलब्ध"
+  "available": "उपलब्ध",
+  "labels": "लेबल",
+  "add_task": "कार्य जोड़ें",
+  "smart-analysis": "एनालिटिक्स",
+  "report_issue": "मामले की रिपोर्ट करें",
+  "note": "टिप्पणी"
 }

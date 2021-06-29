@@ -1,8 +1,8 @@
 /* eslint-disable @typescript-eslint/naming-convention */
 import { Title, Meta } from '@angular/platform-browser';
 import { Injectable, OnDestroy } from '@angular/core';
-import { BehaviorSubject, Subscription, of, Observable } from 'rxjs';
-import { IAppData, ILanguage, IMetaTag, ILoginResponse } from '../../models';
+import { BehaviorSubject, of, Observable } from 'rxjs';
+import { IAppData, ILanguage, IMetaTag, ILoginResponse, ISubscription } from '../../models';
 import { LsService } from '../ls/ls.service';
 
 @Injectable({
@@ -28,9 +28,21 @@ export class AppService implements OnDestroy {
   ROOT_STATE$ = this.ROOT_STATE$$.asObservable();
 
   // use to get current url
+  countDataSource$$ = new BehaviorSubject<any>({
+    pending: 0,
+    today: 0,
+    inbox: 0,
+    completed: 0,
+    upcoming: 0
+  });
+
+  // use to get current url
   private currentUrlDataSource$$ = new BehaviorSubject<string>('');
   // eslint-disable-next-line @typescript-eslint/member-ordering
   currentUrlDataSource$ = this.currentUrlDataSource$$.asObservable();
+
+  // eslint-disable-next-line @typescript-eslint/member-ordering
+  countDataSource$ = this.countDataSource$$.asObservable();
 
   constructor(
     private titleService: Title,
@@ -132,4 +144,13 @@ export class AppService implements OnDestroy {
       this.metaService.addTags(metaTags);
     }
   }
+
+  unsubscribe(subscriptions: ISubscription){
+    Object.keys(subscriptions).map(key=>{
+      if(subscriptions[key]){
+        subscriptions[key].unsubscribe();
+      }
+    });
+  }
+
 }

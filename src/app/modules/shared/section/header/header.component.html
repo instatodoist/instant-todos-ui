@@ -30,17 +30,26 @@
         <ul class="navbar-nav ml-auto navbar-list">
           <li class="nav-item nav-icon">
             <!-- PopUp [TODO]-->
-            <a title="Add Task" href="javascript:void(0)" (click)="openPopUp()"
-              class="iq-waves-effect btn-primary rounded">
+            <a #tooltip="matTooltip" matTooltip="{{'add_task' | translate}}" [matTooltipPosition]="'below'" href="javascript:void(0)"
+              (click)="openPopUp()" class="iq-waves-effect btn-primary rounded">
               <mat-icon aria-hidden="false">add</mat-icon>
             </a>
           </li>
 
           <li class="nav-item nav-icon">
-            <a title="Notes" href="javascript:void(0)" class="iq-waves-effect btn-primary rounded" routerLink="/notes">
+            <a href="javascript:void(0)" #tooltip="matTooltip" matTooltip="{{'notes' | translate}}" [matTooltipPosition]="'below'"
+              class="iq-waves-effect btn-primary rounded" routerLink="/notes">
               <mat-icon aria-hidden="false">notes</mat-icon>
             </a>
           </li>
+
+          <li class="nav-item nav-icon">
+            <a href="javascript:void(0)" #tooltip="matTooltip" matTooltip="{{'labels' | translate}}" [matTooltipPosition]="'below'"
+              class="iq-waves-effect btn-primary rounded" routerLink="/tasks/tags">
+              <mat-icon aria-hidden="false">label</mat-icon>
+            </a>
+          </li>
+
           <ng-container>
             <app-multilingual></app-multilingual>
           </ng-container>
@@ -48,7 +57,8 @@
       </div>
       <ul class="navbar-list">
         <li class="line-height">
-          <a href="javascript:void(0)" [matMenuTriggerFor]="menu" class="search-toggle iq-waves-effect d-flex align-items-center">
+          <a href="javascript:void(0)" [matMenuTriggerFor]="menu"
+            class="search-toggle iq-waves-effect d-flex align-items-center">
             <img src="{{session?.profilePic?.url || defaultProfileImage}}" class="img-fluid rounded mr-3" alt="user">
             <div class="caption">
               <h6 class="mb-0 line-height">{{session?.email.charAt(0) | titlecase}}
@@ -60,10 +70,6 @@
               <mat-icon aria-hidden="false" aria-label="Account">account_circle</mat-icon>
               <span>{{'auth.my_profile' | translate}}</span>
             </button>
-            <button mat-menu-item routerLink="/tasks/tags">
-              <mat-icon aria-hidden="false" aria-label="Label">label_important</mat-icon>
-              <span>{{'label_text' | translate}}</span>
-            </button>
             <button mat-menu-item routerLink="/profile/password">
               <mat-icon aria-hidden="false" aria-label="Password">password</mat-icon>
               <span>{{'auth.change_password' | translate}}</span>
@@ -72,7 +78,7 @@
               <mat-icon aria-hidden="false" aria-label="Label">logout</mat-icon>
               <span>{{'auth.sign_out' | translate}}</span>
             </button>
-            
+
           </mat-menu>
           <!-- <div class="iq-sub-dropdown iq-user-dropdown">
             <div class="iq-card shadow-none m-0">

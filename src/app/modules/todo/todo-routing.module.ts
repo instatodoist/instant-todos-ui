@@ -1,5 +1,6 @@
 import { NgModule } from '@angular/core';
 import { Routes, RouterModule } from '@angular/router';
+import { TodoCompletedComponent } from './todo-completed/todo-completed.component';
 import { TodoInboxComponent } from './todo-inbox/todo-inbox.component';
 import { TodoLabelListComponent } from './todo-label-list/todo-label-list.component';
 
@@ -30,7 +31,7 @@ const routes: Routes = [
       },
       {
         path: 'completed',
-        component: TodoInboxComponent,
+        component: TodoCompletedComponent,
         data: {
           header_title: 'completed'
         }

@@ -9,54 +9,21 @@
               {{('' + item.name ) | translate | titlecase}}
 
               <!-- For Todos Other than Completed, Today, Pending-->
-              <ng-container *ngIf="todoCurrentType !== TODOTYPES.completed && tabs[todoCurrentType].length < 2">
-                <span class="badge badge-primary badge-pill" *ngIf="queryStr">
-                  {{ todos?.totalCount || 0 }}
-                </span>
-                <span class="badge badge-primary badge-pill" *ngIf="!queryStr">
-                  {{(this.count) && this.count[item.name] || todos?.totalCount || 0}}
+              <ng-container>
+                <span class="badge badge-primary badge-pill">
+                  {{ (this.count) && this.count[item.name] ?? todos?.totalCount ?? 0 }}
                 </span>
               </ng-container>
 
-              <!-- For Todos - Today, Pending-->
-              <ng-container *ngIf="todoCurrentType !== TODOTYPES.completed && tabs[todoCurrentType].length === 2">
-                <ng-container *ngIf="!queryStr">
-                  <span *ngIf="todoCurrentType === item.name; else falsyTemplate">
-                    <span
-                      class="badge badge-primary badge-pill">{{(this.count) && this.count[item.name] || todos?.totalCount || ''}}</span>
-                  </span>
-                  <ng-template #falsyTemplate>
-                    <span class="badge badge-primary badge-pill"
-                      *ngIf="i === 0">{{ this.count && this.count[TODOTYPES.today] || ''}}</span>
-                    <span class="badge badge-primary badge-pill"
-                      *ngIf="i === 1">{{ this.count && this.count[TODOTYPES.pending] || ''}}</span>
-                  </ng-template>
-                </ng-container>
-                <ng-container *ngIf="queryStr">
-                  <span *ngIf="todoCurrentType === item.name; else falsyTemplate">
-                    <span class="badge badge-primary badge-pill">{{ todos?.totalCount || ''}}</span>
-                  </span>
-                  <ng-template #falsyTemplate>
-                    <span class="badge badge-primary badge-pill"
-                      *ngIf="i === 0">{{ this.count && this.count[TODOTYPES.today] || ''}}</span>
-                    <span class="badge badge-primary badge-pill"
-                      *ngIf="i === 1">{{ this.count && this.count[TODOTYPES.pending] || ''}}</span>
-                  </ng-template>
-                </ng-container>
-              </ng-container>
-
-              <!-- For Completed Todos-->
-              <ng-container *ngIf="todoCurrentType === TODOTYPES.completed">
-                <span
-                  class="badge badge-primary badge-pill">{{(this.count) && this.count[item.name] || todos?.totalCount || ''}}</span>
-              </ng-container>
             </h4>
           </div>
         </div>
 
         <!-- Section for Todos-->
-        <div class="iq-card-body" *ngIf="!extraLoader && todoCurrentType !== TODOTYPES?.completed">
+        <div class="iq-card-body">
           <ul class="list-group list-group-flush">
+
+            <!-- If Todos -->
             <ng-container *ngIf="todos?.data.length">
               <ng-container *ngFor="let todo of todos?.data; let i = index">
                 <app-todo-single [todo]="todo" [index]="i" [todoCurrentType]="todoCurrentType" [TODOTYPES]="TODOTYPES"
@@ -64,12 +31,13 @@
                   (deleteTodoCb)="deleteTodo($event)"></app-todo-single>
               </ng-container>
             </ng-container>
+
             <!-- If No Todos -->
             <ng-container *ngIf="!todos?.data.length">
               <div class="text-center">
                 <img src="/assets/facelift/images/no-result.svg" />
-                <div class="text-primary" *ngIf="!queryStr">Hurray!! Everything is on the track.</div>
-                <div class="text-primary" *ngIf="queryStr">No Tasks found matching the search criteria. Please try
+                <div class="text-primary" *ngIf="!q">Hurray!! Everything is on the track.</div>
+                <div class="text-primary" *ngIf="q">No Tasks found matching the search criteria. Please try
                   something else</div>
               </div>
             </ng-container>
@@ -77,21 +45,9 @@
         </div>
 
         <!-- Section for Completed Todos-->
-        <div class="iq-card-body" *ngIf="!extraLoader && todoCurrentType === TODOTYPES?.completed">
-          <app-infinite-scroll (scrolled)="refresh()">
-            <app-todo-completed [todos]="todosC"></app-todo-completed>
-            <div class="col-sm-12 text-center" *ngIf="loader">
-              <img src="{{loaderImage}}" alt="loader" style="height: 100px;">
-            </div>
-          </app-infinite-scroll>
-        </div>
+
       </div>
     </div>
 
-    <!-- Loader on fetching data-->
-    <div class="col-sm-12 text-center" *ngIf="todoCurrentType !== TODOTYPES?.completed && extraLoader">
-      <img [src]="loaderImage" alt="loader" style="height: 100px;">
-    </div>
-    <!--END-->
   </div>
 </div>
