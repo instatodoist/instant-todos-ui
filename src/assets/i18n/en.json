@@ -26,7 +26,16 @@
     "account_update": "Update Account Information",
     "sign_with_google": "Sign with Google"
   },
+  "home": {
+    "create_task": "Create Tasks",
+    "create_task_description": "Create Tasks to manage your daily work life priorities",
+    "track_productivity": "Track your Productivity",
+    "track_productivity_description": "Easily Track your productivity on daily,monthly & yearly basis",
+    "create_note": "Create Notes",
+    "create_note_description": "Easily make notes to remember OR to for creating & tracking the Goals."
+  },
   "login_text": "Enter your email address and password to access",
+  "already_account": "Already have an account? ",
   "smart-analysis": "Analytics",
   "tasks": "Tasks",
   "inbox": "Inbox",

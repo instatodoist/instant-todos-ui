@@ -1,21 +1,21 @@
-<h1 class="mb-0 text-center">Forgot Password</h1>
+<h1 class="mb-0 text-center">{{'auth.forgot_password' | translate}}</h1>
 <!-- <p class="text-center text-dark">Enter your email address and password to access admin panel.</p> -->
 <form class="mt-4" [formGroup]="signinForm" #formDir="ngForm" (ngSubmit)="submit()" name="signinForm">
   <div class="form-group">
     <!-- <label for="exampleInputEmail1">{{'auth.email'|translate}}</label> -->
-    <input type="email" class="form-control mb-0" id="exampleInputEmail1" placeholder="Enter email"
+    <input type="email" class="form-control mb-0" id="exampleInputEmail1" placeholder="{{'auth.email' | translate}}"
       formControlName="email" required>
     <div>
       <span
         *ngIf="signinForm.controls.email.touched && signinForm.controls.email.errors && signinForm.controls.username.errors.required">
-        Email is required</span>
+        {{'auth.email_required' | translate}}</span>
     </div>
   </div>
   <div class="sign-info text-center">
     <button type="submit" class="btn btn-primary d-block w-100 mb-2"
       [disabled]="!signinForm.valid || isSubmit">{{'auth.forgot_password'|translate}} <i *ngIf="isSubmit"
         class="fa fa-spinner fa-spin ml-2"></i></button>
-    <span class="text-dark dark-color d-inline-block line-height-2">Already have an account? <a
+    <span class="text-dark dark-color d-inline-block line-height-2">{{'already_account' | translate}} <a
         routerLink="/auth/login">{{'auth.signin'|translate}}</a></span>
   </div>
 </form>

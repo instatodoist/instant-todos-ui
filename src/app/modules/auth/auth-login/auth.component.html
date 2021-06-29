@@ -3,7 +3,7 @@
 <form class="mt-4" [formGroup]="signinForm" #formDir="ngForm" (ngSubmit)="signIn()" name="signinForm">
   <div class="form-group">
     <label for="exampleInputEmail1">{{'auth.email' | translate}}</label>
-    <input type="email" class="form-control mb-0" id="exampleInputEmail1" placeholder="Enter email"
+    <input type="email" class="form-control mb-0" id="exampleInputEmail1" placeholder="{{'auth.email' | translate}}"
       formControlName="email" tabindex="1" required>
     <div>
       <span
@@ -14,7 +14,7 @@
   <div class="form-group">
     <label for="exampleInputPassword1">{{'auth.password' | translate}}</label>
     <a routerLink="/auth/forgot-password" class="float-right">{{'auth.forgot_password' | translate}}</a>
-    <input type="password" class="form-control mb-0" id="exampleInputPassword1" placeholder="Password"
+    <input type="password" class="form-control mb-0" id="exampleInputPassword1" placeholder="{{'auth.password' | translate}}"
       formControlName="password" tabindex="2" required>
     <div>
       <span

@@ -23,18 +23,18 @@ export class AuthLayoutComponent implements OnInit, AfterViewInit {
     this.carousel = [
       {
         image: '/assets/images/prod_1.png',
-        title: 'Create Tasks',
-        description: 'Create Tasks to manage your daily work life priorities'
+        title: 'home.create_task',
+        description: 'home.create_task_description'
       },
       {
         image: '/assets/images/prod_2.jpg',
-        title: 'Track your Productivity',
-        description: 'Easily Track your productivity on daily,monthly & yearly basis'
+        title: 'home.track_productivity',
+        description: 'home.track_productivity_description'
       },
       {
         image: '/assets/images/prod_3.png',
-        title: 'Create Notes',
-        description: 'Easily make notes to remember OR to for creating & tracking the Goals .'
+        title: 'home.create_note',
+        description: 'home.create_note_description'
       }
     ];
   }

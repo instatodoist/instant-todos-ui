@@ -19,8 +19,8 @@
                 data-margin="0">
                 <div class="item" *ngFor="let data of carousel">
                   <img [lazyLoad]="data?.image" class="img-fluid mb-4" alt="logo">
-                  <h4 class="mb-1 text-white">{{data?.title}}</h4>
-                  <p>{{data?.description}}</p>
+                  <h4 class="mb-1 text-white">{{ '' +  data?.title | translate}}</h4>
+                  <p>{{'' + data?.description | translate}}</p>
                 </div>
               </div>
             </div>

@@ -1,4 +1,4 @@
-<h1 class="mb-0 text-center">Sign Up</h1>
+<h1 class="mb-0 text-center">{{ 'auth.signup' | translate }}</h1>
 <!-- <p class="text-center text-dark">Enter your email address and password to access admin panel.</p> -->
 <form class="mt-4" [formGroup]="signinForm" #formDir="ngForm" (ngSubmit)="register()" name="signinForm">
   <div class="form-group">
@@ -32,7 +32,7 @@
     <button type="submit" class="btn btn-primary d-block w-100 mb-2" [disabled]="!signinForm.valid || isSubmit">{{'auth.signup'|translate}}
       <mat-icon [hidden]="!isSubmit"><mat-spinner diameter="20" color="accent"></mat-spinner></mat-icon>
     </button>
-    <span class="text-dark dark-color d-inline-block line-height-2">Already have an account? <a
+    <span class="text-dark dark-color d-inline-block line-height-2">{{'already_account' | translate}}<a
         routerLink="/auth/login">{{'auth.signin'|translate}}</a></span>
   </div>
 </form> 
