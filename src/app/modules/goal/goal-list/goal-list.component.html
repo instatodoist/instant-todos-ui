@@ -26,18 +26,18 @@
                     </a>
                   </label> -->
               <label class="ml-2 mb-0 iq-bg-primary rounded cursor" (click)="openUpdatePopUp(goal)">
-                <a>
+                <a  #tooltip="matTooltip" matTooltip="{{'edit' | translate}}" [matTooltipPosition]="'below'">
                   <mat-icon aria-hidden="false">edit</mat-icon>
               </a>
               </label>
               <label class="ml-2 mb-0 iq-bg-primary rounded" (click)="updateGoal(goal, 'IS_ARCHIEVED')"
                 data-toggle="tooltip" data-placement="top" data-original-title="Tooltip on top">
-                <a>
+                <a  #tooltip="matTooltip" matTooltip="{{'archieve' | translate}}" [matTooltipPosition]="'below'">
                   <mat-icon aria-hidden="false">delete</mat-icon>
                 </a>
               </label>
               <label class="ml-2 mb-0 rounded iq-bg-primary" (click)="updateGoal(goal, 'IS_DELETED')">
-                <a>
+                <a  #tooltip="matTooltip" matTooltip="{{'delete' | translate}}" [matTooltipPosition]="'below'">
                   <mat-icon aria-hidden="false">delete_forever</mat-icon>
                 </a>
               </label>
