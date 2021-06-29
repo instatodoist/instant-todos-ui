@@ -1,8 +1,8 @@
 /* eslint-disable @typescript-eslint/naming-convention */
 import { Title, Meta } from '@angular/platform-browser';
 import { Injectable, OnDestroy } from '@angular/core';
-import { BehaviorSubject, Subscription, of, Observable, combineLatest } from 'rxjs';
-import { IAppData, ILanguage, IMetaTag, ILoginResponse } from '../../models';
+import { BehaviorSubject, Subscription, of, Observable, combineLatest, SubscriptionLike } from 'rxjs';
+import { IAppData, ILanguage, IMetaTag, ILoginResponse, ISubscription } from '../../models';
 import { LsService } from '../ls/ls.service';
 import { ActivatedRoute } from '@angular/router';
 import { switchMap } from 'rxjs/operators';
@@ -160,4 +160,13 @@ export class AppService implements OnDestroy {
       })
     );
   }
+
+  unsubscribe(subscriptions: ISubscription){
+    Object.keys(subscriptions).map(key=>{
+      if(subscriptions[key]){
+        subscriptions[key].unsubscribe();
+      }
+    });
+  }
+
 }

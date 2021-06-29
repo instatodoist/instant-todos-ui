@@ -1,6 +1,6 @@
-import { Component, Input, OnInit } from '@angular/core';
+import { Component, Input, OnDestroy, OnInit } from '@angular/core';
 import { AppService, ProjectService } from '../../../services';
-import { TodoLabelType } from '../../../models/todo.model';
+import { TodoLabelType, ISubscription } from '../../../models';
 
 @Component({
   selector: 'app-todo-project-list',
@@ -11,12 +11,16 @@ import { TodoLabelType } from '../../../models/todo.model';
     }
   `]
 })
-export class TodoProjectListComponent implements OnInit {
+export class TodoProjectListComponent implements OnInit, OnDestroy {
 
   @Input()
   isSidebarCollapse = false;
   labels: TodoLabelType[];
   currentUrl = '';
+  private subscriptions: ISubscription = {
+    url: null,
+    list: null
+  };
 
   constructor(
     private appService: AppService,
@@ -25,13 +29,17 @@ export class TodoProjectListComponent implements OnInit {
 
   ngOnInit(): void {
     this.getLabels();
-    this.appService.currentUrlDataSource$.subscribe( url => {
+    this.subscriptions.url = this.appService.currentUrlDataSource$.subscribe( url => {
       this.currentUrl = url;
     });
   }
 
+  ngOnDestroy(): void {
+    this.appService.unsubscribe(this.subscriptions);
+  }
+
   getLabels(): void {
-    this.projectService
+    this.subscriptions.list = this.projectService
       .fetchAll()
       .subscribe(response => {
         this.labels = response;

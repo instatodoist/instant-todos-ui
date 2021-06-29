@@ -15,7 +15,7 @@ import { DOCUMENT } from '@angular/common';
 import {MatDialog} from '@angular/material/dialog';
 
 import { TodoService, AppService } from '../../../../services';
-import { ITodoTypeCount, INavLink } from '../../../../models';
+import { ITodoTypeCount, INavLink, ISubscription } from '../../../../models';
 import { TodoProjectDialogComponent } from '../../../todo/todo-project-dialog/todo-project-dialog.component';
 @Component({
   selector: 'app-sidebar',
@@ -37,8 +37,9 @@ export class SidebarComponent implements OnInit, AfterViewInit, OnDestroy {
   navLinks: INavLink[];
   currentUrl = '';
   isSidebarCollapse = false;
-  private subscriptions = {
-    count: null as Subscription
+  private subscriptions: ISubscription = {
+    count: null,
+    list:null
   };
 
   constructor(
@@ -55,7 +56,7 @@ export class SidebarComponent implements OnInit, AfterViewInit, OnDestroy {
         isCompleted: true
       }
     };
-    combineLatest([
+    this.subscriptions.list = combineLatest([
       this.appService.currentUrlDataSource$,
       this.todoService.countByTodoType(query)
     ])
@@ -73,14 +74,13 @@ export class SidebarComponent implements OnInit, AfterViewInit, OnDestroy {
   ngAfterViewInit(): void {}
 
   ngOnDestroy(){
-    this.subscriptions.count.unsubscribe();
+    this.appService.unsubscribe(this.subscriptions);
   }
 
   subscribeToCount(){
     this.subscriptions.count = this.appService.countDataSource$
       .subscribe(response=>{
         const { today, pending, inbox, completed, upcoming } = response;
-        console.log(response);
         this.count = {
           ...this.count,
           pending,

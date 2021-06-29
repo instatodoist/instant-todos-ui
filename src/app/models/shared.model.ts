@@ -1,5 +1,6 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import { TemplateRef, Type } from '@angular/core';
+import { Subscription } from 'rxjs';
 
 import {
   IUserProfile,
@@ -95,3 +96,13 @@ export type TDialogCompRef = {
 } & TDialogRefData;
 
 export type IDialogRef = TDialogCompRef | TDialogTempRef;
+
+export interface ISubscription {
+  url?: Subscription;
+  list?: Subscription;
+  create?: Subscription;
+  update?: Subscription;
+  delete?: Subscription;
+  todos?: Subscription;
+  count?: Subscription;
+}

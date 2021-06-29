@@ -1,6 +1,6 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
 import { AppService, TodoService } from '../../../services';
-import { TodoConditions, TodoCompletedListType, ITodoTypeCount } from '../../../models/todo.model';
+import { TodoConditions, TodoCompletedListType, ITodoTypeCount, ISubscription } from '../../../models';
 import { Subscription } from 'rxjs';
 
 @Component({
@@ -17,8 +17,9 @@ export class TodoCompletedComponent implements OnInit, OnDestroy {
   conditions = this.todoService.getConditions('completed');
   isLoading = false;
   count: ITodoTypeCount;
-  private subscriptions = {
-    count: null as Subscription
+  private subscriptions: ISubscription = {
+    count: null,
+    list: null
   };
 
   constructor(
@@ -32,7 +33,7 @@ export class TodoCompletedComponent implements OnInit, OnDestroy {
   }
 
   ngOnDestroy(): void{
-    this.subscriptions.count.unsubscribe();
+    this.appService.unsubscribe(this.subscriptions);
   }
 
   loadMore(): void {
@@ -60,7 +61,7 @@ export class TodoCompletedComponent implements OnInit, OnDestroy {
 
   private getCompletedTodos(conditions: TodoConditions): void {
     this.isLoading = true;
-    this.todoService.fetchCompleted(conditions)
+    this.subscriptions.list = this.todoService.fetchCompleted(conditions)
       .subscribe(({ data, totalCount }) => {
         this.isLoading = false;
         this.todos = {

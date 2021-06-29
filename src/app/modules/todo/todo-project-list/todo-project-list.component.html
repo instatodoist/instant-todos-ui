@@ -1,5 +1,5 @@
-<li *ngFor="let data of labels" [ngClass]="{ 'child-labels': currentUrl === '/tasks/lists/' + data?.name }">
-  <a [routerLink]="['/tasks/lists', data?.name]">
+<li *ngFor="let data of labels" [ngClass]="{ 'child-labels': currentUrl === '/tasks/lists/' + data?.slug }">
+  <a [routerLink]="['/tasks/lists', data?.slug]">
     <mat-icon aria-hidden="false" #tooltip="matTooltip"
     matTooltip="{{isSidebarCollapse? (('' + data?.name ) | translate) : ''}}"
     [matTooltipPosition]="'right'">label</mat-icon>

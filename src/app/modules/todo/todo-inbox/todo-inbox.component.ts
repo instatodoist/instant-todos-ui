@@ -3,16 +3,10 @@ import { Router } from '@angular/router';
 import { CdkDragDrop, moveItemInArray } from '@angular/cdk/drag-drop';
 import { switchMap } from 'rxjs/operators';
 import { combineLatest, Subscription } from 'rxjs';
-import { TodoListType, TodoType, TodoConditions, ITodoTypeCount, ItabName } from '../../../models';
+import {MatDialog} from '@angular/material/dialog';
+import { TodoListType, TodoType, TodoConditions, ITodoTypeCount, ItabName, ISubscription } from '../../../models';
 import { TodoService, AppService, UtilityService, ProjectService } from '../../../services';
 import { TodoDialogComponent } from '../todo-dialog/todo-dialog.component';
-import {MatDialog} from '@angular/material/dialog';
-
-export interface ISubscription {
-  count: Subscription;
-  delete: Subscription;
-  todos: Subscription;
-}
 
 // declare let $: any;
 @Component({
@@ -65,7 +59,7 @@ export class TodoInboxComponent implements OnInit, AfterViewInit, OnDestroy {
       }
     ]
   };
-  private subscriptions = {
+  private subscriptions: ISubscription = {
     count: null,
     delete: null,
     todos: null
@@ -88,11 +82,7 @@ export class TodoInboxComponent implements OnInit, AfterViewInit, OnDestroy {
   ngAfterViewInit(): void { }
 
   ngOnDestroy(): void {
-    Object.keys(this.subscriptions).map(key=>{
-      if(this.subscriptions[key]){
-        this.subscriptions[key].unsubscribe();
-      }
-    });
+   this.appService.unsubscribe(this.subscriptions);
   }
 
   subscribeToCount(){
