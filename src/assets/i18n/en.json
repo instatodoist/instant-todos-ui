@@ -57,5 +57,6 @@
   "available": "Available",
   "labels": "Labels",
   "label_text":"Update tasks labels",
-  "add_task": "Add Task"
+  "add_task": "Add Task",
+  "report_issue": "Report an issue"
 }
