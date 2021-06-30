@@ -164,24 +164,23 @@ export class TodoInboxComponent implements OnInit, AfterViewInit, OnDestroy {
       this.conditions = this.todoService.getConditions(this.todoCurrentType);
     } else {
       this.todoCurrentType = label;
+      const filterLabel = this.labels.find(obj => (obj.slug).toLowerCase() === label.toLowerCase());
+      if(filterLabel){
+        // eslint-disable-next-line no-underscore-dangle
+        this.conditions = this.todoService.getConditions(filterLabel._id, 'labels');
+      } else {
+        this.conditions = this.todoService.getConditions(null, 'labels');
+      }
       this.tabs = {
         ...this.tabs,
         [label]: [
           {
-            name: label,
+            name: filterLabel.name ?? label,
             isShown: true,
             link: `/tasks/lists/${label}`
           }
         ]
       };
-      // eslint-disable-next-line no-underscore-dangle
-      const filterLabel = this.labels.filter(obj => (obj.slug).toLowerCase() === label.toLowerCase());
-      if(filterLabel.length){
-        // eslint-disable-next-line no-underscore-dangle
-        this.conditions = this.todoService.getConditions(filterLabel[0]._id, 'labels');
-      } else {
-        this.conditions = this.todoService.getConditions(null, 'labels');
-      }
     }
     if (q) {
       this.q = q;
