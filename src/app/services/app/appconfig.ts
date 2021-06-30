@@ -86,7 +86,8 @@ export class AppService implements OnDestroy {
     document.documentElement.style.setProperty('--iq-light-primary', iqColor2);
     document.documentElement.style.setProperty('--iq-primary-hover', iqColor3);
     this.ROOT_STATE = {
-      ...this.ROOT_STATE, config: {
+      ...this.ROOT_STATE,
+      config: {
         ...this.ROOT_STATE.config, theme: iqColor
       }
     };
@@ -96,14 +97,22 @@ export class AppService implements OnDestroy {
   setLanguage(lang: ILanguage): void {
     localStorage.setItem('lang', JSON.stringify(lang));
     localStorage.setItem('lng', lang.value);
-    this.setRootState({
-       ...this.ROOT_STATE,
-       config: {
-         ...this.ROOT_STATE.config,
-         lang,
-         lng: lang.value
-       }
-    });
+    this.ROOT_STATE = {
+      ...this.ROOT_STATE,
+      config: {
+        ...this.ROOT_STATE.config,
+        lang,
+        lng: lang.value
+      }
+    };
+    // this.setRootState({
+    //    ...this.ROOT_STATE,
+    //    config: {
+    //      ...this.ROOT_STATE.config,
+    //      lang,
+    //      lng: lang.value
+    //    }
+    // });
   }
 
   // grab available languages
