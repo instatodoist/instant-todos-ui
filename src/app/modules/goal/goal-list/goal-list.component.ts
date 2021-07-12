@@ -37,7 +37,6 @@ export class GoalListComponent implements OnInit, OnDestroy {
         q: null
       },
       sort: {
-        createdAt: 'DESC',
         isPinned: 'DESC'
       }
     };
