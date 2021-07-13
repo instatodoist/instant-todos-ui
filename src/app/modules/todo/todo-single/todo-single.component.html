@@ -3,11 +3,10 @@
 padding-bottom: 10px;" [ngClass]="{'i-am-subtask': isSubTask }" (click)="openPopUp(todo)">
     <!-- Checkbox-->
     <div class="user-img img-fluid">
-      <div class="custom-control custom-radio custom-radio-color-checked custom-control-inline ml-3 mt-2"
+      <div class="custom-control custom-control-inline ml-3 mt-2"
         (click)="$event.stopPropagation(); updateTodo(todo)">
-        <input type="checkbox" id="customCheck-f{{ todo?._id }}" name="customRadio-{{todo?._id}}"
-          class="custom-control-input bg-primary" [checked]="todo?.isCompleted === true">
-        <label class="custom-control-label" for="customCheck-f{{ todo?._id }}"></label>
+        <mat-checkbox class="customCheckbox-{{todo?._id}}" [checked]="todo?.isCompleted === true" (change)="updateTodo(todo)">
+        </mat-checkbox>
       </div>
       <span *ngIf="todo?.subTasks?.length" (click)="$event.stopPropagation(); expandSubTasks()">
         <i class="fas fa-angle-down" [ngClass]="{ 'fa-angle-down' : isExpand, 'fa-angle-right': !isExpand}"

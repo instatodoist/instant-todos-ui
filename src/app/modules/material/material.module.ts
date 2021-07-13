@@ -15,6 +15,7 @@ import {MatProgressSpinnerModule} from '@angular/material/progress-spinner';
 import {MatChipsModule} from '@angular/material/chips';
 import {MatButtonModule} from '@angular/material/button';
 import {MatRadioModule} from '@angular/material/radio';
+import { MatCheckboxModule } from '@angular/material/checkbox';
 
 @NgModule({
   declarations: [],
@@ -34,6 +35,7 @@ import {MatRadioModule} from '@angular/material/radio';
     MatChipsModule,
     MatButtonModule,
     MatRadioModule,
+    MatCheckboxModule
   ],
   exports: [
     FlexLayoutModule,
@@ -50,6 +52,7 @@ import {MatRadioModule} from '@angular/material/radio';
     MatChipsModule,
     MatButtonModule,
     MatRadioModule,
+    MatCheckboxModule
   ]
 })
 export class MaterialModule { }
