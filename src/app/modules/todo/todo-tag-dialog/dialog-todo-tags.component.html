@@ -1,12 +1,12 @@
-<div class="modal-header">
-  <h5 class="modal-title" id="tagsModalTitle"># Tags</h5>
-  <button type="button" class="btn btn-secondary" mat-dialog-close>Done</button>
+<button type="button" class="btn btn-secondary" mat-dialog-close [style]="{'float': 'right'}">Done</button>
+<div mat-dialog-title>
+  <h5 id="tagsModalTitle"># Tags</h5>
 </div>
-<div class="modal-body" style="padding: 0;min-height: 300px;">
+<div mat-dialog-content>
   <ul class="list-group">
     <li class="list-group-item d-flex justify-content-between align-items-center"
       *ngFor="let tag of labels; let i = index" [style]="{'color': tag?.color}">
-      <div class="badge border" [ngStyle]="{ 'color': tag.color, 'border-color': '#ccc !important' }">
+      <div class="badge border" [style]="{ 'color': tag.color, 'border-color': '#ccc !important' }">
         {{tag?.name | titlecase}}
       </div>
       <span>
