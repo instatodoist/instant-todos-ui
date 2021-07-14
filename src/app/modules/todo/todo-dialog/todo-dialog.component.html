@@ -49,8 +49,10 @@
                   <div class="iq-card-body">
                     <ng-container *ngFor="let label of labels">
                       <span *ngIf="isChecked(label)" class="badge border mr-2 cursor"
-                        [ngStyle]="{ 'color': label?.color, 'border-color': '#ccc !important' }">#{{label?.name}} <i
-                          (click)="checkLabels(label)" class="fa fa-times" aria-hidden="true"></i></span>
+                        [ngStyle]="{ 'background-color': label?.color, 'color': 'white', 'border-color': '#ccc !important' }">
+                        #{{label?.name}}
+                        <mat-icon (click)="checkLabels(label)" style="font-size: 12px !important;">close</mat-icon>
+                        </span>
                     </ng-container>
                     <span class="badge border border-secondary text-secondary mr-2 cursor"
                       (click)="openListPopup('TAG')"><i class="fa fa-hashtag" aria-hidden="true"></i>Add
