@@ -28,6 +28,7 @@ export class TodoInboxComponent implements OnInit, AfterViewInit, OnDestroy {
   count: ITodoTypeCount = {};
   tabs: ItabName = this.todoService.todoTabs();
   labels: TodoProjectType[] = [];
+  isTodosLoaded = false;
 
   private params$ = combineLatest([
     this.activatedRoute.params,
@@ -121,6 +122,7 @@ export class TodoInboxComponent implements OnInit, AfterViewInit, OnDestroy {
   }
 
   private fetchTodosOnLoad() {
+    this.isTodosLoaded = true;
     this.subscriptions.todos = this.projectService.fetchAll()
       .pipe(
         switchMap(labels=>{
@@ -132,18 +134,23 @@ export class TodoInboxComponent implements OnInit, AfterViewInit, OnDestroy {
           return this.todoService.fetchAll(conditions);
         })
       )
-      .subscribe(response=>{
-        const { data = {} } = response;
-        const todos = { ...data.todoList };
-        this.todos = {
-          ...this.todos,
-          totalCount: todos.totalCount,
-          data: this.todoService.sortArrayByDate(todos.data, 'createdAt')
-        };
-        if (this.todoCurrentType) {
-          this.appService.configureSeo(this.todoCurrentType);
-        }
-      });
+      .subscribe(
+        response=>{
+          const { data = {} } = response;
+          const todos = { ...data.todoList };
+          this.todos = {
+            ...this.todos,
+            totalCount: todos.totalCount,
+            data: this.todoService.sortArrayByDate(todos.data, 'createdAt')
+          };
+          if (this.todoCurrentType) {
+            this.appService.configureSeo(this.todoCurrentType);
+          }
+          this.isTodosLoaded = true;
+        },
+        ()=>{
+          this.isTodosLoaded = false;
+        });
   }
 
   private fetchParams() {

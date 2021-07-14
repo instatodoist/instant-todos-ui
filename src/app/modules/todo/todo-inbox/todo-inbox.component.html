@@ -33,7 +33,7 @@
             </ng-container>
 
             <!-- If No Todos -->
-            <ng-container *ngIf="!todos?.data.length">
+            <ng-container *ngIf="!todos?.data.length && !isTodosLoaded">
               <div class="text-center">
                 <img src="/assets/facelift/images/no-result.svg" />
                 <div class="text-primary" *ngIf="!q">Hurray!! Everything is on the track.</div>

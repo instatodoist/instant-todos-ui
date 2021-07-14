@@ -65,25 +65,26 @@
                 <div class="iq-card">
                   <div class="iq-card-body">
                     <ul class="list-group">
-                      <li class="list-group-item d-flex justify-content-between align-items-center" *ngFor="let subTask of todo?.subTasks">
+                      <li class="list-group-item d-flex justify-content-between align-items-center"
+                        *ngFor="let subTask of todo?.subTasks">
                         <span>
-                          <input type="radio" id="customCheck-subTask{{subTask._id}}"
-                        class="" (change)="updateSubTask(subTask)">
+                          <mat-checkbox id="customCheck-subTask{{subTask._id}}" (change)="updateSubTask(subTask)">
+                          </mat-checkbox>
                         </span>
                         {{subTask?.title}}
-                        <span class="badge badge-primary badge-pill" (click)="$event.stopPropagation(); removeSubTask(subTask?._id);">
-                          <i class="fa fa-minus-circle cursor" aria-hidden="true"></i>
+                        <span class="badge badge-primary badge-pill"
+                          (click)="$event.stopPropagation(); removeSubTask(subTask?._id);">
+                          <mat-icon>remove_circle</mat-icon>
                         </span>
                       </li>
-                   </ul>
+                    </ul>
                     <div class="acc-edit mt-4" formGroupName="subTodo">
                       <ng-container *ngIf="isSubTaskEvent">
                         <div class="form-group">
                           <label for="subTaskTitle">Add SubTask</label>
                           <input type="text" class="form-control" id="subTaskTitle" formControlName="title">
                         </div>
-                        <button type="button" class="btn btn-primary  mr-2"
-                          (click)="addSubTask(formObj.value.subTodo)"
+                        <button type="button" class="btn btn-primary  mr-2" (click)="addSubTask(formObj.value.subTodo)"
                           [disabled]="!formObj.value.title">Save</button>
                         <button type="reset" class="btn iq-bg-danger" (click)="isSubTaskEvent = false;">Cancel</button>
                       </ng-container>
@@ -121,7 +122,7 @@
                     </div>
                   </li>
                   <li class="d-flex align-items-center justify-content-between" *ngFor="let key of scheduledObjKeys">
-                    <button type="button" class="btn rounded-pill mb-3" [ngClass]="{
+                    <button type="button" class="btn rounded-pill mb-3" [class]="{
                             'btn-outline-primary': formObj.value.scheduledType !== scheduledObj[key].slug,
                             'btn-primary': formObj.value.scheduledType === scheduledObj[key].slug
                           }" (click)="openListPopup('DATE', scheduledObj[key].slug)">
@@ -143,7 +144,9 @@
     <button type="submit" class="btn btn-primary d-block w-100 mb-1" [disabled]="!formObj.valid || isSubmit">
       <span *ngIf="formObj.value._id" class=" mr-2">{{'save_changes' | translate}}</span>
       <span *ngIf="!formObj.value._id">{{'save' | translate}}</span>
-      <mat-icon *ngIf="isSubmit"><mat-spinner diameter="20" color="accent"></mat-spinner></mat-icon>
+      <mat-icon *ngIf="isSubmit">
+        <mat-spinner diameter="20" color="accent"></mat-spinner>
+      </mat-icon>
     </button>
   </form>
 </div>
