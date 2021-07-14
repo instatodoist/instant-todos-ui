@@ -15,14 +15,14 @@ const routes: Routes = [
         path: 'password',
         component: PasswordUpdateComponent,
         data: {
-          header_title: 'account_password'
+          header_title: 'auth.account_password'
         }
       },
       {
         path: 'update',
         component: AccountUpdateComponent,
         data: {
-          header_title: 'account_update'
+          header_title: 'auth.account_update'
         }
       }
     ]

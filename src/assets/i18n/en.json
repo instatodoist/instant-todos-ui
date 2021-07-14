@@ -24,7 +24,8 @@
     "my_profile_label": "View personal profile details.",
     "change_password": "Update Password",
     "account_update": "Update Account Information",
-    "sign_with_google": "Sign with Google"
+    "sign_with_google": "Sign with Google",
+    "account_password": "Update Password"
   },
   "home": {
     "create_task": "Create Tasks",

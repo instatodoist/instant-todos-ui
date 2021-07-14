@@ -3,13 +3,19 @@
     <div class="col-lg-12">
       <div class="iq-card iq-card-block iq-card-stretch iq-card-height">
         <div class="iq-card-body">
-          <nav mat-tab-nav-bar>
+          <!-- <nav mat-tab-nav-bar>
             <a mat-tab-link routerLink="/profile/update" routerLinkActive="active">
               {{'Personal Information'}}
             </a>
             <a mat-tab-link routerLink="/profile/password" routerLinkActive="active">
               {{'Change Password'}}
             </a>
+          </nav> -->
+          <nav mat-tab-nav-bar>
+            <a mat-tab-link *ngFor="let route of routes"
+              [routerLink]="route.url"
+              [active]="route.isActive"
+            > {{route.name}} </a>
           </nav>
         </div>
       </div>
