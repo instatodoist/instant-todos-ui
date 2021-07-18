@@ -1,12 +1,12 @@
 import { DOCUMENT } from '@angular/common';
-import { Component, Inject, OnInit } from '@angular/core';
+import { Component, Inject, OnInit, AfterViewInit } from '@angular/core';
 
 @Component({
   selector: 'app-pomodoro',
   templateUrl: './pomodoro.component.html',
   styleUrls: ['./pomodoro.component.scss']
 })
-export class PomodoroComponent implements OnInit {
+export class PomodoroComponent implements OnInit, AfterViewInit {
 
   pomodoro = {
     started : false,
@@ -20,6 +20,8 @@ export class PomodoroComponent implements OnInit {
     fillerDom : null,
   };
 
+  private player: any = null;
+
   constructor(
     @Inject(DOCUMENT) private document: Document
   ) { }
@@ -27,6 +29,10 @@ export class PomodoroComponent implements OnInit {
 
   ngOnInit(): void {
     this.start();
+  }
+
+  ngAfterViewInit(): void{
+    this.player = this.document.getElementById('player');
   }
 
   startWork() {
@@ -67,7 +73,13 @@ export class PomodoroComponent implements OnInit {
   }
 
   private intervalCallback(){
-    if(!this.pomodoro.started) {return false;}
+    if(!this.pomodoro.started) {
+      return false;
+    }
+    // start alarm beep on 6 seconds
+    if(this.pomodoro.seconds === 7){
+      this.player.play();
+    }
     if(this.pomodoro.seconds === 0) {
       if(this.pomodoro.minutes === 0) {
         this.timerComplete();
