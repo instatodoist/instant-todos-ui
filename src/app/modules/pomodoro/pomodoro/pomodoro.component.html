@@ -1,0 +1,19 @@
+<div id="pomodoro-app">
+  <div id="container">
+    <div id="timer">
+      <div id="time">
+        <span id="minutes">25</span>
+        <span id="colon">:</span>
+        <span id="seconds">00</span>
+      </div>
+      <div id="filler"></div>
+    </div>
+
+    <div id="buttons">
+      <button id="work" (click)="startWork()">Work</button>
+      <button id="shortBreak" (click)="startShortBreak()">Short Break</button>
+      <button id="longBreak" (click)="startLongBreak()">Long Break</button>
+      <button id="stop" (click)="stopTimer()">Stop</button>
+    </div>
+  </div>
+</div>

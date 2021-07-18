@@ -50,6 +50,13 @@
             </a>
           </li>
 
+          <li class="nav-item nav-icon">
+            <a href="javascript:void(0)" #tooltip="matTooltip" matTooltip="{{'Pomodoro Clock' | translate}}" [matTooltipPosition]="'below'"
+              class="iq-waves-effect btn-primary rounded" routerLink="/pomodoro/clock">
+              <mat-icon aria-hidden="false">alarm</mat-icon>
+            </a>
+          </li>
+
           <ng-container>
             <app-multilingual></app-multilingual>
           </ng-container>

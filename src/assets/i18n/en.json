@@ -59,5 +59,6 @@
   "labels": "Labels",
   "label_text":"Update tasks labels",
   "add_task": "Add Task",
-  "report_issue": "Report an issue"
+  "report_issue": "Report an issue",
+  "pomodoro_clock": "Pomodoro Clock"
 }

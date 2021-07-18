@@ -15,6 +15,11 @@ const routes: Routes = [
       },
       {
         component: InnerLayoutComponent,
+        path: 'pomodoro/clock',
+        loadChildren: () => import('./modules/pomodoro/pomodoro.module').then(m => m.PomodoroModule)
+      },
+      {
+        component: InnerLayoutComponent,
         path: 'smart-analysis',
         loadChildren: () => import('./modules/smart-analysis/smart-analysis.module').then(m => m.SmartAnalysisModule)
       },
