@@ -20,7 +20,7 @@ export class PomodoroComponent implements OnInit, AfterViewInit {
     fillerDom : null,
   };
 
-  private player: any = null;
+  // private player: any = null;
 
   constructor(
     @Inject(DOCUMENT) private document: Document
@@ -32,7 +32,7 @@ export class PomodoroComponent implements OnInit, AfterViewInit {
   }
 
   ngAfterViewInit(): void{
-    this.player = this.document.getElementById('player');
+    // this.player = this.document.getElementById('player');
   }
 
   startWork() {
@@ -78,7 +78,7 @@ export class PomodoroComponent implements OnInit, AfterViewInit {
     }
     // start alarm beep on 6 seconds
     if(this.pomodoro.seconds === 7){
-      this.player.play();
+      // this.player.play();
     }
     if(this.pomodoro.seconds === 0) {
       if(this.pomodoro.minutes === 0) {
